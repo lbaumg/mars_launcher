@@ -17,7 +17,6 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> with WidgetsBindingObserver {
   List<AppInfo> apps = [];
   bool searchApps = false;
-  var installedApps;
 
   getInstalledApps() async {
     List<Application> applications = await DeviceApps.getInstalledApplications(
@@ -49,17 +48,8 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
         searchApps = false;
       });
       // Hide status bar
-      SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
+      // SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
     }
-  }
-
-  Future<bool> _onWillPop() async {
-    if (searchApps) {
-      setState(() {
-        searchApps = false;
-      });
-    }
-    return false;
   }
 
   @override
@@ -68,17 +58,16 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     // SystemChrome.setEnabledSystemUIOverlays ([SystemUiOverlay.bottom]);
 
     // Set navigation bar color
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      systemNavigationBarColor: Colors.black,
-    ));
+    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    //   systemNavigationBarColor: Colors.white,
+    // ));
 
     return WillPopScope(
       onWillPop: _onWillPop,
       child: GestureDetector(
         // SWIPE DETECTION
-        onHorizontalDragUpdate: horizontalDragHandler,
-        onVerticalDragUpdate: verticalDragHandler,
-
+        onHorizontalDragUpdate: _horizontalDragHandler,
+        onVerticalDragUpdate: _verticalDragHandler,
         child: Scaffold(
           // backgroundColor: primaryColor,
           body: AnnotatedRegion<SystemUiOverlayStyle>(
@@ -88,9 +77,13 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TopRow(),
-                  SizedBox(height: 80 //MediaQuery.of(context).size.height / 5,
+                  SizedBox(height:60 //MediaQuery.of(context).size.height / 5,
                       ),
+
+                  // Container(),
+
                   Expanded(
+                    // flex: 6,
                     child: Container(
                       alignment: Alignment.topLeft,
                       child: !searchApps
@@ -109,7 +102,16 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     );
   }
 
-  horizontalDragHandler(details) {
+  Future<bool> _onWillPop() async {
+    if (searchApps) {
+      setState(() {
+        searchApps = false;
+      });
+    }
+    return false;
+  }
+
+  _horizontalDragHandler(details) {
     if (searchApps) {
       return;
     }
@@ -124,7 +126,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     }
   }
 
-  verticalDragHandler(details) {
+  _verticalDragHandler(details) {
     int sensitivity = 8;
     if (details.delta.dy > sensitivity) {
       // Down Swipe
