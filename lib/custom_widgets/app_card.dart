@@ -19,6 +19,8 @@ class AppCard extends StatelessWidget {
           style: TextStyle(
             color: textColor,
             fontSize: 30,
+            fontWeight: FontWeight.w300,
+            letterSpacing: 0.7,
             // fontWeight: FontWeight.w00
           ),
         ),

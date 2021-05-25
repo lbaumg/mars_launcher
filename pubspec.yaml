@@ -31,6 +31,8 @@ dependencies:
   device_apps: ^2.1.1
   flutter_launcher_icons: ^0.9.0
   google_fonts: ^2.1.0
+  device_calendar: ^3.1.0
+  fluttertoast: ^8.0.7
 #  swipedetector: ^1.2.0
 
 flutter_icons:
@@ -63,12 +65,13 @@ flutter:
     - family: NotoSans
       fonts:
         - asset: assets/fonts/notosans_light.ttf
+          weight: 300
 #        - asset: assets/fonts/notosans_thin.ttf
 #          weight: 100
 #        - asset: assets/fonts/notosans_medium.ttf
 #          weight: 600
-#        - asset: assets/fonts/notosans_regular.ttf
-#          weight: 600
+        - asset: assets/fonts/notosans_regular.ttf
+          weight: 500
 #        - asset: assets/fonts/notosans_bold.ttf
 #          weight: 900
 
