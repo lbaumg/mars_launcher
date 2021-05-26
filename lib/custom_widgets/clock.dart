@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_mars_launcher/global.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 
@@ -16,12 +17,12 @@ class _ClockState extends State<Clock> {
   double seconds = 0.0;
 
   _currentTime() {
-    return "${DateTime.now().hour} : ${DateTime.now().minute}";
+    return "${DateTime.now().hour}:${DateTime.now().minute}";
   }
 
   _triggerUpdate() {
     Timer.periodic(
-        Duration(seconds: 60),
+        Duration(seconds: 1),
             (Timer timer) => setState(
               () {
             seconds = DateTime.now().second / 60;
@@ -37,47 +38,17 @@ class _ClockState extends State<Clock> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        color: hexToColor('#E3E3ED'),
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        child: Center(
-          child: Stack(
-            children: <Widget>[
-              Center(
-                child: Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.rectangle,
-                    color: hexToColor('#2c3143'),
-                  ),
+      return Text(
+              _currentTime(),
+                style: TextStyle(
+                  color: textColor,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600
                 ),
-              ),
-              Center(
-                child: Container(
-                    margin: const EdgeInsets.all(36.0),
-                    width: 340,
-                    height: 340,
-                    child: Center(
-                      child: Text(
-                        _currentTime(),
-                        style: GoogleFonts.bungee(
-                            fontSize: 60.0,
-                            textStyle: TextStyle(color: Colors.white),
-                            fontWeight: FontWeight.normal),
-                      ),
-                    )),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+          );
   }
 }
-
+/*
 Color hexToColor(String code) {
   return new Color(int.parse(code.substring(1, 7), radix: 16) + 0xFF000000);
-}
+}*/

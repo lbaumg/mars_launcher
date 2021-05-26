@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mars_launcher/data/app_info.dart';
 
+
 Color primaryColor = Colors.black;
 Color textColor = Colors.white;
 

@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mars_launcher/data/app_info.dart';
 
 class AppCard extends StatelessWidget {
-  AppInfo appInfo;
-  Color textColor;
-  AppCard({ required this.appInfo, required this.textColor });
+  final AppInfo appInfo;
+  final bool isShortcutItem;
+
+  AppCard({required this.appInfo, required this.isShortcutItem});
 
   @override
   Widget build(BuildContext context) {
@@ -14,18 +15,47 @@ class AppCard extends StatelessWidget {
         onPressed: () {
           appInfo.open();
         },
+        onLongPress: () {
+          if (!isShortcutItem) {
+            showDialog(
+              context: context,
+              builder: (_) => AlertDialog(
+                title: Text(appInfo.appName, style: TextStyle(fontWeight: FontWeight.bold),),
+                actions: [
+                  appInfo.systemApp
+                      ? Container()
+                      : TextButton(
+                      onPressed: () {
+                        appInfo.uninstall();
+                        Navigator.of(context).pop();
+                      },
+                      child: Text("Uninstall")),
+                  TextButton(
+                      onPressed: () {
+                        appInfo.openSettings();
+                        Navigator.of(context).pop();
+                      },
+                      child: Text("Info")),
+                ],
+              ),
+            );
+          }
+        },
         child: Text(
           appInfo.appName,
           style: TextStyle(
-            color: textColor,
             fontSize: 30,
-            fontWeight: FontWeight.w300,
-            letterSpacing: 0.7,
-            // fontWeight: FontWeight.w00
+            fontWeight: FontWeight.w100,
+            fontFamily: isShortcutItem ? "NotoSansRegular" : "NotoSansLight",
+            letterSpacing: isShortcutItem ? 1 : 0,
           ),
+        ),
+        style: ButtonStyle(
+          overlayColor: MaterialStateProperty.all(Colors.black),
+          foregroundColor: MaterialStateProperty.all(
+              isShortcutItem ? Colors.white : Colors.deepOrange),
         ),
       ),
     );
   }
 }
-

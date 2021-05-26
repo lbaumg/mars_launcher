@@ -15,11 +15,11 @@ class ShortcutApps extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(22.0, 0.0, 0, 0),
+      padding: const EdgeInsets.fromLTRB(22.0, 100.0, 0, 0),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        // mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: shortcuts.map((app) => AppCard(appInfo: app, textColor: textColor,)).toList(),
+        children: shortcuts.map((app) => AppCard(appInfo: app, isShortcutItem: true)).toList(),
       ),
     );
   }

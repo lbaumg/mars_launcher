@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mars_launcher/custom_widgets/clock.dart';
 import 'package:flutter_mars_launcher/global.dart';
 
 class TopRow extends StatelessWidget {
@@ -14,15 +15,7 @@ class TopRow extends StatelessWidget {
           onPressed: () {
             clockApp.open();
           },
-          child: Text(
-            // TODO implement clock
-            "16:20",
-            style: TextStyle(
-              color: textColor,
-              fontSize: 15,
-              // fontWeight: FontWeight.w00
-            ),
-          ),
+          child: Clock(),
         ),
         Expanded(
           child: Container(),

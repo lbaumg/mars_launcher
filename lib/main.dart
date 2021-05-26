@@ -11,7 +11,7 @@ void main() {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     theme: ThemeData(
-        fontFamily: 'NotoSans',
+        fontFamily: 'NotoSansLight',
       scaffoldBackgroundColor: Colors.black,
 
     ),

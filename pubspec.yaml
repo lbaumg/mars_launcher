@@ -33,6 +33,7 @@ dependencies:
   google_fonts: ^2.1.0
   device_calendar: ^3.1.0
   fluttertoast: ^8.0.7
+  intent: ^1.4.0
 #  swipedetector: ^1.2.0
 
 flutter_icons:
@@ -62,18 +63,13 @@ flutter:
     - assets/
 
   fonts:
-    - family: NotoSans
+    - family: NotoSansLight
       fonts:
         - asset: assets/fonts/notosans_light.ttf
-          weight: 300
-#        - asset: assets/fonts/notosans_thin.ttf
-#          weight: 100
-#        - asset: assets/fonts/notosans_medium.ttf
-#          weight: 600
+    - family: NotoSansRegular
+      fonts:
         - asset: assets/fonts/notosans_regular.ttf
-          weight: 500
-#        - asset: assets/fonts/notosans_bold.ttf
-#          weight: 900
+#
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

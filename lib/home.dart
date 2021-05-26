@@ -39,8 +39,11 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
     for (int i = 0; i < applications.length; i++) {
       Application app = applications[i];
+      if (app.appName == "mars launcher") {
+        continue;
+      }
       AppInfo appInfo =
-          AppInfo(packageName: app.packageName, appName: app.appName);
+          AppInfo(packageName: app.packageName, appName: app.appName, systemApp: app.systemApp);
       apps.add(appInfo);
     }
     apps.sort((a, b) => a.appName.compareTo(b.appName));
@@ -75,6 +78,9 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
         onHorizontalDragUpdate: _horizontalDragHandler,
         onVerticalDragUpdate: _verticalDragHandler,
+        onDoubleTap: () {
+          // TODO Toggle dark mode
+        },
         onPanDown: (details) {
           FocusScopeNode currentFocus = FocusScope.of(context);
           if (!currentFocus.hasPrimaryFocus &&
@@ -98,8 +104,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                         padding: const EdgeInsets.fromLTRB(30, 30, 30, 0),
                         child: TopRow(),
                       )),
-                  // SizedBox(
-                  //     height: screenHeight/12 ),//MediaQuery.of(context).size.height / 5,
+
                   Expanded(
                       flex: 1,
                       child: Center(
@@ -112,11 +117,6 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                           style: ElevatedButton.styleFrom(
                             primary: Colors.black
                           ),
-                          // color: Colors.white,
-
-                          // style: ButtonStyle(
-                          //
-                          // ),
                           child: SizedBox(
                             width: 10,
                             height: 20,

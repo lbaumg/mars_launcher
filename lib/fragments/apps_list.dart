@@ -43,7 +43,7 @@ class _AppsListState extends State<AppsList> {
           children: [
             TextField(
               cursorColor: Colors.white,
-              cursorWidth: 0.5,
+              cursorWidth: 0,
               decoration: InputDecoration(
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: primaryColor)
@@ -62,11 +62,11 @@ class _AppsListState extends State<AppsList> {
               onChanged: onItemChanged,
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(22.0, 0.0, 0, 0),
+              padding: const EdgeInsets.fromLTRB(22.0, 20.0, 0, 0),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                // mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: filteredApps.map((app) => AppCard(appInfo: app, textColor: Colors.deepOrangeAccent)).toList(),
+                children: filteredApps.map((app) => AppCard(appInfo: app, isShortcutItem: false,)).toList(),
               ),
             ),
           ],
