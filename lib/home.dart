@@ -6,10 +6,12 @@ import 'package:flutter_mars_launcher/data/app_info.dart';
 import 'package:flutter_mars_launcher/global.dart';
 import 'package:flutter_mars_launcher/fragments/shortcut_apps.dart';
 import 'package:flutter_mars_launcher/fragments/apps_list.dart';
+import 'package:flutter_mars_launcher/models/app_model.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:device_apps/device_apps.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -17,42 +19,13 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> with WidgetsBindingObserver {
-  List<AppInfo> apps = [];
+
   bool searchApps = false;
 
-  late DeviceCalendarPlugin _deviceCalendarPlugin;
-  late List<Calendar> _calendars;
-
-  // List<Calendar> get _readOnlyCalendars => _calendars?.where((c) => c.isReadOnly).toList() ?? List.filled (0, 0);
-
-  _CalendarsPageState() {
-    _deviceCalendarPlugin = DeviceCalendarPlugin();
-  }
-
-
-  getInstalledApps() async {
-    apps.clear();
-    List<Application> applications = await DeviceApps.getInstalledApplications(
-      includeSystemApps: true,
-      onlyAppsWithLaunchIntent: true,
-    );
-
-    for (int i = 0; i < applications.length; i++) {
-      Application app = applications[i];
-      if (app.appName == "mars launcher") {
-        continue;
-      }
-      AppInfo appInfo =
-          AppInfo(packageName: app.packageName, appName: app.appName, systemApp: app.systemApp);
-      apps.add(appInfo);
-    }
-    apps.sort((a, b) => a.appName.compareTo(b.appName));
-  }
 
   @override
   void initState() {
     super.initState();
-    getInstalledApps();
     WidgetsBinding.instance?.addObserver(this);
   }
 
@@ -68,8 +41,8 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
+    // double screenWidth = MediaQuery.of(context).size.width;
+    // double screenHeight = MediaQuery.of(context).size.height;
 
     return WillPopScope(
       onWillPop: _onWillPop,
@@ -112,7 +85,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                         child: ElevatedButton(
                           onPressed: () {
                             Fluttertoast.showToast(msg: "syncing apps..");
-                            getInstalledApps();
+                            Provider.of<AppModel>(context).syncInstalledApps();
                           },
                           style: ElevatedButton.styleFrom(
                             primary: Colors.black
@@ -128,9 +101,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                     flex: 8,
                     child: !searchApps
                         ? ShortcutApps()
-                        : AppsList(
-                            apps: apps,
-                          ),
+                        : AppsList(),
                   ),
                 ],
               ),
@@ -142,24 +113,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   }
 
 
-  void _retrieveCalendars() async {
-    try {
-      var permissionsGranted = await _deviceCalendarPlugin.hasPermissions();
-      if (permissionsGranted.isSuccess && !permissionsGranted.data) {
-        permissionsGranted = await _deviceCalendarPlugin.requestPermissions();
-        if (!permissionsGranted.isSuccess || !permissionsGranted.data) {
-          return;
-        }
-      }
 
-      final calendarsResult = await _deviceCalendarPlugin.retrieveCalendars();
-      setState(() {
-        _calendars = calendarsResult.data;
-      });
-    } on PlatformException catch (e) {
-      print(e);
-    }
-  }
 
   Future<bool> _onWillPop() async {
     if (searchApps) {

@@ -5,32 +5,35 @@ import 'package:flutter_mars_launcher/global.dart';
 import 'package:flutter_mars_launcher/models/app_model.dart';
 import 'package:provider/provider.dart';
 
-class AppsList extends StatefulWidget {
-  // final List<AppInfo> apps;
+class SelectApps extends StatefulWidget {
+  final List<AppInfo> apps;
+
+  SelectApps({required this.apps});
 
   @override
-  _AppsListState createState() => _AppsListState();
+  _SelectAppsState createState() => _SelectAppsState();
 }
 
-class _AppsListState extends State<AppsList> {
+class _SelectAppsState extends State<SelectApps> {
   TextEditingController _textController = TextEditingController();
   List<AppInfo> filteredApps = [];
 
   onItemChanged(String value) {
     setState(() {
-      filteredApps = Provider.of<AppModel>(context, listen: false).apps
+      filteredApps = widget.apps
           .where((app) => app.appName.toLowerCase().contains(value.toLowerCase()))
           .toList();
     });
     if (filteredApps.length == 1) {
       filteredApps.first.open();
     }
+
   }
 
   @override
   void initState() {
     super.initState();
-    filteredApps = Provider.of<AppModel>(context, listen: false).apps;
+    filteredApps = widget.apps;
   }
 
   @override
@@ -44,18 +47,18 @@ class _AppsListState extends State<AppsList> {
               cursorColor: Colors.white,
               cursorWidth: 0,
               decoration: InputDecoration(
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: primaryColor)
-                ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: primaryColor)
-                )
+                  enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: primaryColor)
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: primaryColor)
+                  )
               ),
               controller: _textController,
               autofocus: true,
               textAlign: TextAlign.center,
               style: TextStyle(
-                  color: Colors.white,
+                color: Colors.white,
                 fontSize: 30,
               ),
               onChanged: onItemChanged,
@@ -72,20 +75,6 @@ class _AppsListState extends State<AppsList> {
         ),
       ),
     );
-    
-/*    return Scaffold(      
-      body: ListView.builder(
-          itemCount: widget.apps.length,
-          itemBuilder: (context, index) {
-            return Text(
-                widget.apps[index].appName,
-              style: TextStyle(
-                color: Colors.white
-              ),
-            );
-            // return AppCard(appInfo: widget.apps[index]);
-          }),
-    );*/
   }
 }
 

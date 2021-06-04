@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mars_launcher/data/app_info.dart';
+import 'package:flutter_mars_launcher/fragments/apps_list.dart';
+import 'package:flutter_mars_launcher/fragments/select_app.dart';
+import 'package:flutter_mars_launcher/models/app_model.dart';
+import 'package:provider/provider.dart';
 
 class AppCard extends StatelessWidget {
   final AppInfo appInfo;
@@ -16,20 +20,35 @@ class AppCard extends StatelessWidget {
           appInfo.open();
         },
         onLongPress: () {
-          if (!isShortcutItem) {
+          var apps = Provider.of<AppModel>(context, listen: false).apps;
+          if (isShortcutItem) {
+            Navigator.push(
+              context,
+              MaterialPageRoute<void>(
+                builder: (BuildContext context) {
+                  return Scaffold(
+                    body: SelectApps(apps: apps),
+                  );
+                },
+              ),
+            );
+          } else {
             showDialog(
               context: context,
               builder: (_) => AlertDialog(
-                title: Text(appInfo.appName, style: TextStyle(fontWeight: FontWeight.bold),),
+                title: Text(
+                  appInfo.appName,
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
                 actions: [
                   appInfo.systemApp
                       ? Container()
                       : TextButton(
-                      onPressed: () {
-                        appInfo.uninstall();
-                        Navigator.of(context).pop();
-                      },
-                      child: Text("Uninstall")),
+                          onPressed: () {
+                            appInfo.uninstall();
+                            Navigator.of(context).pop();
+                          },
+                          child: Text("Uninstall")),
                   TextButton(
                       onPressed: () {
                         appInfo.openSettings();

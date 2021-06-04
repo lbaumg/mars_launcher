@@ -2,32 +2,29 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_mars_launcher/global.dart';
-import 'package:google_fonts/google_fonts.dart';
-
 
 class Clock extends StatefulWidget {
-  const Clock({Key ?key}) : super(key: key);
+  const Clock({Key? key}) : super(key: key);
 
   @override
   _ClockState createState() => _ClockState();
 }
 
 class _ClockState extends State<Clock> {
-
   double seconds = 0.0;
 
   _currentTime() {
-    return "${DateTime.now().hour}:${DateTime.now().minute}";
+    return "${DateTime.now().hour.toString().padLeft(2, '0')}:${DateTime.now().minute.toString().padLeft(2, '0')}";
   }
 
   _triggerUpdate() {
     Timer.periodic(
         Duration(seconds: 1),
-            (Timer timer) => setState(
+        (Timer timer) => setState(
               () {
-            seconds = DateTime.now().second / 60;
-          },
-        ));
+                seconds = DateTime.now().second / 60;
+              },
+            ));
   }
 
   @override
@@ -38,14 +35,11 @@ class _ClockState extends State<Clock> {
 
   @override
   Widget build(BuildContext context) {
-      return Text(
-              _currentTime(),
-                style: TextStyle(
-                  color: textColor,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600
-                ),
-          );
+    return Text(
+      _currentTime(),
+      style: TextStyle(
+          color: textColor, fontSize: 15, fontWeight: FontWeight.w600),
+    );
   }
 }
 /*
