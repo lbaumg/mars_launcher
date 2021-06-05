@@ -1,17 +1,13 @@
-import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_mars_launcher/custom_widgets/top_row.dart';
-import 'package:flutter_mars_launcher/data/app_info.dart';
+import 'package:flutter_mars_launcher/home_page/custom_widgets/clock.dart';
 import 'package:flutter_mars_launcher/global.dart';
-import 'package:flutter_mars_launcher/fragments/shortcut_apps.dart';
-import 'package:flutter_mars_launcher/fragments/apps_list.dart';
+import 'package:flutter_mars_launcher/home_page/fragments/app_shortcuts_fragment.dart';
+import 'package:flutter_mars_launcher/home_page/fragments/app_search_fragment.dart';
 import 'package:flutter_mars_launcher/models/app_model.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_mars_launcher/services/service_locator.dart';
 
-import 'package:device_apps/device_apps.dart';
-import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -41,14 +37,10 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    // double screenWidth = MediaQuery.of(context).size.width;
-    // double screenHeight = MediaQuery.of(context).size.height;
-
     return WillPopScope(
       onWillPop: _onWillPop,
       child: GestureDetector(
         // SWIPE DETECTION
-
         onHorizontalDragUpdate: _horizontalDragHandler,
         onVerticalDragUpdate: _verticalDragHandler,
         onDoubleTap: () {
@@ -73,35 +65,17 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                 children: [
                   Expanded(
                       flex: 1,
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(30, 30, 30, 0),
-                        child: TopRow(),
-                      )),
+                      child: TopRow()),
 
                   Expanded(
                       flex: 1,
-                      child: Center(
-                        // alignment: Alignment.centerLeft,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Fluttertoast.showToast(msg: "syncing apps..");
-                            Provider.of<AppModel>(context).syncInstalledApps();
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.black
-                          ),
-                          child: SizedBox(
-                            width: 10,
-                            height: 20,
-                          ),
-                        ),
-                      )),
+                      child: SyncAppsButton()),
 
                   Expanded(
                     flex: 8,
                     child: !searchApps
-                        ? ShortcutApps()
-                        : AppsList(),
+                        ? AppShortcutsFragment()
+                        : AppSearchFragment(),
                   ),
                 ],
               ),
@@ -140,14 +114,6 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   }
 
   _verticalDragHandler(details) {
-/*    if (searchApps) {
-      FocusScopeNode currentFocus = FocusScope.of(context);
-      if (!currentFocus.hasPrimaryFocus &&
-          currentFocus.focusedChild != null) {
-        FocusManager.instance.primaryFocus?.unfocus();
-      }
-    }*/
-
     int sensitivity = 8;
     if (details.delta.dy > sensitivity) {
       // Down Swipe
@@ -166,5 +132,71 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
         }); // Open app search
       }
     }
+  }
+}
+
+class SyncAppsButton extends StatelessWidget {
+  const SyncAppsButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final appsManager = getIt<AppsManager>();
+    return Center(
+      // alignment: Alignment.centerLeft,
+      child: ElevatedButton(
+        onPressed: () {
+          Fluttertoast.showToast(msg: "syncing apps..");
+          appsManager.appsListNotifier.syncInstalledApps();
+        },
+        style: ElevatedButton.styleFrom(
+          primary: Colors.black
+        ),
+        child: SizedBox(
+          width: 10,
+          height: 20,
+        ),
+      ),
+    );
+  }
+}
+
+
+class TopRow extends StatelessWidget {
+  const TopRow({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(30, 30, 30, 0),
+      child: Row(
+        children: [
+          TextButton(
+            onPressed: () {
+              clockApp.open();
+            },
+            child: Clock(),
+          ),
+          Expanded(
+            child: Container(),
+          ),
+          TextButton(
+            onPressed: () {
+              calenderApp.open();
+            },
+            child: Text(
+              "no events",
+              style: TextStyle(
+                color: textColor,
+                fontSize: 15,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

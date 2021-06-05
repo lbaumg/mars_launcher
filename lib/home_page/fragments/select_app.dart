@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mars_launcher/custom_widgets/app_card.dart';
+import 'package:flutter_mars_launcher/home_page/custom_widgets/app_card.dart';
 import 'package:flutter_mars_launcher/data/app_info.dart';
 import 'package:flutter_mars_launcher/global.dart';
 import 'package:flutter_mars_launcher/models/app_model.dart';
