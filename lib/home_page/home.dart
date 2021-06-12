@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_mars_launcher/home_page/custom_widgets/clock.dart';
+import 'package:flutter_mars_launcher/home_page/fragments/clock.dart';
 import 'package:flutter_mars_launcher/global.dart';
 import 'package:flutter_mars_launcher/home_page/fragments/app_shortcuts_fragment.dart';
 import 'package:flutter_mars_launcher/home_page/fragments/app_search_fragment.dart';
-import 'package:flutter_mars_launcher/models/app_model.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_mars_launcher/services/service_locator.dart';
+import 'package:flutter_mars_launcher/home_page/home_logic.dart';
 
 
 class Home extends StatefulWidget {
@@ -17,7 +17,6 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> with WidgetsBindingObserver {
 
   bool searchApps = false;
-
 
   @override
   void initState() {

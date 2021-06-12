@@ -1,16 +1,16 @@
-
 import 'package:device_apps/device_apps.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:intent/intent.dart' as androidIntent;
 import 'package:intent/action.dart' as androidAction;
 
 class AppInfo {
-
   String packageName;
   String appName;
   bool systemApp;
 
-  AppInfo({required this.packageName, required this.appName, this.systemApp=false});
+  AppInfo(
+      {required this.packageName,
+      required this.appName,
+      this.systemApp = false});
 
   void open() {
     DeviceApps.openApp(this.packageName);
@@ -31,5 +31,11 @@ class AppInfo {
     DeviceApps.openAppSettings(this.packageName);
   }
 
-}
+  AppInfo.fromJson(Map<String, dynamic> json)
+      : packageName = json['packageName'],
+        appName = json['appName'],
+        systemApp = json['systemApp'];
 
+  Map<String, dynamic> toJson() =>
+      {'packageName': packageName, 'appName': appName, 'systemApp': systemApp};
+}

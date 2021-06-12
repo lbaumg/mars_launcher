@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mars_launcher/home_page/custom_widgets/app_card.dart';
+import 'package:flutter_mars_launcher/home_page/fragments/app_card.dart';
 import 'package:flutter_mars_launcher/data/app_info.dart';
-import 'package:flutter_mars_launcher/global.dart';
-import 'package:flutter_mars_launcher/models/app_model.dart';
 import 'package:flutter_mars_launcher/services/service_locator.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_mars_launcher/home_page/home_logic.dart';
+
 
 class AppShortcutsFragment extends StatelessWidget {
 
