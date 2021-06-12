@@ -9,7 +9,8 @@ class AppSearchFragment extends StatefulWidget {
   final bool shortcutSelectionMode;
   final int shortcutIndex;
 
-  AppSearchFragment({this.shortcutSelectionMode=false, this.shortcutIndex=-1});
+  AppSearchFragment(
+      {this.shortcutSelectionMode = false, this.shortcutIndex = -1});
 
   @override
   _AppSearchFragmentState createState() => _AppSearchFragmentState();
@@ -28,14 +29,25 @@ class _AppSearchFragmentState extends State<AppSearchFragment> {
           .toList();
     });
     if (filteredApps.length == 1) {
-      if (widget.shortcutSelectionMode) {
-        print("SHORTCUT REPLACEMENT, INDEX: ${widget.shortcutIndex}");
+      openApp(filteredApps.first);
+      /*if (widget.shortcutSelectionMode) {
         appsManager.shortcutAppsNotifier.replaceShortcut(widget.shortcutIndex, filteredApps.first);
         Navigator.pop(context);
       } else {
         print("OPEN APP");
         filteredApps.first.open();
-      }
+      }*/
+    }
+  }
+
+  openApp(AppInfo appInfo) {
+    if (widget.shortcutSelectionMode) {
+      appsManager.shortcutAppsNotifier
+          .replaceShortcut(widget.shortcutIndex, appInfo);
+      Navigator.pop(context);
+    } else {
+      print("OPEN APP");
+      appInfo.open();
     }
   }
 
@@ -80,6 +92,7 @@ class _AppSearchFragmentState extends State<AppSearchFragment> {
                     .map((app) => AppCard(
                           appInfo: app,
                           isShortcutItem: false,
+                          openApp: openApp,
                         ))
                     .toList(),
               ),

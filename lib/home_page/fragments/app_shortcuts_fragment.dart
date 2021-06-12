@@ -19,7 +19,13 @@ class AppShortcutsFragment extends StatelessWidget {
           return Column(
             // mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: shortcutApps.map((app) => AppCard(appInfo: app, isShortcutItem: true)).toList(),
+            children: shortcutApps.map((app) => AppCard(
+                appInfo: app,
+                isShortcutItem: true,
+              openApp: (AppInfo appinfo) {
+                  appinfo.open();
+              },
+            )).toList(),
           );
         }
       ),

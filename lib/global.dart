@@ -10,7 +10,7 @@ Color textColor = Colors.white;
 AppInfo clockApp = AppInfo(packageName: "com.sec.android.app.clockpackage", appName: "Uhr");
 AppInfo calenderApp = AppInfo(packageName: "com.samsung.android.calendar", appName: "Kalender");
 AppInfo cameraApp = AppInfo(packageName: "com.sec.android.app.camera", appName: "Kamera");
-AppInfo contactsApp = AppInfo(packageName: "com.android.phone", appName: "Telefon");
+AppInfo contactsApp = AppInfo(packageName: "com.samsung.android.dialer", appName: "Telefon");
 
 final List<AppInfo> initialShortcutApps = [
   AppInfo(packageName: "com.wetter.androidclient", appName: "wetter.com"),

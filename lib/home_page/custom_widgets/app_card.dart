@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mars_launcher/data/app_info.dart';
 import 'package:flutter_mars_launcher/home_page/fragments/app_search_fragment.dart';
-import 'package:flutter_mars_launcher/home_page/fragments/select_app.dart';
 import 'package:flutter_mars_launcher/models/app_model.dart';
 import 'package:flutter_mars_launcher/services/service_locator.dart';
 import 'package:provider/provider.dart';
 
+typedef OpenAppCallback = Function(AppInfo appInfo);
+
 class AppCard extends StatelessWidget {
   final AppInfo appInfo;
   final bool isShortcutItem;
+  final OpenAppCallback openApp;
 
-  AppCard({required this.appInfo, required this.isShortcutItem});
+  AppCard({required this.appInfo, required this.isShortcutItem, required this.openApp});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +21,7 @@ class AppCard extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(0, 7, 0, 7),
       child: TextButton(
         onPressed: () {
-          appInfo.open();
+          openApp(appInfo);
         },
         onLongPress: () {
 
