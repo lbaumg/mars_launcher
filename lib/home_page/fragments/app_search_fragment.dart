@@ -47,7 +47,6 @@ class _AppSearchFragmentState extends State<AppSearchFragment> {
           .replaceShortcut(widget.shortcutIndex, appInfo);
       Navigator.pop(context);
     } else {
-      print("OPEN APP");
       appInfo.open();
     }
   }
@@ -63,44 +62,56 @@ class _AppSearchFragmentState extends State<AppSearchFragment> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextField(
-              cursorColor: Colors.white,
-              cursorWidth: 0,
-              decoration: InputDecoration(
-                  enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: primaryColor)),
-                  focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: primaryColor))),
-              controller: _textController,
-              autofocus: true,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 30,
+
+      child: ScrollConfiguration(
+        behavior: MyBehavior(),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextField(
+                cursorColor: Colors.white,
+                cursorWidth: 0,
+                decoration: InputDecoration(
+                    enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: primaryColor)),
+                    focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: primaryColor))),
+                controller: _textController,
+                autofocus: true,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 30,
+                ),
+                onChanged: onItemChanged,
               ),
-              onChanged: onItemChanged,
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(22.0, 20.0, 0, 0),
-              child: Column(
-                // mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: filteredApps
-                    .map((app) => AppCard(
-                          appInfo: app,
-                          isShortcutItem: false,
-                          openApp: openApp,
-                        ))
-                    .toList(),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(22.0, 20.0, 0, 0),
+                child: Column(
+                  // mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: filteredApps
+                      .map((app) => AppCard(
+                            appInfo: app,
+                            isShortcutItem: false,
+                            openApp: openApp,
+                          ))
+                      .toList(),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
+  }
+}
+
+class MyBehavior extends ScrollBehavior {
+  @override
+  Widget buildViewportChrome(
+      BuildContext context, Widget child, AxisDirection axisDirection) {
+    return child;
   }
 }
