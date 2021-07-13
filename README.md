@@ -13,3 +13,5 @@ c
 h  
 e  
 r  
+
+based on "a decluttered launcher"
