@@ -11,26 +11,22 @@ class Clock extends StatefulWidget {
 }
 
 class _ClockState extends State<Clock> {
-  double seconds = 0.0;
+  Timer? timer;
 
   _currentTime() {
-    return "${DateTime.now().hour.toString().padLeft(2, '0')}:${DateTime.now().minute.toString().padLeft(2, '0')}";
+    String hour = DateTime.now().hour.toString().padLeft(2, '0');
+    String minute = DateTime.now().minute.toString().padLeft(2, '0');
+    return "$hour:$minute";
   }
 
-  _triggerUpdate() {
-    Timer.periodic(
-        Duration(seconds: 1),
-        (Timer timer) => setState(
-              () {
-                seconds = DateTime.now().second / 60;
-              },
-            ));
-  }
 
   @override
   void initState() {
     super.initState();
-    _triggerUpdate();
+    timer = Timer.periodic(
+        Duration(seconds: 1),
+            (timer) => setState(() {})
+    );
   }
 
   @override
@@ -40,6 +36,12 @@ class _ClockState extends State<Clock> {
       style: TextStyle(
           color: textColor, fontSize: 15, fontWeight: FontWeight.w600),
     );
+  }
+
+  @override
+  void dispose(){
+    timer!.cancel();
+    super.dispose();
   }
 }
 /*

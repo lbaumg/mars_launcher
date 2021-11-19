@@ -4,6 +4,7 @@ import 'package:flutter_mars_launcher/home_page/fragments/clock.dart';
 import 'package:flutter_mars_launcher/global.dart';
 import 'package:flutter_mars_launcher/home_page/fragments/app_shortcuts_fragment.dart';
 import 'package:flutter_mars_launcher/home_page/fragments/app_search_fragment.dart';
+import 'package:flutter_mars_launcher/home_page/fragments/temperature.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_mars_launcher/services/service_locator.dart';
 import 'package:flutter_mars_launcher/home_page/home_logic.dart';
@@ -180,7 +181,16 @@ class TopRow extends StatelessWidget {
             child: Clock(),
           ),
           Expanded(
-            child: Container(),
+              child: Container()
+          ),
+          TextButton(
+            onPressed: () {
+                weatherApp.open();
+            },
+            child: Temperature(),
+          ),
+          Expanded(
+              child: Container()
           ),
           TextButton(
             onPressed: () {
