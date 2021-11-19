@@ -147,7 +147,7 @@ class SyncAppsButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: () {
           Fluttertoast.showToast(msg: "syncing apps..");
-          appsManager.appsListNotifier.syncInstalledApps();
+          appsManager.appsNotifier.syncInstalledApps();
         },
         style: ElevatedButton.styleFrom(
           primary: Colors.black

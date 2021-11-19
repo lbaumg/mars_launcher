@@ -7,9 +7,8 @@ import 'package:flutter_mars_launcher/global.dart';
 
 class AppsNotifier extends ValueNotifier<List<AppInfo>> {
 
-  AppsNotifier() : super([]) {
-    syncInstalledApps();
-  }
+  AppsNotifier() : super([]);
+    // {syncInstalledApps();}
 
   @override
   void notifyListeners() {

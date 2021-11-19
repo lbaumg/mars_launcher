@@ -1,6 +1,7 @@
+import 'package:android_intent_plus/android_intent.dart';
 import 'package:device_apps/device_apps.dart';
-import 'package:intent/intent.dart' as androidIntent;
-import 'package:intent/action.dart' as androidAction;
+import 'package:flutter/services.dart';
+
 
 class AppInfo {
   String packageName;
@@ -16,15 +17,12 @@ class AppInfo {
     DeviceApps.openApp(this.packageName);
   }
 
-  void uninstall() {
-    androidIntent.Intent()
-      ..setAction(androidAction.Action.ACTION_DELETE)
-      ..setData(Uri.parse("package:${this.packageName}"))
-      ..startActivityForResult().then((data) {
-        print(data);
-      }, onError: (e) {
-        print(e);
-      });
+  void uninstall() async {
+      final AndroidIntent intent = AndroidIntent(
+        action: "android.intent.action.DELETE",
+        data: "package:${this.packageName}",
+      );
+      await intent.launch();
   }
 
   void openSettings() {

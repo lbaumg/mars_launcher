@@ -14,7 +14,7 @@ AppInfo contactsApp = AppInfo(packageName: "com.samsung.android.dialer", appName
 
 final List<AppInfo> initialShortcutApps = [
   AppInfo(packageName: "com.wetter.androidclient", appName: "wetter.com"),
-  AppInfo(packageName: "com.huawei.health", appName: "Health"),
+  AppInfo(packageName: "com.github.jamesgay.fitnotes", appName: "Training"),
   AppInfo(packageName: "com.spotify.music", appName: "Spotify"),
   AppInfo(packageName: "com.brave.browser", appName: "Brave"),
 ];

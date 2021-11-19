@@ -24,7 +24,7 @@ class _AppSearchFragmentState extends State<AppSearchFragment> {
 
   onItemChanged(String value) {
     setState(() {
-      filteredApps = appsManager.appsListNotifier.value
+      filteredApps = appsManager.appsNotifier.value
           .where(
               (app) => app.appName.toLowerCase().contains(value.toLowerCase()))
           .toList();
@@ -54,7 +54,7 @@ class _AppSearchFragmentState extends State<AppSearchFragment> {
   @override
   void initState() {
     super.initState();
-    filteredApps = appsManager.appsListNotifier.value;
+    filteredApps = appsManager.appsNotifier.value;
     print("Shortcut selection mode:");
     print(widget.shortcutSelectionMode);
   }
