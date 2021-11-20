@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_mars_launcher/global.dart';
+import 'package:location/location.dart';
 import 'package:weather/weather.dart';
 
 String _api = "fe944563ad38e93ba270f054ec5b3474";
@@ -15,25 +16,14 @@ class Temperature extends StatefulWidget {
 
 class _TemperatureState extends State<Temperature> {
   Timer? timer;
-  double lat = 49.44501618703811; //TODO get from location
-  double lon = 8.654721930317473;
-  String temperature = "";
-  WeatherFactory wf = WeatherFactory(_api);
-
-  Future<String?> _currentTemperature() async {
-    Weather w = await wf.currentWeatherByLocation(lat, lon);
-    String? temp = w.temperature?.celsius?.toInt().toString();
-    return temp?.padRight(temp.length+1,"°C");
-  }
+  TemperatureLogic temperatureLogic = TemperatureLogic();
 
   _updateTemperature() {
-    _currentTemperature().then((String? result){
-      if (result != null) {
-        print("New temperature: $result");
-        setState(() {
-          temperature = result; //.toString();
-        });
-      }
+    temperatureLogic.updateTemperature().then((bool success){
+        if (success) {
+          print(temperatureLogic.temperature);
+          setState(() {});
+        }
     });
   }
 
@@ -54,7 +44,7 @@ class _TemperatureState extends State<Temperature> {
   @override
   Widget build(BuildContext context) {
     return Text(
-      temperature,
+      temperatureLogic.temperature,
       style: TextStyle(
           color: textColor, fontSize: 15, fontWeight: FontWeight.w600),
     );
@@ -66,7 +56,64 @@ class _TemperatureState extends State<Temperature> {
     super.dispose();
   }
 }
-/*
-Color hexToColor(String code) {
-  return new Color(int.parse(code.substring(1, 7), radix: 16) + 0xFF000000);
-}*/
+
+
+
+class TemperatureLogic {
+  String _tempString = "";
+  LocationLogic locationLogic = LocationLogic();
+  WeatherFactory wf = WeatherFactory(_api);
+
+  String get temperature => _tempString;
+
+  Future<bool> updateTemperature() async {
+    await locationLogic.updateLatLon();
+    Weather w = await wf.currentWeatherByLocation(locationLogic.lat, locationLogic.lon);
+    String temp = w.temperature?.celsius?.toInt().toString() ?? "";
+    if (temp.isNotEmpty) {
+      _tempString = "$temp°C";
+      return true;
+    } else {
+      return false;
+    }
+  }
+}
+
+
+class LocationLogic {
+  Location location = new Location();
+  bool _serviceEnabled = false;
+  late PermissionStatus _permissionGranted;
+  late LocationData _locationData;
+  double _lat = 49.44501618703811;
+  double _lon = 8.654721930317473;
+
+  double get lat => _lat;
+  double get lon => _lon;
+
+  updateLocation() async {
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return;
+      }
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+
+    _locationData = await location.getLocation();
+  }
+
+  updateLatLon() async {
+    await updateLocation();
+    _lat = _locationData.latitude ?? _lat;
+    _lon = _locationData.longitude ?? _lon;
+  }
+}
