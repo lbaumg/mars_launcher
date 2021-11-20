@@ -22,8 +22,8 @@ class _TemperatureState extends State<Temperature> {
 
   Future<String?> _currentTemperature() async {
     Weather w = await wf.currentWeatherByLocation(lat, lon);
-    String? temp = w.temperature?.celsius.toString();
-    return temp?.substring(0,3).padRight(4,"°C");
+    String? temp = w.temperature?.celsius?.toInt().toString();
+    return temp?.padRight(temp.length+1,"°C");
   }
 
   _updateTemperature() {
