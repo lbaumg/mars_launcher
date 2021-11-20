@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_mars_launcher/global.dart';
 import 'package:location/location.dart';
 import 'package:weather/weather.dart';
@@ -91,8 +92,22 @@ class LocationLogic {
   double get lat => _lat;
   double get lon => _lon;
 
+  Future<bool> isServiceEnabled() async {
+    bool serviceEnabled = false;
+    for (int i = 0; i < 10; i++) {
+      try {
+        serviceEnabled = await location.serviceEnabled();
+        return serviceEnabled;
+      } on PlatformException {
+        await Future.delayed(Duration(milliseconds: 100));
+      }
+    }
+    return serviceEnabled;
+  }
+
+
   updateLocation() async {
-    _serviceEnabled = await location.serviceEnabled();
+    _serviceEnabled = await isServiceEnabled();
     if (!_serviceEnabled) {
       _serviceEnabled = await location.requestService();
       if (!_serviceEnabled) {
