@@ -1,3 +1,5 @@
+/// App search fragment that appears on swipe up
+
 import 'package:flutter/material.dart';
 import 'package:flutter_mars_launcher/home_page/fragments/app_card.dart';
 import 'package:flutter_mars_launcher/data/app_info.dart';
