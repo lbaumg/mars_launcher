@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_mars_launcher/home_page/fragments/clock.dart';
 import 'package:flutter_mars_launcher/global.dart';
 import 'package:flutter_mars_launcher/home_page/fragments/app_shortcuts_fragment.dart';
 import 'package:flutter_mars_launcher/home_page/fragments/app_search_fragment.dart';
-import 'package:flutter_mars_launcher/home_page/fragments/temperature.dart';
+import 'package:flutter_mars_launcher/home_page/fragments/top_row/top_row.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_mars_launcher/services/service_locator.dart';
 import 'package:flutter_mars_launcher/home_page/home_logic.dart';
@@ -163,49 +162,3 @@ class SyncAppsButton extends StatelessWidget {
 }
 
 
-class TopRow extends StatelessWidget {
-  const TopRow({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(30, 30, 30, 0),
-      child: Row(
-        children: [
-          TextButton(
-            onPressed: () {
-              clockApp.open();
-            },
-            child: Clock(),
-          ),
-          Expanded(
-              child: Container()
-          ),
-          TextButton(
-            onPressed: () {
-                weatherApp.open();
-            },
-            child: Temperature(),
-          ),
-          Expanded(
-              child: Container()
-          ),
-          TextButton(
-            onPressed: () {
-              calenderApp.open();
-            },
-            child: Text(
-              "no events",
-              style: TextStyle(
-                color: textColor,
-                fontSize: 15,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
