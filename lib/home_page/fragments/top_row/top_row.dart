@@ -2,10 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_mars_launcher/global.dart';
-import 'package:flutter_mars_launcher/home_page/fragments/top_row/calender_view.dart';
+import 'package:flutter_mars_launcher/home_page/fragments/top_row/event.dart';
 import 'package:flutter_mars_launcher/home_page/fragments/top_row/clock.dart';
 import 'package:flutter_mars_launcher/home_page/fragments/top_row/temperature.dart';
-
 
 class TopRow extends StatelessWidget {
   const TopRow({
@@ -24,27 +23,25 @@ class TopRow extends StatelessWidget {
             },
             child: Clock(),
           ),
-          Expanded(
-              child: Container()
-          ),
+          Expanded(child: Container()),
           TextButton(
             onPressed: () {
               weatherApp.open();
             },
             child: Temperature(),
           ),
-          Expanded(
-              child: Container()
-          ),
-          TextButton(
-            onPressed: () {
-              calenderApp.open();
-            },
-            child: CalenderView(),
+          Expanded(child: Container()),
+          Container(
+            constraints: BoxConstraints(maxWidth: 125),
+            child: TextButton(
+              onPressed: () {
+                calenderApp.open();
+              },
+              child: EventView(),
+            ),
           ),
         ],
       ),
     );
   }
 }
-
