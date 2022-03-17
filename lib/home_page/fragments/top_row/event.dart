@@ -14,6 +14,7 @@ class EventView extends StatefulWidget {
   @override
   State<EventView> createState() => _EventViewState();
 }
+
 // TODO long press on calendar -> create new event
 class _EventViewState extends State<EventView> {
   Timer? timer;
@@ -22,9 +23,9 @@ class _EventViewState extends State<EventView> {
   @override
   Widget build(BuildContext context) {
     return Text(
-      calenderLogic.nextEvent.length > 15 ? ".." + calenderLogic.nextEvent.substring(calenderLogic.nextEvent.length - 15) : calenderLogic.nextEvent,
+      calenderLogic.nextEvent.length > 15 ? ".." + calenderLogic.nextEvent.substring(calenderLogic.nextEvent.length - 15)
+          : calenderLogic.nextEvent,
       softWrap: false,
-      // overflow:TextOverflow.ellipsis,
       style: TextStyle(
         color: textColor,
         fontSize: 15,
@@ -35,7 +36,6 @@ class _EventViewState extends State<EventView> {
   _updateEvents() {
     calenderLogic.updateEvents().then((bool success) {
       if (success) {
-        print("SET STATE, new event: ${calenderLogic.nextEvent}");
         setState(() {});
       }
     });
@@ -63,34 +63,27 @@ class CalenderLogic {
   String _nextEvent = "no events";
   late DeviceCalendarPlugin _deviceCalendarPlugin;
   List<Calendar> _calendars = [];
-  bool _calendarsLoaded = false;
-
-  List<Calendar> get _writableCalendars =>
-      _calendars.where((c) => c.isReadOnly == false).toList();
-
-  List<Calendar> get _readOnlyCalendars =>
-      _calendars.where((c) => c.isReadOnly == true).toList();
+  DateTime _lastUpdatedCalendars = DateTime.now();
 
   List<Calendar> get _defaultCalendars =>
       _calendars.where((c) => c.isDefault == true).toList();
 
-  CalenderLogic() {
-    _deviceCalendarPlugin = DeviceCalendarPlugin();
-    _retrieveCalendars();
-    print("CalenderLogic constructor called");
-  }
-
   String get nextEvent => _nextEvent;
 
+  CalenderLogic() {
+    _deviceCalendarPlugin = DeviceCalendarPlugin();
+  }
+
   Future<bool> updateEvents() async {
-    // if (!_calendarsLoaded) {
-    //   print("UPDATING EVENTS");
-    //   sleep(Duration(seconds: 2));
-    // }
+    DateTime now = DateTime.now();
+    if (now.compareTo(_lastUpdatedCalendars) >= 0) {
+      await _retrieveCalendars();
+      _lastUpdatedCalendars = now.add(Duration(days: 7));
+    }
     return await _retrieveCalendarEvents();
   }
 
-  void _retrieveCalendars() async {
+  Future _retrieveCalendars() async {
     try {
       var permissionsGranted = await _deviceCalendarPlugin.hasPermissions();
       if (permissionsGranted.isSuccess &&
@@ -106,9 +99,6 @@ class CalenderLogic {
 
       final calendarsResult = await _deviceCalendarPlugin.retrieveCalendars();
       _calendars = calendarsResult.data as List<Calendar>;
-      print("CALENDARS LOADED");
-      _calendarsLoaded = true;
-      _retrieveCalendarEvents();
     } on PlatformException catch (e) {
       print(e);
     }
@@ -128,10 +118,10 @@ class CalenderLogic {
       return false;
     }
     String title = events.last.title!;
-    String start = "${events.last.start!.hour.toString().padLeft(2, '0')}:${events.last.start!.minute.toString().padLeft(2, '0')}";
+    String start =
+        "${events.last.start!.hour.toString().padLeft(2, '0')}:${events.last.start!.minute.toString().padLeft(2, '0')}";
 
     _nextEvent = "$title ($start)";
-    print(_nextEvent);
     return true;
   }
 }
