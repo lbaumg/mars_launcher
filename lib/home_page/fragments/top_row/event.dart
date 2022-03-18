@@ -1,5 +1,6 @@
+/// Queries the device calendars and events for the day and displays the next event in a Text widget
+
 import 'dart:async';
-import 'dart:io';
 
 import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/material.dart';
@@ -33,16 +34,16 @@ class _EventViewState extends State<EventView> {
     );
   }
 
-  _updateEvents() {
-    calenderLogic.updateEvents().then((bool success) {
-      if (success) {
+  _updateEvents() async {
+    calenderLogic.updateEvents().then((bool nextEventUpdated) {
+      if (nextEventUpdated) {
         setState(() {});
       }
     });
   }
 
   _triggerUpdate() {
-    timer = Timer.periodic(Duration(minutes: 10), (timer) => _updateEvents());
+    timer = Timer.periodic(Duration(minutes: 1), (timer) => _updateEvents());
   }
 
   @override
@@ -105,6 +106,8 @@ class CalenderLogic {
   }
 
   Future<bool> _retrieveCalendarEvents() async {
+    /// Reads calendar events
+    /// return true if next retrieved event != currently stored event else false
     var now = DateTime.now();
     var midnight = DateTime(now.year, now.month, now.day + 1);
 
@@ -114,14 +117,17 @@ class CalenderLogic {
           calendar.id, RetrieveEventsParams(startDate: now, endDate: midnight));
       events.addAll(calendarEventsResult.data as List<Event>);
     }
-    if (events.isEmpty || events.last.title == null || events.last.start == null) {
+    String newNextEvent = "no events";
+    if (events.isNotEmpty && events.last.title != null && events.last.start != null) {
+      String startTime =
+          "${events.last.start!.hour.toString().padLeft(2, '0')}:${events.last.start!.minute.toString().padLeft(2, '0')}";
+      newNextEvent = "${events.last.title!} ($startTime)";
+    }
+    if (newNextEvent != _nextEvent) {
+      _nextEvent = newNextEvent;
+      return true;
+    } else {
       return false;
     }
-    String title = events.last.title!;
-    String start =
-        "${events.last.start!.hour.toString().padLeft(2, '0')}:${events.last.start!.minute.toString().padLeft(2, '0')}";
-
-    _nextEvent = "$title ($start)";
-    return true;
   }
 }
