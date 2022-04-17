@@ -1,6 +1,5 @@
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:device_apps/device_apps.dart';
-import 'package:flutter/services.dart';
 
 
 class AppInfo {
