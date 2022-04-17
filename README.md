@@ -1,3 +1,3 @@
 # mars launcher
 
-minimalistic and really swaggy launcher  
+minimalistic and really simple launcher
