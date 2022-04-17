@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mars_launcher/data/app_info.dart';
 import 'package:flutter_mars_launcher/home_page/fragments/app_search_fragment.dart';
-import 'package:flutter_mars_launcher/home_page/home_logic.dart';
+import 'package:flutter_mars_launcher/logic/apps_logic.dart';
 import 'package:flutter_mars_launcher/services/service_locator.dart';
 
 
@@ -18,6 +18,11 @@ class AppCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appsManager = getIt<AppsManager>();
+
+    var fontFamily = isShortcutItem ? "NotoSansRegular" : "NotoSansLight";
+    var letterSpacing = isShortcutItem ? 1.0 : 0.0;
+    var textColor = isShortcutItem ? Colors.white : Colors.deepOrange;
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 7, 0, 7),
       child: TextButton(
@@ -48,14 +53,12 @@ class AppCard extends StatelessWidget {
           style: TextStyle(
             fontSize: 30,
             fontWeight: FontWeight.w100,
-            fontFamily: isShortcutItem ? "NotoSansRegular" : "NotoSansLight",
-            letterSpacing: isShortcutItem ? 1 : 0,
+            fontFamily: fontFamily,
+            letterSpacing: letterSpacing,
           ),
         ),
         style: ButtonStyle(
-          overlayColor: MaterialStateProperty.all(Colors.black),
-          foregroundColor: MaterialStateProperty.all(
-              isShortcutItem ? Colors.white : Colors.deepOrange),
+          foregroundColor: MaterialStateProperty.all(isShortcutItem ? Theme.of(context).primaryColor : Colors.deepOrange),
         ),
       ),
     );

@@ -28,7 +28,6 @@ class _EventViewState extends State<EventView> {
           : calenderLogic.nextEvent,
       softWrap: false,
       style: TextStyle(
-        color: textColor,
         fontSize: 15,
       ),
     );

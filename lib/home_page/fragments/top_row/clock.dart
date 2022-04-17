@@ -34,7 +34,7 @@ class _ClockState extends State<Clock> {
     return Text(
       _currentTime(),
       style: TextStyle(
-          color: textColor, fontSize: 15, fontWeight: FontWeight.w600),
+          fontSize: 15, fontWeight: FontWeight.w600),
     );
   }
 

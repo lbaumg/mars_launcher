@@ -1,10 +1,11 @@
 /// Shortcut apps fragment in middle of home screen
+/// TODO save in database after change and load on startup
 
 import 'package:flutter/material.dart';
 import 'package:flutter_mars_launcher/home_page/fragments/app_card.dart';
 import 'package:flutter_mars_launcher/data/app_info.dart';
 import 'package:flutter_mars_launcher/services/service_locator.dart';
-import 'package:flutter_mars_launcher/home_page/home_logic.dart';
+import 'package:flutter_mars_launcher/logic/apps_logic.dart';
 
 
 class AppShortcutsFragment extends StatelessWidget {

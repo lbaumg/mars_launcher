@@ -5,7 +5,7 @@ import 'package:flutter_mars_launcher/home_page/fragments/app_card.dart';
 import 'package:flutter_mars_launcher/data/app_info.dart';
 import 'package:flutter_mars_launcher/global.dart';
 import 'package:flutter_mars_launcher/services/service_locator.dart';
-import 'package:flutter_mars_launcher/home_page/home_logic.dart';
+import 'package:flutter_mars_launcher/logic/apps_logic.dart';
 
 
 class AppSearchFragment extends StatefulWidget {
@@ -44,7 +44,9 @@ class _AppSearchFragmentState extends State<AppSearchFragment> {
   }
 
   openApp(AppInfo appInfo) {
+    /// Opens app if not in selectionMode else replace shortcut
     if (widget.shortcutSelectionMode) {
+      // TODO return as result
       appsManager.shortcutAppsNotifier
           .replaceShortcut(widget.shortcutIndex, appInfo);
       Navigator.pop(context);
@@ -76,14 +78,14 @@ class _AppSearchFragmentState extends State<AppSearchFragment> {
                 cursorWidth: 0,
                 decoration: InputDecoration(
                     enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: primaryColor)),
+                        borderSide: BorderSide(color: Colors.transparent)),
                     focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: primaryColor))),
+                        borderSide: BorderSide(color: Colors.transparent))),
                 controller: _textController,
                 autofocus: true,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Theme.of(context).primaryColor,
                   fontSize: 30,
                 ),
                 onChanged: onItemChanged,

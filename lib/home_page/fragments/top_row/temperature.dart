@@ -47,7 +47,7 @@ class _TemperatureState extends State<Temperature> {
     return Text(
       temperatureLogic.temperature,
       style: TextStyle(
-          color: textColor, fontSize: 15, fontWeight: FontWeight.w600),
+          fontSize: 15, fontWeight: FontWeight.w600),
     );
   }
 

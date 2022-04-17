@@ -4,9 +4,10 @@ import 'package:flutter_mars_launcher/global.dart';
 import 'package:flutter_mars_launcher/home_page/fragments/app_shortcuts_fragment.dart';
 import 'package:flutter_mars_launcher/home_page/fragments/app_search_fragment.dart';
 import 'package:flutter_mars_launcher/home_page/fragments/top_row/top_row.dart';
+import 'package:flutter_mars_launcher/logic/theme_logic.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_mars_launcher/services/service_locator.dart';
-import 'package:flutter_mars_launcher/home_page/home_logic.dart';
+import 'package:flutter_mars_launcher/logic/apps_logic.dart';
 
 
 class Home extends StatefulWidget {
@@ -17,6 +18,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> with WidgetsBindingObserver {
 
   bool searchApps = false;
+  final themeManager = getIt<ThemeManager>();
 
   @override
   void initState() {
@@ -43,7 +45,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
         onHorizontalDragUpdate: _horizontalDragHandler,
         onVerticalDragUpdate: _verticalDragHandler,
         onDoubleTap: () {
-          // TODO Toggle dark mode
+          themeManager.toggleDarkMode();
         },
         onPanDown: (details) {
           FocusScopeNode currentFocus = FocusScope.of(context);
@@ -56,28 +58,25 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
         child: Scaffold(
           resizeToAvoidBottomInset: false,
           // backgroundColor: primaryColor,
-          body: AnnotatedRegion<SystemUiOverlayStyle>(
-            value: SystemUiOverlayStyle.dark,
-            child: SafeArea(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                      flex: 1,
-                      child: TopRow()),
+          body: SafeArea(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                    flex: 1,
+                    child: TopRow()),
 
-                  Expanded(
-                      flex: 1,
-                      child: SyncAppsButton()),
+                Expanded(
+                    flex: 1,
+                    child: SyncAppsButton()),
 
-                  Expanded(
-                    flex: 8,
-                    child: !searchApps
-                        ? AppShortcutsFragment()
-                        : AppSearchFragment(),
-                  ),
-                ],
-              ),
+                Expanded(
+                  flex: 8,
+                  child: !searchApps
+                      ? AppShortcutsFragment()
+                      : AppSearchFragment(),
+                ),
+              ],
             ),
           ),
         ),
@@ -144,14 +143,11 @@ class SyncAppsButton extends StatelessWidget {
     final appsManager = getIt<AppsManager>();
     return Center(
       // alignment: Alignment.centerLeft,
-      child: ElevatedButton(
+      child: TextButton(
         onPressed: () {
           Fluttertoast.showToast(msg: "syncing apps..");
           appsManager.appsNotifier.syncInstalledApps();
         },
-        style: ElevatedButton.styleFrom(
-          primary: Colors.black
-        ),
         child: SizedBox(
           width: 10,
           height: 20,
