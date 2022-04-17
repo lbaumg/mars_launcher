@@ -1,10 +1,10 @@
-/// Top row of home screen, contains widgets from home_page/fragments/top_row
+/// Top row of home screen, contains widgets from pages/fragments/top_row
 
 import 'package:flutter/material.dart';
 import 'package:flutter_mars_launcher/global.dart';
-import 'package:flutter_mars_launcher/home_page/fragments/top_row/event.dart';
-import 'package:flutter_mars_launcher/home_page/fragments/top_row/clock.dart';
-import 'package:flutter_mars_launcher/home_page/fragments/top_row/temperature.dart';
+import 'package:flutter_mars_launcher/pages/fragments/top_row/event.dart';
+import 'package:flutter_mars_launcher/pages/fragments/top_row/clock.dart';
+import 'package:flutter_mars_launcher/pages/fragments/top_row/temperature.dart';
 
 class TopRow extends StatelessWidget {
   const TopRow({

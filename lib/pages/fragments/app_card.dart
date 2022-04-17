@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mars_launcher/data/app_info.dart';
-import 'package:flutter_mars_launcher/home_page/fragments/app_search_fragment.dart';
+import 'package:flutter_mars_launcher/pages/fragments/app_search_fragment.dart';
 import 'package:flutter_mars_launcher/logic/apps_logic.dart';
 import 'package:flutter_mars_launcher/services/service_locator.dart';
 
@@ -21,7 +21,6 @@ class AppCard extends StatelessWidget {
 
     var fontFamily = isShortcutItem ? "NotoSansRegular" : "NotoSansLight";
     var letterSpacing = isShortcutItem ? 1.0 : 0.0;
-    var textColor = isShortcutItem ? Colors.white : Colors.deepOrange;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 7, 0, 7),

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_mars_launcher/global.dart';
-import 'package:flutter_mars_launcher/home_page/fragments/app_shortcuts_fragment.dart';
-import 'package:flutter_mars_launcher/home_page/fragments/app_search_fragment.dart';
-import 'package:flutter_mars_launcher/home_page/fragments/top_row/top_row.dart';
+import 'package:flutter_mars_launcher/pages/fragments/app_shortcuts_fragment.dart';
+import 'package:flutter_mars_launcher/pages/fragments/app_search_fragment.dart';
+import 'package:flutter_mars_launcher/pages/fragments/top_row/top_row.dart';
 import 'package:flutter_mars_launcher/logic/theme_logic.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_mars_launcher/services/service_locator.dart';
