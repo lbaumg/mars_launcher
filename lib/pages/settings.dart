@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mars_launcher/logic/shortcut_logic.dart';
 import 'package:flutter_mars_launcher/logic/theme_logic.dart';
 import 'package:flutter_mars_launcher/services/service_locator.dart';
-import 'package:flutter_mars_launcher/services/storage_service/shared_prefs_manager.dart';
+
+var switchHeight = 30.0;
 
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);
@@ -22,8 +23,6 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
     var textStyleSubTitle =
         TextStyle(fontSize: 22, height: 1, fontWeight: FontWeight.bold);
     var textStyleItems = TextStyle(fontSize: 18, height: 1);
-
-    var switchHeight = 30.0;
 
     return GestureDetector(
       onDoubleTap: () {
@@ -47,130 +46,69 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                   style: textStyleSubTitle,
                 ),
                 SizedBox(height: 10),
-                Table(
-                    // border: TableBorder.all(color: Colors.black),
-                    defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                    columnWidths: const <int, TableColumnWidth>{
-                      0: FixedColumnWidth(180),
-                      1: FixedColumnWidth(100),
-                    },
-                    children: <TableRow>[
-                      TableRow(children: <Widget> [
-                        Text(
-                          "number of\nshortcut items",
-                          style: textStyleItems,
-                        ),
-                        ValueListenableBuilder<int>(
-                            valueListenable:
-                            appShortcutsManager.numberOfShortcutItemsNotifier,
-                            builder: (context, numOfShortcutItems, child) {
-                              return Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-
-                                  SizedBox(
-                                    width: 40,
-                                    child: IconButton(
-                                      icon: Icon(Icons.remove),
-                                      onPressed: () {
-                                        appShortcutsManager.decNumberOfShortcutItems();
-                                      },
-                                    ),
-                                  ),
-                                  Text(numOfShortcutItems.toString()),
-                                  SizedBox(
-                                    width: 35,
-                                    child: IconButton(
-                                      icon: Icon(Icons.add),
-                                      onPressed: () {
-                                        appShortcutsManager.incNumberOfShortcutItems();
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              );
-                            }),
-                      ]),
-
-                      TableRow(children: <Widget>[
-                        Text(
-                          "enable clock app",
-                          style: textStyleItems,
-                        ),
-                        ValueListenableBuilder<bool>(
-                            valueListenable:
+                TextButton(
+                  onPressed: () {},
+                  child: Text(
+                    "set default launcher",
+                    style: textStyleItems,
+                  ),
+                ),
+                GestureDetector(
+                  onDoubleTap: () {},
+                  child: Table(
+                      // border: TableBorder.all(color: Colors.black),
+                      defaultVerticalAlignment:
+                          TableCellVerticalAlignment.middle,
+                      columnWidths: const <int, TableColumnWidth>{
+                        0: FixedColumnWidth(180),
+                        1: FixedColumnWidth(100),
+                      },
+                      children: <TableRow>[
+                        TableRow(children: <Widget>[
+                          Text(
+                            "number of\nshortcut items",
+                            style: textStyleItems,
+                          ),
+                          IncDecButton(),
+                        ]),
+                        TableRow(children: <Widget>[
+                          Text(
+                            "enable clock app",
+                            style: textStyleItems,
+                          ),
+                          SwitchButton(
+                            appShortcutsManager: appShortcutsManager,
+                            enabledNotifier:
                                 appShortcutsManager.clockEnabledNotifier,
-                            builder: (context, isSwitched, child) {
-                              return SizedBox(
-                                height: switchHeight,
-                                child: Switch(
-                                  value: isSwitched,
-                                  onChanged: (value) {
-                                    appShortcutsManager.toggleEnable(
-                                        "isSwitchedClock", value);
-                                  },
-                                  activeTrackColor: Colors.grey[600],
-                                  activeColor: Colors.grey[800],
-                                  inactiveThumbColor: Colors.grey[400],
-                                  inactiveTrackColor: Colors.grey[200],
-                                  focusColor: Colors.transparent,
-                                ),
-                              );
-                            }),
-                      ]),
-                      TableRow(children: <Widget>[
-                        Text(
-                          "enable weather app",
-                          style: textStyleItems,
-                        ),
-                        ValueListenableBuilder<bool>(
-                            valueListenable:
+                            setting: "isSwitchedClock",
+                          ),
+                        ]),
+                        TableRow(children: <Widget>[
+                          Text(
+                            "enable weather app",
+                            style: textStyleItems,
+                          ),
+                          SwitchButton(
+                            appShortcutsManager: appShortcutsManager,
+                            enabledNotifier:
                                 appShortcutsManager.weatherEnabledNotifier,
-                            builder: (context, isSwitched, child) {
-                              return SizedBox(
-                                height: switchHeight,
-                                child: Switch(
-                                  value: isSwitched,
-                                  onChanged: (value) {
-                                    appShortcutsManager.toggleEnable(
-                                        "isSwitchedWeather", value);
-                                  },
-                                  activeTrackColor: Colors.grey[600],
-                                  activeColor: Colors.grey[800],
-                                  inactiveThumbColor: Colors.grey[400],
-                                  inactiveTrackColor: Colors.grey[200],
-                                  focusColor: Colors.transparent,
-                                ),
-                              );
-                            }),
-                      ]),
-                      TableRow(children: <Widget>[
-                        Text(
-                          "enable calendar app",
-                          style: textStyleItems,
-                        ),
-                        ValueListenableBuilder<bool>(
-                            valueListenable:
+                            setting: "isSwitchedWeather",
+                          ),
+                        ]),
+                        TableRow(children: <Widget>[
+                          Text(
+                            "enable calendar app",
+                            style: textStyleItems,
+                          ),
+                          SwitchButton(
+                            appShortcutsManager: appShortcutsManager,
+                            enabledNotifier:
                                 appShortcutsManager.calendarEnabledNotifier,
-                            builder: (context, isSwitched, child) {
-                              return SizedBox(
-                                height: switchHeight,
-                                child: Switch(
-                                  value: isSwitched,
-                                  onChanged: (value) {
-                                    appShortcutsManager.toggleEnable(
-                                        "isSwitchedCalendar", value);
-                                  },
-                                  activeTrackColor: Colors.grey[600],
-                                  activeColor: Colors.grey[800],
-                                  inactiveThumbColor: Colors.grey[400],
-                                  inactiveTrackColor: Colors.grey[200],
-                                  focusColor: Colors.transparent,
-                                ),
-                              );
-                            }),
+                            setting: "isSwitchedCalendar",
+                          ),
+                        ]),
                       ]),
-                    ]),
+                ),
                 SizedBox(height: 100),
                 Text(
                   "select apps",
@@ -246,6 +184,83 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
           ),
         ),
       ),
+    );
+  }
+}
+
+class SwitchButton extends StatelessWidget {
+  final AppShortcutsManager appShortcutsManager;
+  final ValueNotifier<bool> enabledNotifier;
+  final String setting;
+
+  const SwitchButton(
+      {Key? key,
+      required this.appShortcutsManager,
+      required this.enabledNotifier,
+      required this.setting})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: switchHeight,
+      child: ValueListenableBuilder<bool>(
+          valueListenable: enabledNotifier,
+          builder: (context, isSwitched, child) {
+            return Switch(
+              value: isSwitched,
+              onChanged: (value) {
+                appShortcutsManager.toggleEnable(setting, value);
+              },
+              activeTrackColor: Colors.grey[600],
+              activeColor: Colors.grey[800],
+              inactiveThumbColor: Colors.grey[400],
+              inactiveTrackColor: Colors.grey[200],
+              focusColor: Colors.transparent,
+            );
+          }),
+    );
+  }
+}
+
+class IncDecButton extends StatelessWidget {
+  final appShortcutsManager = getIt<AppShortcutsManager>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        SizedBox(
+          width: 40,
+          child: IconButton(
+            splashColor: Colors.transparent,
+            hoverColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            icon: Icon(Icons.remove),
+            onPressed: () {
+              appShortcutsManager.decNumberOfShortcutItems();
+            },
+          ),
+        ),
+        ValueListenableBuilder<int>(
+            valueListenable: appShortcutsManager.numberOfShortcutItemsNotifier,
+            builder: (context, numOfShortcutItems, child) {
+              return Text(numOfShortcutItems.toString());
+            }),
+        SizedBox(
+          width: 35,
+          child: IconButton(
+            splashColor: Colors.transparent,
+            hoverColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            icon: Icon(Icons.add),
+            onPressed: () {
+              appShortcutsManager.incNumberOfShortcutItems();
+            },
+          ),
+        ),
+      ],
     );
   }
 }
