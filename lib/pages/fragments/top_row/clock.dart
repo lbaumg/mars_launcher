@@ -11,40 +11,55 @@ class Clock extends StatefulWidget {
 }
 
 class _ClockState extends State<Clock> {
-  Timer? timer;
+  late ClockLogic clockLogic;
 
-  _currentTime() {
-    String hour = DateTime.now().hour.toString().padLeft(2, '0');
-    String minute = DateTime.now().minute.toString().padLeft(2, '0');
-    return "$hour:$minute";
+  void callback() {
+    setState(() {});
   }
-
 
   @override
   void initState() {
     super.initState();
-    timer = Timer.periodic(
-        Duration(seconds: 1),
-            (timer) => setState(() {})
-    );
+    clockLogic = ClockLogic(this.callback);
   }
 
   @override
   Widget build(BuildContext context) {
     return Text(
-      _currentTime(),
-      style: TextStyle(
-          fontSize: 15, fontWeight: FontWeight.w600),
+      clockLogic.currentTime,
+      style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
     );
   }
 
   @override
-  void dispose(){
-    timer!.cancel();
+  void dispose() {
+    clockLogic.stopTimer();
     super.dispose();
   }
 }
-/*
-Color hexToColor(String code) {
-  return new Color(int.parse(code.substring(1, 7), radix: 16) + 0xFF000000);
-}*/
+
+class ClockLogic {
+  Function callback;
+  late Timer timer;
+  late String currentTime;
+  String previousTime = "-1:-1";
+
+  ClockLogic(this.callback) {
+    _updateClock();
+    timer = Timer.periodic(Duration(seconds: 1), (timer) => _updateClock());
+  }
+
+  void _updateClock() {
+    String hour = DateTime.now().hour.toString().padLeft(2, '0');
+    String minute = DateTime.now().minute.toString().padLeft(2, '0');
+    currentTime = "$hour:$minute";
+    if (currentTime != previousTime) {
+      callback();
+      previousTime = currentTime;
+    }
+  }
+
+  void stopTimer() {
+    timer.cancel();
+  }
+}
