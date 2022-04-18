@@ -82,3 +82,5 @@ output.json
 #NDK
 obj/
 .externalNativeBuild
+
+assets/apps.json
