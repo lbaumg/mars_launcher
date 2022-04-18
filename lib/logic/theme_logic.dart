@@ -11,6 +11,9 @@ class ThemeManager {
     primaryColor: Colors.white,
     fontFamily: 'NotoSansLight',
     scaffoldBackgroundColor: Colors.black,
+    iconTheme: IconThemeData(
+      color: Colors.white,
+    ),
     textTheme: TextTheme(
       bodyText1: TextStyle(),
       bodyText2: TextStyle(),
@@ -28,6 +31,9 @@ class ThemeManager {
     primaryColor: Colors.black,
     fontFamily: 'NotoSansLight',
     scaffoldBackgroundColor: Colors.white,
+    iconTheme: IconThemeData(
+      color: Colors.black,
+    ),
     textTheme: TextTheme(
       bodyText1: TextStyle(),
       bodyText2: TextStyle(),

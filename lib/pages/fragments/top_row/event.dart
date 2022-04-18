@@ -6,6 +6,8 @@ import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mars_launcher/global.dart';
+import 'package:flutter_mars_launcher/logic/shortcut_logic.dart';
+import 'package:flutter_mars_launcher/services/service_locator.dart';
 
 class EventView extends StatefulWidget {
   const EventView({
@@ -16,52 +18,56 @@ class EventView extends StatefulWidget {
   State<EventView> createState() => _EventViewState();
 }
 
-// TODO long press on calendar -> create new event
 class _EventViewState extends State<EventView> {
-  Timer? timer;
+  final appShortcutsManager = getIt<AppShortcutsManager>();
   late CalenderLogic calenderLogic = CalenderLogic();
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      calenderLogic.nextEvent.length > 15 ? ".." + calenderLogic.nextEvent.substring(calenderLogic.nextEvent.length - 15)
-          : calenderLogic.nextEvent,
-      softWrap: false,
-      style: TextStyle(
-        fontSize: 15,
-      ),
-    );
-  }
-
-  _updateEvents() async {
-    calenderLogic.updateEvents().then((bool nextEventUpdated) {
-      if (nextEventUpdated) {
-        setState(() {});
-      }
-    });
-  }
-
-  _triggerUpdate() {
-    timer = Timer.periodic(Duration(minutes: 1), (timer) => _updateEvents());
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _triggerUpdate();
-    _updateEvents();
+    return ValueListenableBuilder<bool>(
+        valueListenable: appShortcutsManager.weatherEnabledNotifier,
+        builder: (context, isWeatherEnabled, child) {
+          var letterLength = isWeatherEnabled ? 15 : 21;
+          return Container(
+            constraints: BoxConstraints(maxWidth: isWeatherEnabled ? 140 : 180),
+            child: TextButton(
+              onPressed: () {
+                calenderApp.open();
+              },
+              onLongPress: () {
+                // TODO create new event
+              },
+              child: ValueListenableBuilder<String>(
+                  valueListenable: calenderLogic.eventNotifier,
+                  builder: (context, event, child) {
+                    return Text(
+                      event.length > letterLength
+                          ? ".." + event.substring(event.length - letterLength)
+                          : event,
+                      softWrap: false,
+                      style: TextStyle(
+                        fontSize: 15,
+                      ),
+                    );
+                  }),
+            ),
+          );
+        });
   }
 
   @override
   void dispose() {
-    timer!.cancel();
+    calenderLogic.stopTimer();
     super.dispose();
   }
 }
 
 class CalenderLogic {
+  final ValueNotifier<String> eventNotifier = ValueNotifier("no events");
+  late Timer timer;
+
   String _nextEvent = "no events";
-  late DeviceCalendarPlugin _deviceCalendarPlugin;
+  DeviceCalendarPlugin _deviceCalendarPlugin = DeviceCalendarPlugin();
   List<Calendar> _calendars = [];
   DateTime _lastUpdatedCalendars = DateTime.now();
 
@@ -71,16 +77,17 @@ class CalenderLogic {
   String get nextEvent => _nextEvent;
 
   CalenderLogic() {
-    _deviceCalendarPlugin = DeviceCalendarPlugin();
+    updateEvents();
+    timer = Timer.periodic(Duration(minutes: 1), (timer) => updateEvents());
   }
 
-  Future<bool> updateEvents() async {
+  Future updateEvents() async {
     DateTime now = DateTime.now();
     if (now.compareTo(_lastUpdatedCalendars) >= 0) {
       await _retrieveCalendars();
       _lastUpdatedCalendars = now.add(Duration(days: 7));
     }
-    return await _retrieveCalendarEvents();
+    eventNotifier.value = await _retrieveCalendarEvents();
   }
 
   Future _retrieveCalendars() async {
@@ -104,29 +111,38 @@ class CalenderLogic {
     }
   }
 
-  Future<bool> _retrieveCalendarEvents() async {
+  Future<String> _retrieveCalendarEvents() async {
     /// Reads calendar events
-    /// return true if next retrieved event != currently stored event else false
+    /// returns next occuring event
     var now = DateTime.now();
     var midnight = DateTime(now.year, now.month, now.day + 1);
 
     List<Event> events = [];
-    for (Calendar calendar in _defaultCalendars) {
+    for (Calendar calendar in _calendars) {
       var calendarEventsResult = await _deviceCalendarPlugin.retrieveEvents(
           calendar.id, RetrieveEventsParams(startDate: now, endDate: midnight));
       events.addAll(calendarEventsResult.data as List<Event>);
     }
     String newNextEvent = "no events";
-    if (events.isNotEmpty && events.last.title != null && events.last.start != null) {
-      String startTime =
-          "${events.last.start!.hour.toString().padLeft(2, '0')}:${events.last.start!.minute.toString().padLeft(2, '0')}";
-      newNextEvent = "${events.last.title!} ($startTime)";
+    if (events.isNotEmpty) {
+      events.sort((a, b) => a.start!.compareTo(b.start!));
+      if (events.length > 1 && events.any((element) => !element.allDay!)) {
+        events.removeWhere((element) => element.allDay!);
+      }
+
+      var nextEvent = events.first;
+      if (nextEvent.allDay!) {
+        newNextEvent = nextEvent.title!;
+      } else {
+        String startTime =
+            "${nextEvent.start!.hour.toString().padLeft(2, '0')}:${nextEvent.start!.minute.toString().padLeft(2, '0')}";
+        newNextEvent = "${nextEvent.title!} ($startTime)";
+      }
     }
-    if (newNextEvent != _nextEvent) {
-      _nextEvent = newNextEvent;
-      return true;
-    } else {
-      return false;
-    }
+    return newNextEvent;
+  }
+
+  void stopTimer() {
+    timer.cancel();
   }
 }

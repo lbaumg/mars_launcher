@@ -4,6 +4,7 @@ import 'package:flutter_mars_launcher/pages/fragments/app_shortcuts_fragment.dar
 import 'package:flutter_mars_launcher/pages/fragments/app_search_fragment.dart';
 import 'package:flutter_mars_launcher/pages/fragments/top_row/top_row.dart';
 import 'package:flutter_mars_launcher/logic/theme_logic.dart';
+import 'package:flutter_mars_launcher/pages/settings.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_mars_launcher/services/service_locator.dart';
 import 'package:flutter_mars_launcher/logic/apps_logic.dart';
@@ -43,6 +44,12 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
         // SWIPE DETECTION
         onHorizontalDragUpdate: _horizontalDragHandler,
         onVerticalDragUpdate: _verticalDragHandler,
+        onLongPress: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const Settings()),
+          );
+        },
         onDoubleTap: () {
           themeManager.toggleDarkMode();
         },
