@@ -11,6 +11,13 @@ class ThemeManager {
     primaryColor: Colors.white,
     fontFamily: 'NotoSansLight',
     scaffoldBackgroundColor: Colors.black,
+    textTheme: TextTheme(
+      bodyText1: TextStyle(),
+      bodyText2: TextStyle(),
+    ).apply(
+      bodyColor: Colors.white,
+      displayColor: Colors.white,
+    ),
     textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
             foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
@@ -21,6 +28,13 @@ class ThemeManager {
     primaryColor: Colors.black,
     fontFamily: 'NotoSansLight',
     scaffoldBackgroundColor: Colors.white,
+    textTheme: TextTheme(
+      bodyText1: TextStyle(),
+      bodyText2: TextStyle(),
+    ).apply(
+      bodyColor: Colors.black,
+      displayColor: Colors.black,
+    ),
     textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
             foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
