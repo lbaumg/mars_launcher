@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mars_launcher/global.dart';
+import 'package:flutter_mars_launcher/logic/shortcut_logic.dart';
 import 'package:flutter_mars_launcher/pages/fragments/app_shortcuts_fragment.dart';
 import 'package:flutter_mars_launcher/pages/fragments/app_search_fragment.dart';
 import 'package:flutter_mars_launcher/pages/fragments/top_row/top_row.dart';
@@ -19,6 +19,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
   bool searchApps = false;
   final themeManager = getIt<ThemeManager>();
+  final appShortcutsManager = getIt<AppShortcutsManager>();
 
   @override
   void initState() {
@@ -63,7 +64,6 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
         child: Scaffold(
           resizeToAvoidBottomInset: false,
-          // backgroundColor: primaryColor,
           body: SafeArea(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -110,10 +110,10 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     int sensivity = 8;
     if (details.delta.dx > sensivity) {
       // Right Swipe
-      contactsApp.open();
+      appShortcutsManager.contactsAppNotifier.value.open();
     } else if (details.delta.dx < -sensivity) {
       // Left Swipe
-      cameraApp.open();
+      appShortcutsManager.cameraAppNotifier.value.open();
     }
   }
 

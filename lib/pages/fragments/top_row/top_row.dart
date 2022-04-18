@@ -1,8 +1,6 @@
 /// Top row of home screen, contains widgets from pages/fragments/top_row
 
-import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mars_launcher/global.dart';
 import 'package:flutter_mars_launcher/logic/shortcut_logic.dart';
 import 'package:flutter_mars_launcher/pages/fragments/top_row/event.dart';
 import 'package:flutter_mars_launcher/pages/fragments/top_row/clock.dart';
@@ -28,7 +26,7 @@ class TopRow extends StatelessWidget {
                 return isEnabled
                     ? TextButton(
                         onPressed: () {
-                          clockApp.open();
+                          appShortcutsManager.clockAppNotifier.value.open();
                         },
                         onLongPress: () {
                           // TODO create alarm
@@ -43,7 +41,7 @@ class TopRow extends StatelessWidget {
                 return isEnabled
                     ? TextButton(
                         onPressed: () {
-                          weatherApp.open();
+                          appShortcutsManager.weatherAppNotifier.value.open();
                         },
                         child: Temperature(),
                       )

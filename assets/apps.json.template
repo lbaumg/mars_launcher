@@ -1,0 +1,52 @@
+{
+  "shortcutApps": [
+    {
+      "packageName": "",
+      "name": "select"
+    },
+    {
+      "packageName": "",
+      "name": "select"
+    },
+    {
+      "packageName": "",
+      "name": "select"
+    },
+    {
+      "packageName": "",
+      "name": "select"
+    },
+    {
+      "packageName": "",
+      "name": "select"
+    },
+    {
+      "packageName": "",
+      "name": "select"
+    },
+    {
+      "packageName": "",
+      "name": "select"
+    }
+  ],
+  "weather": {
+      "packageName": "",
+      "name": "weather"
+  },
+  "clock": {
+      "packageName": "",
+      "name": "clock"
+  },
+  "calendar": {
+    "packageName": "",
+    "appName": "calendar"
+  },
+  "camera": {
+    "packageName": "",
+    "appName": "camera"
+  },
+  "contacts": {
+    "packageName": "",
+    "appName": "contacts"
+  }
+}

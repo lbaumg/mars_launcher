@@ -8,5 +8,5 @@ final getIt = GetIt.instance;
 void setupGetIt() {
   getIt.registerLazySingleton<AppsManager>(() => AppsManager());
   getIt.registerLazySingleton<ThemeManager>(() => ThemeManager());
-  getIt.registerSingleton<AppShortcutsManager>(AppShortcutsManager());
+  getIt.registerLazySingleton<AppShortcutsManager>(() => AppShortcutsManager());
 }

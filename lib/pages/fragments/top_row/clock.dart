@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_mars_launcher/global.dart';
 
 class Clock extends StatefulWidget {
   const Clock({Key? key}) : super(key: key);

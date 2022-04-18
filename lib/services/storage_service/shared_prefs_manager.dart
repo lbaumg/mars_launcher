@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPrefsManager {
   static void saveData(String key, dynamic value) async {
+    print("(WRITING TO STORAGE) $key: $value");
     final prefs = await SharedPreferences.getInstance();
     if (value is int) {
       prefs.setInt(key, value);

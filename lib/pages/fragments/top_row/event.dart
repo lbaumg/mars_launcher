@@ -5,7 +5,6 @@ import 'dart:async';
 import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_mars_launcher/global.dart';
 import 'package:flutter_mars_launcher/logic/shortcut_logic.dart';
 import 'package:flutter_mars_launcher/services/service_locator.dart';
 
@@ -32,7 +31,7 @@ class _EventViewState extends State<EventView> {
             constraints: BoxConstraints(maxWidth: isWeatherEnabled ? 140 : 180),
             child: TextButton(
               onPressed: () {
-                calenderApp.open();
+                appShortcutsManager.calendarAppNotifier.value.open();
               },
               onLongPress: () {
                 // TODO create new event
@@ -70,9 +69,6 @@ class CalenderLogic {
   DeviceCalendarPlugin _deviceCalendarPlugin = DeviceCalendarPlugin();
   List<Calendar> _calendars = [];
   DateTime _lastUpdatedCalendars = DateTime.now();
-
-  List<Calendar> get _defaultCalendars =>
-      _calendars.where((c) => c.isDefault == true).toList();
 
   String get nextEvent => _nextEvent;
 

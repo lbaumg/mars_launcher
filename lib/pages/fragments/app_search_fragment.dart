@@ -1,6 +1,7 @@
 /// App search fragment that appears on swipe up
 
 import 'package:flutter/material.dart';
+import 'package:flutter_mars_launcher/logic/shortcut_logic.dart';
 import 'package:flutter_mars_launcher/pages/fragments/app_card.dart';
 import 'package:flutter_mars_launcher/data/app_info.dart';
 import 'package:flutter_mars_launcher/services/service_locator.dart';
@@ -22,6 +23,7 @@ class _AppSearchFragmentState extends State<AppSearchFragment> {
   TextEditingController _textController = TextEditingController();
   List<AppInfo> filteredApps = [];
   final appsManager = getIt<AppsManager>();
+  final appShortcutsManager = getIt<AppShortcutsManager>();
 
   onItemChanged(String value) {
     setState(() {
@@ -46,7 +48,7 @@ class _AppSearchFragmentState extends State<AppSearchFragment> {
     /// Opens app if not in selectionMode else replace shortcut
     if (widget.shortcutSelectionMode) {
       // TODO return as result
-      appsManager.shortcutAppsNotifier
+      appShortcutsManager.shortcutAppsNotifier
           .replaceShortcut(widget.shortcutIndex, appInfo);
       Navigator.pop(context);
     } else {

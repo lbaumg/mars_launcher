@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_mars_launcher/global.dart';
 import 'package:location/location.dart';
 import 'package:weather/weather.dart';
 

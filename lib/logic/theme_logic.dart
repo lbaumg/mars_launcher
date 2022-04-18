@@ -62,7 +62,7 @@ class ThemeManager {
 
   ThemeManager() {
     SharedPrefsManager.readData('themeMode').then((value) {
-      print('value read from storage: ' + value.toString());
+      print('Theme: $value (read from storage)');
       var themeMode = value ?? true;
       darkModeNotifier.setMode(themeMode);
     });

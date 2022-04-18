@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mars_launcher/data/app_info.dart';
+import 'package:flutter_mars_launcher/logic/shortcut_logic.dart';
 import 'package:flutter_mars_launcher/pages/fragments/app_search_fragment.dart';
-import 'package:flutter_mars_launcher/logic/apps_logic.dart';
 import 'package:flutter_mars_launcher/services/service_locator.dart';
 
 
@@ -17,7 +17,7 @@ class AppCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appsManager = getIt<AppsManager>();
+    final appShortcutsManager = getIt<AppShortcutsManager>();
 
     var fontFamily = isShortcutItem ? "NotoSansRegular" : "NotoSansLight";
     var letterSpacing = isShortcutItem ? 1.0 : 0.0;
@@ -31,7 +31,7 @@ class AppCard extends StatelessWidget {
         onLongPress: () {
 
           if (isShortcutItem) {
-            int shortcutIndex = appsManager.shortcutAppsNotifier.value.indexOf(appInfo);
+            int shortcutIndex = appShortcutsManager.shortcutAppsNotifier.value.indexOf(appInfo);
 
             Navigator.push(
               context,
