@@ -7,6 +7,7 @@ import 'package:flutter_mars_launcher/data/app_info.dart';
 import 'package:flutter_mars_launcher/global.dart';
 import 'package:flutter_mars_launcher/services/storage_service/shared_prefs_manager.dart';
 
+
 class AppShortcutsManager {
   final ValueNotifier<bool> weatherEnabledNotifier = ValueNotifier(false);
   final ValueNotifier<bool> clockEnabledNotifier = ValueNotifier(false);
@@ -78,22 +79,23 @@ class AppShortcutsManager {
 
   }
 
-  void toggleEnable(String setting, bool value) {
+  void toggleEnable(String setting) {
     if (setting == "isSwitchedWeather") {
-      weatherEnabledNotifier.value = value;
+      weatherEnabledNotifier.value = !weatherEnabledNotifier.value;
+      SharedPrefsManager.saveData(setting, weatherEnabledNotifier.value);
     } else if (setting == "isSwitchedClock") {
-      clockEnabledNotifier.value = value;
+      clockEnabledNotifier.value = !clockEnabledNotifier.value;
+      SharedPrefsManager.saveData(setting, clockEnabledNotifier.value);
     } else if (setting == "isSwitchedCalendar") {
-      calendarEnabledNotifier.value = value;
+      calendarEnabledNotifier.value = !calendarEnabledNotifier.value;
+      SharedPrefsManager.saveData(setting, calendarEnabledNotifier.value);
     }
-    SharedPrefsManager.saveData(setting, value);
+
   }
 
   void incNumberOfShortcutItems() {
-    if (numberOfShortcutItemsNotifier.value < MAX_NUM_OF_SHORTCUT_ITEMS) {
-      numberOfShortcutItemsNotifier.value++;
-      saveNumberOfShortcutItems();
-    }
+    numberOfShortcutItemsNotifier.value = (numberOfShortcutItemsNotifier.value + 1) % (MAX_NUM_OF_SHORTCUT_ITEMS+1);
+    saveNumberOfShortcutItems();
   }
 
   void decNumberOfShortcutItems() {
