@@ -7,7 +7,6 @@ import 'package:flutter_mars_launcher/data/app_info.dart';
 import 'package:flutter_mars_launcher/services/service_locator.dart';
 import 'package:flutter_mars_launcher/logic/apps_logic.dart';
 
-
 class AppSearchFragment extends StatefulWidget {
   final bool shortcutSelectionMode;
   final int shortcutIndex;
@@ -21,59 +20,29 @@ class AppSearchFragment extends StatefulWidget {
 
 class _AppSearchFragmentState extends State<AppSearchFragment> {
   TextEditingController _textController = TextEditingController();
-  List<AppInfo> filteredApps = [];
-  final appsManager = getIt<AppsManager>();
-  final appShortcutsManager = getIt<AppShortcutsManager>();
+  late final appSearchLogic;
 
-  onItemChanged(String value) {
-    setState(() {
-      filteredApps = appsManager.appsNotifier.value
-          .where(
-              (app) => app.appName.toLowerCase().contains(value.toLowerCase()))
-          .toList();
-    });
-    if (filteredApps.length == 1) {
-      openApp(filteredApps.first);
-      /*if (widget.shortcutSelectionMode) {
-        appsManager.shortcutAppsNotifier.replaceShortcut(widget.shortcutIndex, filteredApps.first);
-        Navigator.pop(context);
-      } else {
-        print("OPEN APP");
-        filteredApps.first.open();
-      }*/
-    }
-  }
-
-  openApp(AppInfo appInfo) {
-    /// Opens app if not in selectionMode else replace shortcut
-    if (widget.shortcutSelectionMode) {
-      // TODO return as result
-      appShortcutsManager.shortcutAppsNotifier
-          .replaceShortcut(widget.shortcutIndex, appInfo);
-      Navigator.pop(context);
-    } else {
-      appInfo.open();
-    }
+  callbackPop () {
+    Navigator.pop(context);
   }
 
   @override
   void initState() {
-    super.initState();
-    filteredApps = appsManager.appsNotifier.value;
+    appSearchLogic = AppSearchLogic(callbackPop, widget.shortcutSelectionMode, widget.shortcutIndex);
     print("Shortcut selection mode:");
     print(widget.shortcutSelectionMode);
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-
       child: ScrollConfiguration(
         behavior: MyBehavior(),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <Widget> [
               TextField(
                 cursorColor: Colors.white,
                 cursorWidth: 0,
@@ -89,20 +58,27 @@ class _AppSearchFragmentState extends State<AppSearchFragment> {
                   color: Theme.of(context).primaryColor,
                   fontSize: 30,
                 ),
-                onChanged: onItemChanged,
+                onChanged: (value) {
+                  appSearchLogic.getFilteredApps(value);
+                },
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(22.0, 20.0, 0, 0),
-                child: Column(
-                  // mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: filteredApps
-                      .map((app) => AppCard(
-                            appInfo: app,
-                            isShortcutItem: false,
-                            openApp: openApp,
-                          ))
-                      .toList(),
+                child: ValueListenableBuilder<List<AppInfo>>(
+                  valueListenable: appSearchLogic.filteredAppsNotifier,
+                  builder: (context, filteredApps, child) {
+                    return Column(
+                      // mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: filteredApps
+                          .map((app) => AppCard(
+                                appInfo: app,
+                                isShortcutItem: false,
+                                openApp: appSearchLogic.handleAppSelected,
+                              ))
+                          .toList(),
+                    );
+                  }
                 ),
               ),
             ],
@@ -111,6 +87,44 @@ class _AppSearchFragmentState extends State<AppSearchFragment> {
       ),
     );
   }
+}
+
+class AppSearchLogic {
+  final appsManager = getIt<AppsManager>();
+  final appShortcutsManager = getIt<AppShortcutsManager>();
+  late final ValueNotifier<List<AppInfo>> filteredAppsNotifier;
+  final Function callbackPop;
+  final bool shortcutSelectionMode;
+  final int shortcutIndex;
+
+  AppSearchLogic(this.callbackPop, this.shortcutSelectionMode, this.shortcutIndex) {
+    filteredAppsNotifier = ValueNotifier(appsManager.appsNotifier.value);
+  }
+
+
+  handleAppSelected(AppInfo appInfo) {
+    /// Opens app if not in selectionMode else replace shortcut
+    if (shortcutSelectionMode) {
+      // TODO return as result
+      appShortcutsManager.shortcutAppsNotifier
+          .replaceShortcut(shortcutIndex, appInfo);
+      callbackPop();
+    } else {
+      appInfo.open();
+    }
+  }
+
+  getFilteredApps(String searchValue) {
+    List<AppInfo> filteredApps = appsManager.appsNotifier.value
+        .where((app) =>
+        app.appName.toLowerCase().contains(searchValue.toLowerCase()))
+        .toList();
+    if (filteredApps.length == 1) {
+      handleAppSelected(filteredApps.first);
+    }
+    filteredAppsNotifier.value = filteredApps;
+  }
+
 }
 
 class MyBehavior extends ScrollBehavior {
