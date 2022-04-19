@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mars_launcher/data/app_info.dart';
 import 'package:flutter_mars_launcher/logic/shortcut_logic.dart';
 import 'package:flutter_mars_launcher/logic/theme_logic.dart';
+import 'package:flutter_mars_launcher/pages/fragments/app_search_fragment.dart';
 import 'package:flutter_mars_launcher/services/service_locator.dart';
 
 var switchHeight = 30.0;
@@ -16,6 +18,33 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> with WidgetsBindingObserver {
   final appShortcutsManager = getIt<AppShortcutsManager>();
   final themeManager = getIt<ThemeManager>();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance?.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.inactive && mounted) {
+      Navigator.of(context).pop();
+    }
+    super.didChangeAppLifecycleState(state);
+  }
+
+  void pushAppSearch(ValueNotifier<AppInfo> specialAppNotifier) {
+    Navigator.push(
+      context,
+      MaterialPageRoute<void>(
+          builder: (_) => Scaffold(
+                  body: SafeArea(
+                      child: AppSearchFragment(
+                appSearchMode: AppSearchMode.chooseSpecialShortcut,
+                specialShortcutApp: specialAppNotifier,
+              )))),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +69,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                   children: [
                     Text("settings", style: textStyleTitle),
                     SizedBox(
-                      height: 30,
+                      height: 20,
                       width: double.infinity,
                     ),
                     // Text(
@@ -58,6 +87,21 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                       ),
                     ),
 
+                    // TextButton(
+                    //   onPressed: () {
+                    //     appShortcutsManager.toggleShortcutMode();
+                    //   },
+                    //   child: ValueListenableBuilder<bool>(
+                    //       valueListenable: appShortcutsManager.shortcutMode,
+                    //       builder: (context, mode, child){
+                    //       return Text(
+                    //         mode ? "shortcut mode" : "search mode",
+                    //         style: textStyleItems,
+                    //       );
+                    //     }
+                    //   ),
+                    // ),
+
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -74,135 +118,182 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                           width: 20,
                         ),
                         ValueListenableBuilder<int>(
-                            valueListenable: appShortcutsManager.numberOfShortcutItemsNotifier,
+                            valueListenable: appShortcutsManager
+                                .numberOfShortcutItemsNotifier,
                             builder: (context, numOfShortcutItems, child) {
-                              return Text(numOfShortcutItems.toString(), style: textStyleItems);
+                              return Text(numOfShortcutItems.toString(),
+                                  style: textStyleItems);
                             }),
                       ],
                     ),
+
                     TextButton(
                       onPressed: () {
                         appShortcutsManager.toggleEnable("isSwitchedClock");
                       },
+                      onLongPress: () {
+                        pushAppSearch(
+                            appShortcutsManager.clockAppNotifier);
+                      },
                       child: ValueListenableBuilder<bool>(
-                          valueListenable: appShortcutsManager.clockEnabledNotifier,
+                          valueListenable:
+                              appShortcutsManager.clockEnabledNotifier,
                           builder: (context, clockEnabled, child) {
-                          return Text(
-                            clockEnabled ? "clock" : "hide clock",
-                            style: textStyleItems,
-                          );
-                        }
-                      ),
+                            return Text(
+                              clockEnabled ? "clock" : "hide clock",
+                              style: textStyleItems,
+                            );
+                          }),
                     ),
                     TextButton(
                       onPressed: () {
                         appShortcutsManager.toggleEnable("isSwitchedWeather");
                       },
+                      onLongPress: () {
+                        pushAppSearch(
+                            appShortcutsManager.weatherAppNotifier);
+                      },
                       child: ValueListenableBuilder<bool>(
-                          valueListenable: appShortcutsManager.weatherEnabledNotifier,
+                          valueListenable:
+                              appShortcutsManager.weatherEnabledNotifier,
                           builder: (context, clockEnabled, child) {
                             return Text(
                               clockEnabled ? "weather" : "hide weather",
                               style: textStyleItems,
                             );
-                          }
-                      ),
+                          }),
                     ),
                     TextButton(
                       onPressed: () {
                         appShortcutsManager.toggleEnable("isSwitchedCalendar");
                       },
+                      onLongPress: () {
+                        pushAppSearch(
+                            appShortcutsManager.calendarAppNotifier);
+                      },
                       child: ValueListenableBuilder<bool>(
-                          valueListenable: appShortcutsManager.calendarEnabledNotifier,
+                          valueListenable:
+                              appShortcutsManager.calendarEnabledNotifier,
                           builder: (context, clockEnabled, child) {
                             return Text(
                               clockEnabled ? "calendar" : "hide calendar",
                               style: textStyleItems,
                             );
-                          }
-                      ),
+                          }),
                     ),
-
-
+                    TextButton(
+                        onPressed: () {},
+                        onLongPress: () {
+                          pushAppSearch(
+                              appShortcutsManager.swipeLeftAppNotifier);
+                        },
+                        child: Text(
+                          "swipe left",
+                          style: textStyleItems,
+                        )),
+                    TextButton(
+                        onPressed: () {},
+                        onLongPress: () {
+                          pushAppSearch(
+                              appShortcutsManager.swipeRightAppNotifier);
+                        },
+                        child: Text(
+                          "swipe right",
+                          style: textStyleItems,
+                        )),
                   ],
                 ),
               ),
 
-
-              SizedBox(height: 40),
-              TextButton(
-                onPressed: ()  {},
-                child: Text(
-                  "select apps",
-                  style: textStyleSubTitle,
-                ),
-              ),
-                    // SizedBox(height: 0, width: double.infinity),
-                    Table(
-                      // border: TableBorder.all(color: Colors.white),
-                      defaultColumnWidth: FixedColumnWidth(150),
-                      children: <TableRow>[
-                        TableRow(children: <Widget>[
-                          TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                "swipe left",
-                                style: textStyleItems,
-                              )),
-                          TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                "swipe right",
-                                style: textStyleItems,
-                              )),
-                        ]),
-                        TableRow(children: <Widget>[
-                          ValueListenableBuilder<bool>(
-                              valueListenable:
-                                  appShortcutsManager.clockEnabledNotifier,
-                              builder: (context, isSwitched, child) {
-                                return isSwitched
-                                    ? TextButton(
-                                        onPressed: () {},
-                                        child: Text(
-                                          "clock",
-                                          style: textStyleItems,
-                                        ))
-                                    : Container();
-                              }),
-                          ValueListenableBuilder<bool>(
-                              valueListenable:
-                                  appShortcutsManager.calendarEnabledNotifier,
-                              builder: (context, isSwitched, child) {
-                                return isSwitched
-                                    ? TextButton(
-                                        onPressed: () {},
-                                        child: Text(
-                                          "calendar",
-                                          style: textStyleItems,
-                                        ))
-                                    : Container();
-                              }),
-                        ]),
-                        TableRow(children: <Widget>[
-                          ValueListenableBuilder<bool>(
-                              valueListenable:
-                                  appShortcutsManager.weatherEnabledNotifier,
-                              builder: (context, isSwitched, child) {
-                                return isSwitched
-                                    ? TextButton(
-                                        onPressed: () {},
-                                        child: Text(
-                                          "weather",
-                                          style: textStyleItems,
-                                        ))
-                                    : Container();
-                              }),
-                          Container()
-                        ])
-                      ],
-                    )
-                  ],
+              // SizedBox(height: 20),
+              // TextButton(
+              //   onPressed: () {},
+              //   child: Text(
+              //     "select apps",
+              //     style: textStyleSubTitle,
+              //   ),
+              // ),
+              // SizedBox(height: 0, width: double.infinity),
+              // Table(
+              //   // border: TableBorder.all(color: Colors.white),
+              //   defaultColumnWidth: FixedColumnWidth(150),
+              //   children: <TableRow>[
+              //     TableRow(children: <Widget>[
+              //       TextButton(
+              //           onPressed: () {
+              //             pushAppSearch(
+              //                 appShortcutsManager.swipeLeftAppNotifier);
+              //           },
+              //           child: Text(
+              //             "swipe left",
+              //             style: textStyleItems,
+              //           )),
+              //       TextButton(
+              //           onPressed: () {
+              //             pushAppSearch(
+              //                 appShortcutsManager.swipeRightAppNotifier);
+              //           },
+              //           child: Text(
+              //             "swipe right",
+              //             style: textStyleItems,
+              //           )),
+              //     ]),
+              //     TableRow(children: <Widget>[
+              //       ValueListenableBuilder<bool>(
+              //           valueListenable:
+              //               appShortcutsManager.clockEnabledNotifier,
+              //           builder: (context, isSwitched, child) {
+              //             return isSwitched
+              //                 ? TextButton(
+              //                     onPressed: () {
+              //                       pushAppSearch(
+              //                           appShortcutsManager.clockAppNotifier);
+              //                     },
+              //                     child: Text(
+              //                       "clock",
+              //                       style: textStyleItems,
+              //                     ))
+              //                 : Container();
+              //           }),
+              //       ValueListenableBuilder<bool>(
+              //           valueListenable:
+              //               appShortcutsManager.calendarEnabledNotifier,
+              //           builder: (context, isSwitched, child) {
+              //             return isSwitched
+              //                 ? TextButton(
+              //                     onPressed: () {
+              //                       pushAppSearch(appShortcutsManager
+              //                           .calendarAppNotifier);
+              //                     },
+              //                     child: Text(
+              //                       "calendar",
+              //                       style: textStyleItems,
+              //                     ))
+              //                 : Container();
+              //           }),
+              //     ]),
+              //     TableRow(children: <Widget>[
+              //       ValueListenableBuilder<bool>(
+              //           valueListenable:
+              //               appShortcutsManager.weatherEnabledNotifier,
+              //           builder: (context, isSwitched, child) {
+              //             return isSwitched
+              //                 ? TextButton(
+              //                     onPressed: () {
+              //                       pushAppSearch(
+              //                           appShortcutsManager.weatherAppNotifier);
+              //                     },
+              //                     child: Text(
+              //                       "weather",
+              //                       style: textStyleItems,
+              //                     ))
+              //                 : Container();
+              //           }),
+              //       Container()
+              //     ])
+              //   ],
+              // )
+            ],
           ),
         ),
       ),
@@ -286,7 +377,6 @@ class IncDecButton extends StatelessWidget {
     );
   }
 }
-
 
 /*GestureDetector(
                       onDoubleTap: () {},
