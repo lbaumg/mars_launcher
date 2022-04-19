@@ -6,18 +6,30 @@ import 'package:flutter_mars_launcher/logic/theme_logic.dart';
 
 void main() {
   setupGetIt();
+
+  runApp(MarsLauncher());
+}
+
+class MarsLauncher extends StatelessWidget {
   final themeManager = getIt<ThemeManager>();
 
-  runApp(ValueListenableBuilder<bool>(
-    valueListenable: themeManager.darkModeNotifier,
-    builder: (context, themeMode, child) {
-      return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: themeMode ? themeManager.darkTheme : themeManager.lightTheme,
-        home: AnnotatedRegion<SystemUiOverlayStyle>(
-            value: themeMode ? themeManager.darkSystemUiOverlayStyle : themeManager.lightSystemUiOverlayStyle,
-            child: Home()),
-      );
-    },
-  ));
+  MarsLauncher({
+    Key? key,
+  }) : super(key: key);
+
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<bool>(
+      valueListenable: themeManager.darkModeNotifier,
+      builder: (context, themeMode, child) => MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: themeMode ? themeManager.darkTheme : themeManager.lightTheme,
+          home: AnnotatedRegion<SystemUiOverlayStyle>(
+              value: themeMode ? themeManager.darkSystemUiOverlayStyle : themeManager.lightSystemUiOverlayStyle,
+              child: child!),
+        ),
+      child: Home(),
+    );
+  }
 }
