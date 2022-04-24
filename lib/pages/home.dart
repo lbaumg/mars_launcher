@@ -110,10 +110,10 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     int sensivity = 8;
     if (details.delta.dx > sensivity) {
       // Right Swipe
-      appShortcutsManager.contactsAppNotifier.value.open();
+      appShortcutsManager.swipeRightAppNotifier.value.open();
     } else if (details.delta.dx < -sensivity) {
       // Left Swipe
-      appShortcutsManager.cameraAppNotifier.value.open();
+      appShortcutsManager.swipeLeftAppNotifier.value.open();
     }
   }
 

@@ -6,7 +6,7 @@ import 'package:get_it/get_it.dart';
 final getIt = GetIt.instance;
 
 void setupGetIt() {
-  getIt.registerLazySingleton<AppsManager>(() => AppsManager());
-  getIt.registerLazySingleton<ThemeManager>(() => ThemeManager());
-  getIt.registerLazySingleton<AppShortcutsManager>(() => AppShortcutsManager());
+  getIt.registerSingleton<AppsManager>(AppsManager());
+  getIt.registerSingleton<ThemeManager>(ThemeManager());
+  getIt.registerSingleton<AppShortcutsManager>(AppShortcutsManager());
 }

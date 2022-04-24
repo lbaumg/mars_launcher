@@ -32,12 +32,11 @@ class AppCard extends StatelessWidget {
 
           if (isShortcutItem) {
             int shortcutIndex = appShortcutsManager.shortcutAppsNotifier.value.indexOf(appInfo);
-
             Navigator.push(
               context,
               MaterialPageRoute<void>(
                 builder: (_) =>
-                    Scaffold(body: SafeArea(child: AppSearchFragment(shortcutSelectionMode: true, shortcutIndex: shortcutIndex)))
+                    Scaffold(body: SafeArea(child: AppSearchFragment(appSearchMode: AppSearchMode.chooseShortcut, shortcutIndex: shortcutIndex)))
               ),
             );
           } else {
@@ -87,13 +86,13 @@ class AppInfoDialog extends StatelessWidget {
                   appInfo.uninstall();
                   Navigator.of(context).pop();
                 },
-                child: Text("Uninstall")),
+                child: Text("Uninstall", style: TextStyle(color: Colors.blue),)),
         TextButton(
             onPressed: () {
               appInfo.openSettings();
               Navigator.of(context).pop();
             },
-            child: Text("Info")),
+            child: Text("Info", style: TextStyle(color: Colors.blue),),),
       ],
     );
   }

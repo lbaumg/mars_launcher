@@ -7,30 +7,45 @@ import 'package:flutter_mars_launcher/data/app_info.dart';
 import 'package:flutter_mars_launcher/services/service_locator.dart';
 import 'package:flutter_mars_launcher/logic/apps_logic.dart';
 
-class AppSearchFragment extends StatefulWidget {
-  final bool shortcutSelectionMode;
-  final int shortcutIndex;
+enum AppSearchMode {
+  openApp, chooseShortcut, chooseSpecialShortcut
+}
 
-  AppSearchFragment(
-      {this.shortcutSelectionMode = false, this.shortcutIndex = -1});
+class AppSearchFragment extends StatefulWidget {
+  final AppSearchMode appSearchMode;
+  final ValueNotifierWithKey<AppInfo>? specialShortcutAppNotifier;
+  final int? shortcutIndex;
+
+  AppSearchFragment({this.appSearchMode = AppSearchMode.openApp, this.specialShortcutAppNotifier, this.shortcutIndex});
 
   @override
   _AppSearchFragmentState createState() => _AppSearchFragmentState();
 }
 
-class _AppSearchFragmentState extends State<AppSearchFragment> {
+class _AppSearchFragmentState extends State<AppSearchFragment> with WidgetsBindingObserver{
   TextEditingController _textController = TextEditingController();
   late final appSearchLogic;
+  bool currentlyPopping = false;
 
-  callbackPop () {
+  callbackPop() {
     Navigator.pop(context);
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.inactive && mounted && !currentlyPopping) {
+      currentlyPopping = true;
+      Navigator.of(context).popUntil((route) => route.isFirst);
+    }
+  }
+
+  @override
   void initState() {
-    appSearchLogic = AppSearchLogic(callbackPop, widget.shortcutSelectionMode, widget.shortcutIndex);
-    print("Shortcut selection mode:");
-    print(widget.shortcutSelectionMode);
+    print("INITIALISING AppSearchFragment");
+    appSearchLogic = AppSearchLogic(callbackPop: callbackPop, appSearchMode: widget.appSearchMode, specialShortcutAppNotifier: widget.specialShortcutAppNotifier, shortcutIndex: widget.shortcutIndex);
+    print("Shortcut selection mode: ${widget.appSearchMode}");
+    WidgetsBinding.instance?.addObserver(this);
     super.initState();
   }
 
@@ -93,24 +108,33 @@ class AppSearchLogic {
   final appsManager = getIt<AppsManager>();
   final appShortcutsManager = getIt<AppShortcutsManager>();
   late final ValueNotifier<List<AppInfo>> filteredAppsNotifier;
+  final ValueNotifierWithKey? specialShortcutAppNotifier;
+  final int? shortcutIndex;
   final Function callbackPop;
-  final bool shortcutSelectionMode;
-  final int shortcutIndex;
+  final AppSearchMode appSearchMode;
 
-  AppSearchLogic(this.callbackPop, this.shortcutSelectionMode, this.shortcutIndex) {
+  AppSearchLogic({required this.callbackPop, required this.appSearchMode, this.specialShortcutAppNotifier, this.shortcutIndex}) {
     filteredAppsNotifier = ValueNotifier(appsManager.appsNotifier.value);
   }
 
-
   handleAppSelected(AppInfo appInfo) {
-    /// Opens app if not in selectionMode else replace shortcut
-    if (shortcutSelectionMode) {
-      // TODO return as result
-      appShortcutsManager.shortcutAppsNotifier
-          .replaceShortcut(shortcutIndex, appInfo);
-      callbackPop();
-    } else {
+    /// if appSearchMode: open app
+    /// else if chooseShortcut: replace shortcut
+    /// else if chooseSpecialShortcut: replace special shortcut
+
+    if (appSearchMode == AppSearchMode.openApp) {
       appInfo.open();
+    } else if (appSearchMode == AppSearchMode.chooseShortcut) {
+      print("Replacing shortcut app with index $shortcutIndex with ${appInfo.appName}");
+      appShortcutsManager.shortcutAppsNotifier
+          .replaceShortcut(shortcutIndex ?? -1, appInfo);
+      callbackPop();
+    } else if (appSearchMode == AppSearchMode.chooseSpecialShortcut) {
+      print("Replacing special shortcut app ${specialShortcutAppNotifier?.key} with ${appInfo.appName}");
+      if (specialShortcutAppNotifier != null) {
+        appShortcutsManager.setSpecialShortcutValue(specialShortcutAppNotifier!, appInfo);
+      }
+      callbackPop();
     }
   }
 

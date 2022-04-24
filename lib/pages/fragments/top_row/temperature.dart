@@ -84,9 +84,9 @@ class LocationLogic {
   Location location = new Location();
   bool _serviceEnabled = false;
   late PermissionStatus _permissionGranted;
-  late LocationData _locationData;
-  double _lat = 49.44501618703811;
-  double _lon = 8.654721930317473;
+  LocationData? _locationData;
+  double _lat = 0.0;
+  double _lon = 0.0;
 
   double get lat => _lat;
   double get lon => _lon;
@@ -127,7 +127,7 @@ class LocationLogic {
 
   updateLatLon() async {
     await updateLocation();
-    _lat = _locationData.latitude ?? _lat;
-    _lon = _locationData.longitude ?? _lon;
+    _lat = _locationData?.latitude ?? _lat;
+    _lon = _locationData?.longitude ?? _lon;
   }
 }

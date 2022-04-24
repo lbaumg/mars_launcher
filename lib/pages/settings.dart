@@ -18,6 +18,7 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> with WidgetsBindingObserver {
   final appShortcutsManager = getIt<AppShortcutsManager>();
   final themeManager = getIt<ThemeManager>();
+  bool currentlyPopping = false;
 
   @override
   void initState() {
@@ -27,13 +28,14 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.inactive && mounted) {
+    if (state == AppLifecycleState.inactive && mounted && !currentlyPopping) {
+      currentlyPopping = true;
       Navigator.of(context).pop();
     }
     super.didChangeAppLifecycleState(state);
   }
 
-  void pushAppSearch(ValueNotifier<AppInfo> specialAppNotifier) {
+  void pushAppSearch(ValueNotifierWithKey<AppInfo> specialAppNotifier) {
     Navigator.push(
       context,
       MaterialPageRoute<void>(
@@ -41,7 +43,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                   body: SafeArea(
                       child: AppSearchFragment(
                 appSearchMode: AppSearchMode.chooseSpecialShortcut,
-                specialShortcutApp: specialAppNotifier,
+                specialShortcutAppNotifier: specialAppNotifier,
               )))),
     );
   }
@@ -49,8 +51,6 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     var textStyleTitle = TextStyle(fontSize: 35, fontWeight: FontWeight.normal);
-    var textStyleSubTitle =
-        TextStyle(fontSize: 22, height: 1, fontWeight: FontWeight.bold);
     var textStyleItems = TextStyle(fontSize: 22, height: 1);
 
     return GestureDetector(
@@ -89,7 +89,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
 
                     // TextButton(
                     //   onPressed: () {
-                    //     appShortcutsManager.toggleShortcutMode();
+                    //     appShortcutsManager.toggleEnabled("shortcutMode", appShortcutsManager.shortcutMode);
                     //   },
                     //   child: ValueListenableBuilder<bool>(
                     //       valueListenable: appShortcutsManager.shortcutMode,
@@ -107,7 +107,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                       children: [
                         TextButton(
                           onPressed: () {
-                            appShortcutsManager.incNumberOfShortcutItems();
+                            appShortcutsManager.setNotifierValueAndSave(appShortcutsManager.numberOfShortcutItemsNotifier);
                           },
                           child: Text(
                             "shortcut apps",
@@ -118,8 +118,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                           width: 20,
                         ),
                         ValueListenableBuilder<int>(
-                            valueListenable: appShortcutsManager
-                                .numberOfShortcutItemsNotifier,
+                            valueListenable: appShortcutsManager.numberOfShortcutItemsNotifier,
                             builder: (context, numOfShortcutItems, child) {
                               return Text(numOfShortcutItems.toString(),
                                   style: textStyleItems);
@@ -129,7 +128,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
 
                     TextButton(
                       onPressed: () {
-                        appShortcutsManager.toggleEnable("isSwitchedClock");
+                        appShortcutsManager.setNotifierValueAndSave(appShortcutsManager.clockEnabledNotifier);
                       },
                       onLongPress: () {
                         pushAppSearch(
@@ -147,7 +146,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                     ),
                     TextButton(
                       onPressed: () {
-                        appShortcutsManager.toggleEnable("isSwitchedWeather");
+                        appShortcutsManager.setNotifierValueAndSave(appShortcutsManager.weatherEnabledNotifier);
                       },
                       onLongPress: () {
                         pushAppSearch(
@@ -165,7 +164,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                     ),
                     TextButton(
                       onPressed: () {
-                        appShortcutsManager.toggleEnable("isSwitchedCalendar");
+                        appShortcutsManager.setNotifierValueAndSave(appShortcutsManager.calendarEnabledNotifier);
                       },
                       onLongPress: () {
                         pushAppSearch(
@@ -301,83 +300,6 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
   }
 }
 
-class SwitchButton extends StatelessWidget {
-  final AppShortcutsManager appShortcutsManager;
-  final ValueNotifier<bool> enabledNotifier;
-  final String setting;
-
-  const SwitchButton(
-      {Key? key,
-      required this.appShortcutsManager,
-      required this.enabledNotifier,
-      required this.setting})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: switchHeight,
-      child: ValueListenableBuilder<bool>(
-          valueListenable: enabledNotifier,
-          builder: (context, isSwitched, child) {
-            return Switch(
-              value: isSwitched,
-              onChanged: (value) {
-                appShortcutsManager.toggleEnable(setting);
-              },
-              activeTrackColor: Colors.grey[600],
-              activeColor: Colors.grey[800],
-              inactiveThumbColor: Colors.grey[400],
-              inactiveTrackColor: Colors.grey[200],
-              focusColor: Colors.transparent,
-            );
-          }),
-    );
-  }
-}
-
-class IncDecButton extends StatelessWidget {
-  final appShortcutsManager = getIt<AppShortcutsManager>();
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        SizedBox(
-          width: 40,
-          child: IconButton(
-            splashColor: Colors.transparent,
-            hoverColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            icon: Icon(Icons.remove),
-            onPressed: () {
-              appShortcutsManager.decNumberOfShortcutItems();
-            },
-          ),
-        ),
-        ValueListenableBuilder<int>(
-            valueListenable: appShortcutsManager.numberOfShortcutItemsNotifier,
-            builder: (context, numOfShortcutItems, child) {
-              return Text(numOfShortcutItems.toString());
-            }),
-        SizedBox(
-          width: 35,
-          child: IconButton(
-            splashColor: Colors.transparent,
-            hoverColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            icon: Icon(Icons.add),
-            onPressed: () {
-              appShortcutsManager.incNumberOfShortcutItems();
-            },
-          ),
-        ),
-      ],
-    );
-  }
-}
-
 /*GestureDetector(
                       onDoubleTap: () {},
                       child: Table(
@@ -405,7 +327,7 @@ class IncDecButton extends StatelessWidget {
                                 appShortcutsManager: appShortcutsManager,
                                 enabledNotifier:
                                     appShortcutsManager.clockEnabledNotifier,
-                                setting: "isSwitchedClock",
+                                setting: "clockEnabled",
                               ),
                             ]),
                             TableRow(children: <Widget>[
@@ -417,7 +339,7 @@ class IncDecButton extends StatelessWidget {
                                 appShortcutsManager: appShortcutsManager,
                                 enabledNotifier:
                                     appShortcutsManager.weatherEnabledNotifier,
-                                setting: "isSwitchedWeather",
+                                setting: "weatherEnabled",
                               ),
                             ]),
                             TableRow(children: <Widget>[
@@ -429,7 +351,7 @@ class IncDecButton extends StatelessWidget {
                                 appShortcutsManager: appShortcutsManager,
                                 enabledNotifier:
                                     appShortcutsManager.calendarEnabledNotifier,
-                                setting: "isSwitchedCalendar",
+                                setting: "calendarEnabled",
                               ),
                             ]),
                           ]),

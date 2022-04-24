@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:device_apps/device_apps.dart';
+import 'package:flutter_mars_launcher/global.dart';
 
 
 class AppInfo {
@@ -7,13 +10,19 @@ class AppInfo {
   String appName;
   bool systemApp;
 
-  AppInfo(
-      {required this.packageName,
-      required this.appName,
-      this.systemApp = false});
+
+  AppInfo({
+    required this.packageName,
+    required this.appName,
+    this.systemApp = false
+  });
 
   void open() {
-    DeviceApps.openApp(this.packageName);
+    if (this.packageName.isNotEmpty) {
+      DeviceApps.openApp(this.packageName);
+    } else {
+      print("Could not open app: packageName is empty");
+    }
   }
 
   void uninstall() async {
@@ -29,10 +38,25 @@ class AppInfo {
   }
 
   AppInfo.fromJson(Map<String, dynamic> json)
-      : packageName = json['packageName'],
-        appName = json['appName'],
-        systemApp = json['systemApp'];
+      : packageName = json[JSON_KEY_PACKAGE_NAME],
+        appName = json[JSON_KEY_APP_NAME],
+        systemApp = json[JSON_KEY_SYSTEM_APP];
 
-  Map<String, dynamic> toJson() =>
-      {'packageName': packageName, 'appName': appName, 'systemApp': systemApp};
+  Map<String, dynamic> toJson() => {
+          JSON_KEY_PACKAGE_NAME: packageName,
+          JSON_KEY_APP_NAME: appName,
+          JSON_KEY_SYSTEM_APP: systemApp
+        };
+
+  static AppInfo fromJsonString(String? jsonString) {
+    jsonString = jsonString ?? jsonEncode({JSON_KEY_PACKAGE_NAME: "", JSON_KEY_APP_NAME: "select", JSON_KEY_SYSTEM_APP: false});
+    Map<String, dynamic> json = jsonDecode(jsonString) as Map<String, dynamic>;
+    return AppInfo(packageName: json[JSON_KEY_PACKAGE_NAME], appName: json[JSON_KEY_APP_NAME], systemApp: json[JSON_KEY_SYSTEM_APP]);
+  }
+
+  String toJsonString() => jsonEncode({
+    JSON_KEY_PACKAGE_NAME: packageName,
+    JSON_KEY_APP_NAME: appName,
+    JSON_KEY_SYSTEM_APP: systemApp
+  });
 }

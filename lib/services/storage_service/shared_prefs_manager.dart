@@ -1,10 +1,8 @@
-import 'package:flutter/cupertino.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_mars_launcher/main.dart';
 
 class SharedPrefsManager {
   static void saveData(String key, dynamic value) async {
-    print("(WRITING TO STORAGE) $key: $value");
-    final prefs = await SharedPreferences.getInstance();
+    print("(WRITING TO SHARED PREFS) $key: $value");
     if (value is int) {
       prefs.setInt(key, value);
     } else if (value is String) {
@@ -16,15 +14,19 @@ class SharedPrefsManager {
     }
   }
 
-  static Future<dynamic> readData(String key) async {
-    WidgetsFlutterBinding.ensureInitialized();
-    final prefs = await SharedPreferences.getInstance();
+  static dynamic readData(String key) {
     dynamic obj = prefs.get(key);
+    print('(READ FROM SHARED PREFS) $key: $obj');
     return obj;
   }
 
+  static List<dynamic> readMultiData(List<String> keyList) {
+    List<dynamic> objList = keyList.map((key) => prefs.get(key)).toList();
+    print('(READ FROM SHARED PREFS) ${objList.toString()}');
+    return objList;
+  }
+
   static Future<bool> deleteData(String key) async {
-    final prefs = await SharedPreferences.getInstance();
     return prefs.remove(key);
   }
 }

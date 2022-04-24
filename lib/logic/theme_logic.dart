@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mars_launcher/services/storage_service/shared_prefs_manager.dart';
 
+
+
 class ThemeManager {
-  final darkModeNotifier = DarkModeNotifier();
+  static const String KEY_THEME_MODE = "themeMode";
+  late final themeModeNotifier;
 
   final darkTheme = ThemeData(
     primaryColor: Colors.white,
@@ -61,30 +64,11 @@ class ThemeManager {
   );
 
   ThemeManager() {
-    SharedPrefsManager.readData('themeMode').then((value) {
-      print('Theme: $value (read from storage)');
-      var themeMode = value ?? true;
-      darkModeNotifier.setMode(themeMode);
-    });
+    themeModeNotifier = ValueNotifier<bool>(SharedPrefsManager.readData(KEY_THEME_MODE) ?? true);
   }
 
   void toggleDarkMode() {
-    bool newMode = !darkModeNotifier.isDarkMode();
-    SharedPrefsManager.saveData('themeMode', newMode);
-    darkModeNotifier.toggleMode();
-  }
-}
-
-class DarkModeNotifier extends ValueNotifier<bool> {
-  DarkModeNotifier() : super(true);
-
-  bool isDarkMode() => value;
-
-  void setMode(bool mode) {
-    value = mode;
-  }
-
-  void toggleMode() {
-    value = !value;
+    themeModeNotifier.value = !themeModeNotifier.value;
+    SharedPrefsManager.saveData(KEY_THEME_MODE, themeModeNotifier.value);
   }
 }
