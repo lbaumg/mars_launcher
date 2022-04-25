@@ -10,23 +10,18 @@ class Clock extends StatefulWidget {
 }
 
 class _ClockState extends State<Clock> {
-  late ClockLogic clockLogic;
-
-  void callback() {
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    clockLogic = ClockLogic(this.callback);
-  }
+  ClockLogic clockLogic = ClockLogic();
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      clockLogic.currentTime,
-      style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+    return ValueListenableBuilder<String>(
+        valueListenable: clockLogic.timeNotifier,
+        builder: (context, currentTime, child) {
+        return Text(
+          currentTime,
+          style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+        );
+      }
     );
   }
 
@@ -38,12 +33,10 @@ class _ClockState extends State<Clock> {
 }
 
 class ClockLogic {
-  Function callback;
+  final ValueNotifier<String> timeNotifier = ValueNotifier("");
   late Timer timer;
-  late String currentTime;
-  String previousTime = "-1:-1";
 
-  ClockLogic(this.callback) {
+  ClockLogic() {
     _updateClock();
     timer = Timer.periodic(Duration(seconds: 1), (timer) => _updateClock());
   }
@@ -51,11 +44,7 @@ class ClockLogic {
   void _updateClock() {
     String hour = DateTime.now().hour.toString().padLeft(2, '0');
     String minute = DateTime.now().minute.toString().padLeft(2, '0');
-    currentTime = "$hour:$minute";
-    if (currentTime != previousTime) {
-      callback();
-      previousTime = currentTime;
-    }
+    timeNotifier.value = "$hour:$minute";
   }
 
   void stopTimer() {
