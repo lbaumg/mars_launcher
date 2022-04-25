@@ -127,10 +127,10 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                     ),
 
                     TextButton(
-                      onPressed: () {
+                      onLongPress: () {
                         appShortcutsManager.setNotifierValueAndSave(appShortcutsManager.clockEnabledNotifier);
                       },
-                      onLongPress: () {
+                      onPressed: () {
                         pushAppSearch(
                             appShortcutsManager.clockAppNotifier);
                       },
@@ -145,10 +145,10 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                           }),
                     ),
                     TextButton(
-                      onPressed: () {
+                      onLongPress: () {
                         appShortcutsManager.setNotifierValueAndSave(appShortcutsManager.weatherEnabledNotifier);
                       },
-                      onLongPress: () {
+                      onPressed: () {
                         pushAppSearch(
                             appShortcutsManager.weatherAppNotifier);
                       },
@@ -163,10 +163,10 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                           }),
                     ),
                     TextButton(
-                      onPressed: () {
+                      onLongPress: () {
                         appShortcutsManager.setNotifierValueAndSave(appShortcutsManager.calendarEnabledNotifier);
                       },
-                      onLongPress: () {
+                      onPressed: () {
                         pushAppSearch(
                             appShortcutsManager.calendarAppNotifier);
                       },
@@ -181,8 +181,8 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                           }),
                     ),
                     TextButton(
-                        onPressed: () {},
-                        onLongPress: () {
+                        onLongPress: () {},
+                        onPressed: () {
                           pushAppSearch(
                               appShortcutsManager.swipeLeftAppNotifier);
                         },
@@ -191,8 +191,8 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                           style: textStyleItems,
                         )),
                     TextButton(
-                        onPressed: () {},
-                        onLongPress: () {
+                        onLongPress: () {},
+                        onPressed: () {
                           pushAppSearch(
                               appShortcutsManager.swipeRightAppNotifier);
                         },
