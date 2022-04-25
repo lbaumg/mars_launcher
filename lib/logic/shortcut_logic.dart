@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_mars_launcher/data/app_info.dart';
 import 'package:flutter_mars_launcher/global.dart';
-import 'package:flutter_mars_launcher/services/storage_service/shared_prefs_manager.dart';
+import 'package:flutter_mars_launcher/services/shared_prefs_manager.dart';
 
 
 class AppShortcutsManager {
