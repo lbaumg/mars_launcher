@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mars_launcher/data/app_info.dart';
+import 'package:flutter_mars_launcher/global.dart';
 import 'package:flutter_mars_launcher/logic/shortcut_logic.dart';
+import 'package:flutter_mars_launcher/logic/temperature_logic.dart';
 import 'package:flutter_mars_launcher/logic/theme_logic.dart';
 import 'package:flutter_mars_launcher/pages/fragments/app_search_fragment.dart';
 import 'package:flutter_mars_launcher/services/service_locator.dart';
@@ -18,6 +20,7 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> with WidgetsBindingObserver {
   final appShortcutsManager = getIt<AppShortcutsManager>();
   final themeManager = getIt<ThemeManager>();
+  final temperatureLogic = getIt<TemperatureLogic>();
   bool currentlyPopping = false;
 
   @override
@@ -77,6 +80,16 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                     //   style: textStyleSubTitle,
                     // ),
                     SizedBox(height: 10),
+                    TextButton(
+                      onPressed: () {
+                        marsLauncherAppInfo.openSettings();
+                      },
+                      child: Text(
+                        "permissions",
+                        style: textStyleItems,
+                      ),
+                    ),
+
                     TextButton(
                       onPressed: () {
                         // TODO open settings for setting default launcher
@@ -147,6 +160,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                     TextButton(
                       onLongPress: () {
                         appShortcutsManager.setNotifierValueAndSave(appShortcutsManager.weatherEnabledNotifier);
+                        temperatureLogic.askForPermission();
                       },
                       onPressed: () {
                         pushAppSearch(
