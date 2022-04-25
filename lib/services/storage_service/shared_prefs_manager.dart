@@ -2,7 +2,7 @@ import 'package:flutter_mars_launcher/main.dart';
 
 class SharedPrefsManager {
   static void saveData(String key, dynamic value) async {
-    print("(WRITING TO SHARED PREFS) $key: $value");
+    print("[WRITE SP] $key: $value");
     if (value is int) {
       prefs.setInt(key, value);
     } else if (value is String) {
@@ -16,13 +16,13 @@ class SharedPrefsManager {
 
   static dynamic readData(String key) {
     dynamic obj = prefs.get(key);
-    print('(READ FROM SHARED PREFS) $key: $obj');
+    print('[READ SP] $key: $obj');
     return obj;
   }
 
   static List<dynamic> readMultiData(List<String> keyList) {
     List<dynamic> objList = keyList.map((key) => prefs.get(key)).toList();
-    print('(READ FROM SHARED PREFS) ${objList.toString()}');
+    print('[READ SP] ${objList.toString()}');
     return objList;
   }
 
