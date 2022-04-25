@@ -1,12 +1,10 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_mars_launcher/global.dart';
 import 'package:flutter_mars_launcher/logic/shortcut_logic.dart';
 import 'package:flutter_mars_launcher/services/location_service.dart';
 import 'package:flutter_mars_launcher/services/service_locator.dart';
-import 'package:location/location.dart';
 import 'package:weather/weather.dart';
 
 const API_KEY = "fe944563ad38e93ba270f054ec5b3474";
@@ -45,7 +43,6 @@ class TemperatureLogic {
   }
 
   void askForPermission() async{
-    // TODO ask for permission, call when enabling weather
     await locationService.checkPermission();
   }
 }

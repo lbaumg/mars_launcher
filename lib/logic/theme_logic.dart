@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mars_launcher/services/shared_prefs_manager.dart';
 
+const KEY_THEME_MODE = "themeMode";
+
 
 
 class ThemeManager {
-  static const String KEY_THEME_MODE = "themeMode";
   late final themeModeNotifier;
 
   final darkTheme = ThemeData(
@@ -27,8 +28,7 @@ class ThemeManager {
     textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
             foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-            overlayColor:
-                MaterialStateProperty.all<Color>(Colors.transparent))),
+            overlayColor: MaterialStateProperty.all<Color>(Colors.transparent))),
   );
   final lightTheme = ThemeData(
     primaryColor: Colors.black,
@@ -47,8 +47,7 @@ class ThemeManager {
     textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
             foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-            overlayColor:
-                MaterialStateProperty.all<Color>(Colors.transparent))),
+            overlayColor: MaterialStateProperty.all<Color>(Colors.transparent))),
   );
   final darkSystemUiOverlayStyle = SystemUiOverlayStyle(
     systemNavigationBarColor: Colors.black,
@@ -63,6 +62,9 @@ class ThemeManager {
     statusBarIconBrightness: Brightness.light,
   );
 
+  get currentTheme => themeModeNotifier.value ? darkTheme : lightTheme;
+  get currentSystemUiOverlayStyle => themeModeNotifier.value ? darkSystemUiOverlayStyle : lightSystemUiOverlayStyle;
+
   ThemeManager() {
     themeModeNotifier = ValueNotifier<bool>(SharedPrefsManager.readData(KEY_THEME_MODE) ?? true);
   }
@@ -70,5 +72,9 @@ class ThemeManager {
   void toggleDarkMode() {
     themeModeNotifier.value = !themeModeNotifier.value;
     SharedPrefsManager.saveData(KEY_THEME_MODE, themeModeNotifier.value);
+  }
+
+  void setBackgroundColor(Color color) {
+    // TODO set color of current theme and systemUiOverlayStyle
   }
 }

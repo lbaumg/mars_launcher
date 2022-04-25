@@ -7,76 +7,58 @@ import 'package:flutter_mars_launcher/data/app_info.dart';
 import 'package:flutter_mars_launcher/global.dart';
 import 'package:flutter_mars_launcher/services/shared_prefs_manager.dart';
 
+const KEY_APPS_ARE_SAVED = "appsAreSaved";
+const KEY_WEATHER_ENABLED = "weatherEnabled";
+const KEY_CLOCK_ENABLED = "clockEnabled";
+const KEY_CALENDAR_ENABLED = "calendarEnabled";
+const KEY_NUM_OF_SHORTCUT_ITEMS = "numOfShortcutItems";
+const KEY_SHORTCUT_MODE = "shortcutMode";
+const KEY_CLOCK_APP = "clockApp";
+const KEY_CALENDAR_APP = "calendarApp";
+const KEY_WEATHER_APP = "weatherApp";
+const KEY_SWIPE_LEFT_APP = "swipeLeftApp";
+const KEY_SWIPE_RIGHT_APP = "swipeRightApp";
 
 class AppShortcutsManager {
-  static const KEY_APPS_ARE_SAVED = "appsAreSaved";
-  static const KEY_WEATHER_ENABLED = "weatherEnabled";
-  static const KEY_CLOCK_ENABLED = "clockEnabled";
-  static const KEY_CALENDAR_ENABLED = "calendarEnabled";
-  static const KEY_NUM_OF_SHORTCUT_ITEMS = "numOfShortcutItems";
-  static const KEY_SHORTCUT_MODE = "shortcutMode";
-  static const KEY_CLOCK_APP = "clockApp";
-  static const KEY_CALENDAR_APP = "calendarApp";
-  static const KEY_WEATHER_APP = "weatherApp";
-  static const KEY_SWIPE_LEFT_APP = "swipeLeftApp";
-  static const KEY_SWIPE_RIGHT_APP = "swipeRightApp";
-
-  final ValueNotifierWithKey<bool> weatherEnabledNotifier = ValueNotifierWithKey(true, KEY_WEATHER_ENABLED);
-  final ValueNotifierWithKey<bool> clockEnabledNotifier = ValueNotifierWithKey(true, KEY_CLOCK_ENABLED);
-  final ValueNotifierWithKey<bool> calendarEnabledNotifier = ValueNotifierWithKey(true, KEY_CALENDAR_ENABLED);
-
-  final ValueNotifierWithKey<int> numberOfShortcutItemsNotifier = ValueNotifierWithKey(4, KEY_NUM_OF_SHORTCUT_ITEMS);
-
-  late final ShortcutAppsNotifier shortcutAppsNotifier;
+  late final ValueNotifierWithKey<bool> weatherEnabledNotifier;
+  late final ValueNotifierWithKey<bool> clockEnabledNotifier;
+  late final ValueNotifierWithKey<bool> calendarEnabledNotifier;
+  late final ValueNotifierWithKey<int> numberOfShortcutItemsNotifier;
+  late final ValueNotifierWithKey<bool> shortcutMode;
   late final ValueNotifierWithKey<AppInfo> clockAppNotifier;
   late final ValueNotifierWithKey<AppInfo> calendarAppNotifier;
   late final ValueNotifierWithKey<AppInfo> weatherAppNotifier;
   late final ValueNotifierWithKey<AppInfo> swipeLeftAppNotifier;
   late final ValueNotifierWithKey<AppInfo> swipeRightAppNotifier;
-
-  final ValueNotifierWithKey<bool> shortcutMode = ValueNotifierWithKey(true, KEY_SHORTCUT_MODE);
-
-  late bool appsAreSaved;
-
+  late final ShortcutAppsNotifier shortcutAppsNotifier;
 
   AppShortcutsManager() {
     print("INITIALIZING AppShortcutsManager");
-    generateGenericShortcutApps();
-    loadSharedPreferences();
+    weatherEnabledNotifier = ValueNotifierWithKey(SharedPrefsManager.readData(KEY_WEATHER_ENABLED) ?? true, KEY_WEATHER_ENABLED);
+    clockEnabledNotifier = ValueNotifierWithKey(SharedPrefsManager.readData(KEY_CLOCK_ENABLED) ?? true, KEY_CLOCK_ENABLED);
+    calendarEnabledNotifier = ValueNotifierWithKey(SharedPrefsManager.readData(KEY_CALENDAR_ENABLED) ?? true, KEY_CALENDAR_ENABLED);
+    numberOfShortcutItemsNotifier = ValueNotifierWithKey(SharedPrefsManager.readData(KEY_NUM_OF_SHORTCUT_ITEMS) ?? 4, KEY_NUM_OF_SHORTCUT_ITEMS);
+    shortcutMode = ValueNotifierWithKey(SharedPrefsManager.readData(KEY_SHORTCUT_MODE) ?? true, KEY_SHORTCUT_MODE);
 
-    if (appsAreSaved) {
+    if (SharedPrefsManager.readData(KEY_APPS_ARE_SAVED) ?? false) {
       loadShortcutAppsFromSharedPrefs();
     } else {
+      generateGenericShortcutApps();
       loadShortcutAppsFromJson();
     }
   }
 
-
   void generateGenericShortcutApps() {
-    AppInfo genericApp = AppInfo(packageName: "", appName: "select");
-    List<AppInfo> initialShortcutApps = List.generate(MAX_NUM_OF_SHORTCUT_ITEMS, (index) => genericApp);
-    shortcutAppsNotifier = ShortcutAppsNotifier(initialShortcutApps);
-    clockAppNotifier = ValueNotifierWithKey(genericApp, KEY_CLOCK_APP);
-    calendarAppNotifier = ValueNotifierWithKey(genericApp, KEY_CALENDAR_APP);
-    weatherAppNotifier = ValueNotifierWithKey(genericApp, KEY_WEATHER_APP);
-    swipeLeftAppNotifier = ValueNotifierWithKey(genericApp, KEY_SWIPE_LEFT_APP);
-    swipeRightAppNotifier = ValueNotifierWithKey(genericApp, KEY_SWIPE_RIGHT_APP);
+    shortcutAppsNotifier = ShortcutAppsNotifier(List.generate(MAX_NUM_OF_SHORTCUT_ITEMS, (index) => genericAppInfo));
+    clockAppNotifier = ValueNotifierWithKey(genericAppInfo, KEY_CLOCK_APP);
+    calendarAppNotifier = ValueNotifierWithKey(genericAppInfo, KEY_CALENDAR_APP);
+    weatherAppNotifier = ValueNotifierWithKey(genericAppInfo, KEY_WEATHER_APP);
+    swipeLeftAppNotifier = ValueNotifierWithKey(genericAppInfo, KEY_SWIPE_LEFT_APP);
+    swipeRightAppNotifier = ValueNotifierWithKey(genericAppInfo, KEY_SWIPE_RIGHT_APP);
   }
-
-
-  void loadSharedPreferences() {
-    appsAreSaved = SharedPrefsManager.readData(KEY_APPS_ARE_SAVED) ?? false;
-    weatherEnabledNotifier.value = SharedPrefsManager.readData(KEY_WEATHER_ENABLED) ?? true;
-    clockEnabledNotifier.value = SharedPrefsManager.readData(KEY_CLOCK_ENABLED) ?? true;
-    calendarEnabledNotifier.value = SharedPrefsManager.readData(KEY_CALENDAR_ENABLED) ?? true;
-    numberOfShortcutItemsNotifier.value = SharedPrefsManager.readData(KEY_NUM_OF_SHORTCUT_ITEMS) ?? 4;
-    shortcutMode.value = SharedPrefsManager.readData(KEY_SHORTCUT_MODE) ?? true;
-  }
-
 
   void loadShortcutAppsFromJson() async {
     print("LOADING APPS FROM JSON");
-
     try {
       final String response = await rootBundle.loadString('assets/apps.json');
       final shortcutAppsJson = await json.decode(response);
@@ -95,18 +77,13 @@ class AppShortcutsManager {
 
   void loadShortcutAppsFromSharedPrefs() {
     print("LOADING APPS FROM SHARED PREFS");
-
-    List<String> keysShortcutApps = List.generate(MAX_NUM_OF_SHORTCUT_ITEMS, (index) => "shortcut$index");
-    List<dynamic> objList = SharedPrefsManager.readMultiData(keysShortcutApps);
-
-    shortcutAppsNotifier.value = List.generate(objList.length, (index) => AppInfo.fromJsonString(objList[index]));
-    clockAppNotifier.value = AppInfo.fromJsonString(SharedPrefsManager.readData(clockAppNotifier.key));
-    calendarAppNotifier.value = AppInfo.fromJsonString(SharedPrefsManager.readData(calendarAppNotifier.key));
-    weatherAppNotifier.value = AppInfo.fromJsonString(SharedPrefsManager.readData(weatherAppNotifier.key));
-    swipeLeftAppNotifier.value = AppInfo.fromJsonString(SharedPrefsManager.readData(swipeLeftAppNotifier.key));
-    swipeRightAppNotifier.value = AppInfo.fromJsonString(SharedPrefsManager.readData(swipeRightAppNotifier.key));
+    shortcutAppsNotifier = ShortcutAppsNotifier(List.generate(MAX_NUM_OF_SHORTCUT_ITEMS, (index) => AppInfo.fromJsonString(SharedPrefsManager.readData("shortcut$index"))));
+    clockAppNotifier = ValueNotifierWithKey(AppInfo.fromJsonString(SharedPrefsManager.readData(KEY_CLOCK_APP)), KEY_CLOCK_APP);
+    calendarAppNotifier = ValueNotifierWithKey(AppInfo.fromJsonString(SharedPrefsManager.readData(KEY_CALENDAR_APP)), KEY_CALENDAR_APP);
+    weatherAppNotifier = ValueNotifierWithKey(AppInfo.fromJsonString(SharedPrefsManager.readData(KEY_WEATHER_APP)), KEY_WEATHER_APP);
+    swipeLeftAppNotifier = ValueNotifierWithKey(AppInfo.fromJsonString(SharedPrefsManager.readData(KEY_SWIPE_LEFT_APP)), KEY_SWIPE_LEFT_APP);
+    swipeRightAppNotifier = ValueNotifierWithKey(AppInfo.fromJsonString(SharedPrefsManager.readData(KEY_SWIPE_RIGHT_APP)), KEY_SWIPE_RIGHT_APP);
   }
-
 
   void saveShortcutAppsToSharedPrefs() {
     int i = 0;
@@ -123,7 +100,6 @@ class AppShortcutsManager {
     SharedPrefsManager.saveData(KEY_APPS_ARE_SAVED, true);
   }
 
-
   void setNotifierValueAndSave(ValueNotifierWithKey notifier) {
     switch (notifier.key) {
       case KEY_SHORTCUT_MODE:
@@ -138,12 +114,12 @@ class AppShortcutsManager {
     SharedPrefsManager.saveData(notifier.key, notifier.value);
   }
 
-
   void setSpecialShortcutValue(ValueNotifierWithKey notifier, AppInfo appInfo) {
     notifier.value = appInfo;
     SharedPrefsManager.saveData(notifier.key, notifier.value.toJsonString());
   }
 }
+
 
 class ValueNotifierWithKey<T> extends ValueNotifier<T> {
   final String key;

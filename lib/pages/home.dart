@@ -20,6 +20,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   bool searchApps = false;
   final themeManager = getIt<ThemeManager>();
   final appShortcutsManager = getIt<AppShortcutsManager>();
+  final sensitivity = 8;
 
   @override
   void initState() {
@@ -90,9 +91,6 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     );
   }
 
-
-
-
   Future<bool> _onWillPop() async {
     if (searchApps) {
       setState(() {
@@ -107,18 +105,16 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       return;
     }
 
-    int sensivity = 8;
-    if (details.delta.dx > sensivity) {
+    if (details.delta.dx > sensitivity) {
       // Right Swipe
       appShortcutsManager.swipeRightAppNotifier.value.open();
-    } else if (details.delta.dx < -sensivity) {
+    } else if (details.delta.dx < -sensitivity) {
       // Left Swipe
       appShortcutsManager.swipeLeftAppNotifier.value.open();
     }
   }
 
   _verticalDragHandler(details) {
-    int sensitivity = 8;
     if (details.delta.dy > sensitivity) {
       // Down Swipe
       if (searchApps) {
@@ -138,29 +134,3 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     }
   }
 }
-
-class SyncAppsButton extends StatelessWidget {
-  const SyncAppsButton({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final appsManager = getIt<AppsManager>();
-    return Center(
-      // alignment: Alignment.centerLeft,
-      child: TextButton(
-        onPressed: () {
-          Fluttertoast.showToast(msg: "syncing apps..");
-          appsManager.syncInstalledApps();
-        },
-        child: SizedBox(
-          width: 10,
-          height: 20,
-        ),
-      ),
-    );
-  }
-}
-
-

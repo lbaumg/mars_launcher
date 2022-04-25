@@ -33,7 +33,7 @@ class _ClockState extends State<Clock> {
 }
 
 class ClockLogic {
-  final ValueNotifier<String> timeNotifier = ValueNotifier("");
+  final timeNotifier = ValueNotifier("");
   late Timer timer;
 
   ClockLogic() {

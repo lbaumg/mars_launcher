@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mars_launcher/data/app_info.dart';
 import 'package:flutter_mars_launcher/global.dart';
@@ -7,8 +6,6 @@ import 'package:flutter_mars_launcher/logic/temperature_logic.dart';
 import 'package:flutter_mars_launcher/logic/theme_logic.dart';
 import 'package:flutter_mars_launcher/pages/fragments/app_search_fragment.dart';
 import 'package:flutter_mars_launcher/services/service_locator.dart';
-
-var switchHeight = 30.0;
 
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);
@@ -75,10 +72,6 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                       height: 20,
                       width: double.infinity,
                     ),
-                    // Text(
-                    //   "general",
-                    //   style: textStyleSubTitle,
-                    // ),
                     SizedBox(height: 10),
                     TextButton(
                       onPressed: () {
@@ -217,95 +210,6 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                   ],
                 ),
               ),
-
-              // SizedBox(height: 20),
-              // TextButton(
-              //   onPressed: () {},
-              //   child: Text(
-              //     "select apps",
-              //     style: textStyleSubTitle,
-              //   ),
-              // ),
-              // SizedBox(height: 0, width: double.infinity),
-              // Table(
-              //   // border: TableBorder.all(color: Colors.white),
-              //   defaultColumnWidth: FixedColumnWidth(150),
-              //   children: <TableRow>[
-              //     TableRow(children: <Widget>[
-              //       TextButton(
-              //           onPressed: () {
-              //             pushAppSearch(
-              //                 appShortcutsManager.swipeLeftAppNotifier);
-              //           },
-              //           child: Text(
-              //             "swipe left",
-              //             style: textStyleItems,
-              //           )),
-              //       TextButton(
-              //           onPressed: () {
-              //             pushAppSearch(
-              //                 appShortcutsManager.swipeRightAppNotifier);
-              //           },
-              //           child: Text(
-              //             "swipe right",
-              //             style: textStyleItems,
-              //           )),
-              //     ]),
-              //     TableRow(children: <Widget>[
-              //       ValueListenableBuilder<bool>(
-              //           valueListenable:
-              //               appShortcutsManager.clockEnabledNotifier,
-              //           builder: (context, isSwitched, child) {
-              //             return isSwitched
-              //                 ? TextButton(
-              //                     onPressed: () {
-              //                       pushAppSearch(
-              //                           appShortcutsManager.clockAppNotifier);
-              //                     },
-              //                     child: Text(
-              //                       "clock",
-              //                       style: textStyleItems,
-              //                     ))
-              //                 : Container();
-              //           }),
-              //       ValueListenableBuilder<bool>(
-              //           valueListenable:
-              //               appShortcutsManager.calendarEnabledNotifier,
-              //           builder: (context, isSwitched, child) {
-              //             return isSwitched
-              //                 ? TextButton(
-              //                     onPressed: () {
-              //                       pushAppSearch(appShortcutsManager
-              //                           .calendarAppNotifier);
-              //                     },
-              //                     child: Text(
-              //                       "calendar",
-              //                       style: textStyleItems,
-              //                     ))
-              //                 : Container();
-              //           }),
-              //     ]),
-              //     TableRow(children: <Widget>[
-              //       ValueListenableBuilder<bool>(
-              //           valueListenable:
-              //               appShortcutsManager.weatherEnabledNotifier,
-              //           builder: (context, isSwitched, child) {
-              //             return isSwitched
-              //                 ? TextButton(
-              //                     onPressed: () {
-              //                       pushAppSearch(
-              //                           appShortcutsManager.weatherAppNotifier);
-              //                     },
-              //                     child: Text(
-              //                       "weather",
-              //                       style: textStyleItems,
-              //                     ))
-              //                 : Container();
-              //           }),
-              //       Container()
-              //     ])
-              //   ],
-              // )
             ],
           ),
         ),
@@ -313,60 +217,3 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
     );
   }
 }
-
-/*GestureDetector(
-                      onDoubleTap: () {},
-                      child: Table(
-                          // border: TableBorder.all(color: Colors.black),
-                          defaultVerticalAlignment:
-                              TableCellVerticalAlignment.middle,
-                          columnWidths: const <int, TableColumnWidth>{
-                            0: FixedColumnWidth(180),
-                            1: FixedColumnWidth(100),
-                          },
-                          children: <TableRow>[
-                            TableRow(children: <Widget>[
-                              Text(
-                                "shortcut apps",
-                                style: textStyleItems,
-                              ),
-                              IncDecButton(),
-                            ]),
-                            TableRow(children: <Widget>[
-                              Text(
-                                "enable clock app",
-                                style: textStyleItems,
-                              ),
-                              SwitchButton(
-                                appShortcutsManager: appShortcutsManager,
-                                enabledNotifier:
-                                    appShortcutsManager.clockEnabledNotifier,
-                                setting: "clockEnabled",
-                              ),
-                            ]),
-                            TableRow(children: <Widget>[
-                              Text(
-                                "enable weather app",
-                                style: textStyleItems,
-                              ),
-                              SwitchButton(
-                                appShortcutsManager: appShortcutsManager,
-                                enabledNotifier:
-                                    appShortcutsManager.weatherEnabledNotifier,
-                                setting: "weatherEnabled",
-                              ),
-                            ]),
-                            TableRow(children: <Widget>[
-                              Text(
-                                "enable calendar app",
-                                style: textStyleItems,
-                              ),
-                              SwitchButton(
-                                appShortcutsManager: appShortcutsManager,
-                                enabledNotifier:
-                                    appShortcutsManager.calendarEnabledNotifier,
-                                setting: "calendarEnabled",
-                              ),
-                            ]),
-                          ]),
-                    ),*/

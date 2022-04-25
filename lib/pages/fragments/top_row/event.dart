@@ -19,7 +19,7 @@ class EventView extends StatefulWidget {
 
 class _EventViewState extends State<EventView> {
   final appShortcutsManager = getIt<AppShortcutsManager>();
-  late CalenderLogic calenderLogic = CalenderLogic();
+  final calenderLogic = CalenderLogic();
 
   @override
   Widget build(BuildContext context) {
@@ -61,16 +61,13 @@ class _EventViewState extends State<EventView> {
   }
 }
 
-class CalenderLogic {
-  final ValueNotifier<String> eventNotifier = ValueNotifier("no events");
-  late Timer timer;
 
-  String _nextEvent = "no events";
+class CalenderLogic {
+  final eventNotifier = ValueNotifier("no events");
   DeviceCalendarPlugin _deviceCalendarPlugin = DeviceCalendarPlugin();
   List<Calendar> _calendars = [];
   DateTime _lastUpdatedCalendars = DateTime.now();
-
-  String get nextEvent => _nextEvent;
+  late Timer timer;
 
   CalenderLogic() {
     updateEvents();
@@ -107,9 +104,9 @@ class CalenderLogic {
     }
   }
 
+  /// Reads calendar events
+  /// returns next occuring event
   Future<String> _retrieveCalendarEvents() async {
-    /// Reads calendar events
-    /// returns next occuring event
     var now = DateTime.now();
     var midnight = DateTime(now.year, now.month, now.day + 1);
 

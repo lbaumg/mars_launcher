@@ -1,6 +1,6 @@
 
 import 'package:device_apps/device_apps.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_mars_launcher/data/app_info.dart';
 import 'package:flutter_mars_launcher/global.dart';
 

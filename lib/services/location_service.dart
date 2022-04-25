@@ -2,7 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:location/location.dart';
 
 class LocationService {
-  Location location = new Location();
+  final location = new Location();
   double? lat;
   double? lon;
 

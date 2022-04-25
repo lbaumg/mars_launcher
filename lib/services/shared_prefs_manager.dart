@@ -20,12 +20,6 @@ class SharedPrefsManager {
     return obj;
   }
 
-  static List<dynamic> readMultiData(List<String> keyList) {
-    List<dynamic> objList = keyList.map((key) => prefs.get(key)).toList();
-    print('[READ SP] ${objList.toString()}');
-    return objList;
-  }
-
   static Future<bool> deleteData(String key) async {
     return prefs.remove(key);
   }
