@@ -74,7 +74,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
                 Expanded(
                     flex: 1,
-                    child: SyncAppsButton()),
+                    child: Container()),
 
                 Expanded(
                   flex: 8,
@@ -152,7 +152,7 @@ class SyncAppsButton extends StatelessWidget {
       child: TextButton(
         onPressed: () {
           Fluttertoast.showToast(msg: "syncing apps..");
-          appsManager.appsNotifier.syncInstalledApps();
+          appsManager.syncInstalledApps();
         },
         child: SizedBox(
           width: 10,
