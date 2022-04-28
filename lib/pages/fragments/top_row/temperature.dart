@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter_mars_launcher/logic/temperature_logic.dart';
-import 'package:flutter_mars_launcher/services/service_locator.dart';
+import 'package:mars_launcher/logic/temperature_logic.dart';
+import 'package:mars_launcher/services/service_locator.dart';
 
 
 class Temperature extends StatelessWidget {

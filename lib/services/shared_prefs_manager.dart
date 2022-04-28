@@ -1,8 +1,8 @@
-import 'package:flutter_mars_launcher/main.dart';
+import 'package:mars_launcher/main.dart';
 
 class SharedPrefsManager {
   static void saveData(String key, dynamic value) async {
-    print("[WRITE SP] $key: $value");
+    print("[SharedPrefsManager] WRITE $key: $value");
     if (value is int) {
       prefs.setInt(key, value);
     } else if (value is String) {
@@ -16,7 +16,7 @@ class SharedPrefsManager {
 
   static dynamic readData(String key) {
     dynamic obj = prefs.get(key);
-    print('[READ SP] $key: $obj');
+    print("[SharedPrefsManager] READ $key: $obj");
     return obj;
   }
 

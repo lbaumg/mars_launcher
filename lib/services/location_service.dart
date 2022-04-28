@@ -3,8 +3,7 @@ import 'package:location/location.dart';
 
 class LocationService {
   final location = new Location();
-  double? lat;
-  double? lon;
+  var locationData = LocationData.fromMap(Map());
 
   Future<bool> isServiceEnabled() async {
     bool serviceEnabled = false;
@@ -21,24 +20,14 @@ class LocationService {
 
   Future<bool> checkPermission() async {
     bool serviceEnabled = await isServiceEnabled();
-    if (!serviceEnabled && !await location.requestService()) {
+    if ((!serviceEnabled && !await location.requestService()) || await location.hasPermission() == PermissionStatus.denied) {
       return false;
+    } else {
+      return true;
     }
-
-    PermissionStatus permissionGranted = await location.hasPermission();
-    if (permissionGranted == PermissionStatus.denied) {
-      print("REQUESTING PERMISSION");
-      permissionGranted = await location.requestPermission();
-      if (permissionGranted != PermissionStatus.granted) {
-        return false;
-      }
-    }
-    return true;
   }
 
   updateLocation() async {
-    LocationData locationData = await location.getLocation();
-    lon = locationData.longitude;
-    lat = locationData.latitude;
+    locationData = await location.getLocation();
   }
 }

@@ -2,14 +2,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_mars_launcher/services/shared_prefs_manager.dart';
+import 'package:mars_launcher/services/shared_prefs_manager.dart';
 
 const KEY_THEME_MODE = "themeMode";
 
 
-
 class ThemeManager {
-  late final themeModeNotifier;
+  final themeModeNotifier = ValueNotifier<bool>(SharedPrefsManager.readData(KEY_THEME_MODE) ?? true);
 
   final darkTheme = ThemeData(
     primaryColor: Colors.white,
@@ -64,10 +63,6 @@ class ThemeManager {
 
   get currentTheme => themeModeNotifier.value ? darkTheme : lightTheme;
   get currentSystemUiOverlayStyle => themeModeNotifier.value ? darkSystemUiOverlayStyle : lightSystemUiOverlayStyle;
-
-  ThemeManager() {
-    themeModeNotifier = ValueNotifier<bool>(SharedPrefsManager.readData(KEY_THEME_MODE) ?? true);
-  }
 
   void toggleDarkMode() {
     themeModeNotifier.value = !themeModeNotifier.value;

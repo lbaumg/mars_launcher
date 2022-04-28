@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mars_launcher/data/app_info.dart';
-import 'package:flutter_mars_launcher/logic/shortcut_logic.dart';
-import 'package:flutter_mars_launcher/pages/fragments/app_search_fragment.dart';
-import 'package:flutter_mars_launcher/services/service_locator.dart';
-
+import 'package:mars_launcher/data/app_info.dart';
+import 'package:mars_launcher/logic/shortcut_logic.dart';
+import 'package:mars_launcher/pages/fragments/app_search_fragment.dart';
+import 'package:mars_launcher/services/service_locator.dart';
 
 
 typedef OpenAppCallback = Function(AppInfo appInfo);

@@ -2,10 +2,11 @@
 /// TODO save in database after change and load on startup
 
 import 'package:flutter/material.dart';
-import 'package:flutter_mars_launcher/logic/shortcut_logic.dart';
-import 'package:flutter_mars_launcher/pages/fragments/app_card.dart';
-import 'package:flutter_mars_launcher/data/app_info.dart';
-import 'package:flutter_mars_launcher/services/service_locator.dart';
+import 'package:mars_launcher/logic/settings_logic.dart';
+import 'package:mars_launcher/logic/shortcut_logic.dart';
+import 'package:mars_launcher/pages/fragments/app_card.dart';
+import 'package:mars_launcher/data/app_info.dart';
+import 'package:mars_launcher/services/service_locator.dart';
 
 var num2topPad = {
   0: 0.0,
@@ -19,13 +20,13 @@ var num2topPad = {
 };
 
 class AppShortcutsFragment extends StatelessWidget {
+  final appShortcutsManager = getIt<AppShortcutsManager>();
+  final settingsLogic = getIt<SettingsLogic>();
 
   @override
   Widget build(BuildContext context) {
-    final appShortcutsManager = getIt<AppShortcutsManager>();
-
     return ValueListenableBuilder<int>(
-        valueListenable: appShortcutsManager.numberOfShortcutItemsNotifier,
+        valueListenable: settingsLogic.numberOfShortcutItemsNotifier,
         builder: (context, numOfShortcutItems, child){
         return Padding(
           padding: EdgeInsets.fromLTRB(22.0, num2topPad[numOfShortcutItems]!, 0, 0),

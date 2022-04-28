@@ -1,11 +1,12 @@
 /// App search fragment that appears on swipe up
 
 import 'package:flutter/material.dart';
-import 'package:flutter_mars_launcher/logic/shortcut_logic.dart';
-import 'package:flutter_mars_launcher/pages/fragments/app_card.dart';
-import 'package:flutter_mars_launcher/data/app_info.dart';
-import 'package:flutter_mars_launcher/services/service_locator.dart';
-import 'package:flutter_mars_launcher/logic/apps_logic.dart';
+import 'package:mars_launcher/logic/shortcut_logic.dart';
+import 'package:mars_launcher/logic/utils.dart';
+import 'package:mars_launcher/pages/fragments/app_card.dart';
+import 'package:mars_launcher/data/app_info.dart';
+import 'package:mars_launcher/services/service_locator.dart';
+import 'package:mars_launcher/logic/apps_logic.dart';
 
 enum AppSearchMode {
   openApp, chooseShortcut, chooseSpecialShortcut
@@ -23,9 +24,9 @@ class AppSearchFragment extends StatefulWidget {
 }
 
 class _AppSearchFragmentState extends State<AppSearchFragment> with WidgetsBindingObserver{
-  TextEditingController _textController = TextEditingController();
+  final _textController = TextEditingController();
   late final appSearchLogic;
-  bool currentlyPopping = false;
+  var currentlyPopping = false;
 
   callbackPop() {
     Navigator.pop(context);
@@ -42,9 +43,9 @@ class _AppSearchFragmentState extends State<AppSearchFragment> with WidgetsBindi
 
   @override
   void initState() {
-    print("INITIALISING AppSearchFragment");
+    print("[$runtimeType] INITIALISING");
     appSearchLogic = AppSearchLogic(callbackPop: callbackPop, appSearchMode: widget.appSearchMode, specialShortcutAppNotifier: widget.specialShortcutAppNotifier, shortcutIndex: widget.shortcutIndex);
-    print("Shortcut selection mode: ${widget.appSearchMode}");
+    print("[$runtimeType] Shortcut selection mode: ${widget.appSearchMode}");
     WidgetsBinding.instance?.addObserver(this);
     super.initState();
   }
@@ -125,12 +126,12 @@ class AppSearchLogic {
     if (appSearchMode == AppSearchMode.openApp) {
       appInfo.open();
     } else if (appSearchMode == AppSearchMode.chooseShortcut) {
-      print("Replacing shortcut app with index $shortcutIndex with ${appInfo.appName}");
+      print("[$runtimeType] Replacing shortcut app with index $shortcutIndex with ${appInfo.appName}");
       appShortcutsManager.shortcutAppsNotifier
           .replaceShortcut(shortcutIndex ?? -1, appInfo);
       callbackPop();
     } else if (appSearchMode == AppSearchMode.chooseSpecialShortcut) {
-      print("Replacing special shortcut app ${specialShortcutAppNotifier?.key} with ${appInfo.appName}");
+      print("[$runtimeType] Replacing special shortcut app ${specialShortcutAppNotifier?.key} with ${appInfo.appName}");
       if (specialShortcutAppNotifier != null) {
         appShortcutsManager.setSpecialShortcutValue(specialShortcutAppNotifier!, appInfo);
       }

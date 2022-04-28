@@ -10,7 +10,7 @@ class Clock extends StatefulWidget {
 }
 
 class _ClockState extends State<Clock> {
-  ClockLogic clockLogic = ClockLogic();
+  final clockLogic = ClockLogic();
 
   @override
   Widget build(BuildContext context) {

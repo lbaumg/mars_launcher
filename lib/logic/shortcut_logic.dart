@@ -3,9 +3,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_mars_launcher/data/app_info.dart';
-import 'package:flutter_mars_launcher/global.dart';
-import 'package:flutter_mars_launcher/services/shared_prefs_manager.dart';
+import 'package:mars_launcher/data/app_info.dart';
+import 'package:mars_launcher/global.dart';
+import 'package:mars_launcher/logic/utils.dart';
+import 'package:mars_launcher/services/shared_prefs_manager.dart';
 
 const KEY_APPS_ARE_SAVED = "appsAreSaved";
 const KEY_WEATHER_ENABLED = "weatherEnabled";
@@ -20,11 +21,6 @@ const KEY_SWIPE_LEFT_APP = "swipeLeftApp";
 const KEY_SWIPE_RIGHT_APP = "swipeRightApp";
 
 class AppShortcutsManager {
-  late final ValueNotifierWithKey<bool> weatherEnabledNotifier;
-  late final ValueNotifierWithKey<bool> clockEnabledNotifier;
-  late final ValueNotifierWithKey<bool> calendarEnabledNotifier;
-  late final ValueNotifierWithKey<int> numberOfShortcutItemsNotifier;
-  late final ValueNotifierWithKey<bool> shortcutMode;
   late final ValueNotifierWithKey<AppInfo> clockAppNotifier;
   late final ValueNotifierWithKey<AppInfo> calendarAppNotifier;
   late final ValueNotifierWithKey<AppInfo> weatherAppNotifier;
@@ -33,12 +29,7 @@ class AppShortcutsManager {
   late final ShortcutAppsNotifier shortcutAppsNotifier;
 
   AppShortcutsManager() {
-    print("INITIALIZING AppShortcutsManager");
-    weatherEnabledNotifier = ValueNotifierWithKey(SharedPrefsManager.readData(KEY_WEATHER_ENABLED) ?? true, KEY_WEATHER_ENABLED);
-    clockEnabledNotifier = ValueNotifierWithKey(SharedPrefsManager.readData(KEY_CLOCK_ENABLED) ?? true, KEY_CLOCK_ENABLED);
-    calendarEnabledNotifier = ValueNotifierWithKey(SharedPrefsManager.readData(KEY_CALENDAR_ENABLED) ?? true, KEY_CALENDAR_ENABLED);
-    numberOfShortcutItemsNotifier = ValueNotifierWithKey(SharedPrefsManager.readData(KEY_NUM_OF_SHORTCUT_ITEMS) ?? 4, KEY_NUM_OF_SHORTCUT_ITEMS);
-    shortcutMode = ValueNotifierWithKey(SharedPrefsManager.readData(KEY_SHORTCUT_MODE) ?? true, KEY_SHORTCUT_MODE);
+    print("[$runtimeType] INITIALIZING");
 
     if (SharedPrefsManager.readData(KEY_APPS_ARE_SAVED) ?? false) {
       loadShortcutAppsFromSharedPrefs();
@@ -58,7 +49,7 @@ class AppShortcutsManager {
   }
 
   void loadShortcutAppsFromJson() async {
-    print("LOADING APPS FROM JSON");
+    print("[$runtimeType] LOADING APPS FROM JSON");
     try {
       final String response = await rootBundle.loadString('assets/apps.json');
       final shortcutAppsJson = await json.decode(response);
@@ -70,13 +61,13 @@ class AppShortcutsManager {
       swipeLeftAppNotifier.value = AppInfo(packageName: shortcutAppsJson["camera"][JSON_KEY_PACKAGE_NAME], appName: shortcutAppsJson["camera"][JSON_KEY_APP_NAME]);
       swipeRightAppNotifier.value = AppInfo(packageName: shortcutAppsJson["contacts"][JSON_KEY_PACKAGE_NAME], appName: shortcutAppsJson["contacts"][JSON_KEY_APP_NAME]);
     } catch (e) {
-      print("ERROR: $e");
+      print("[$runtimeType] error loading from json: $e");
     }
     saveShortcutAppsToSharedPrefs();
   }
 
   void loadShortcutAppsFromSharedPrefs() {
-    print("LOADING APPS FROM SHARED PREFS");
+    print("[$runtimeType] LOADING APPS FROM SHARED PREFS");
     shortcutAppsNotifier = ShortcutAppsNotifier(List.generate(MAX_NUM_OF_SHORTCUT_ITEMS, (index) => AppInfo.fromJsonString(SharedPrefsManager.readData("shortcut$index"))));
     clockAppNotifier = ValueNotifierWithKey(AppInfo.fromJsonString(SharedPrefsManager.readData(KEY_CLOCK_APP)), KEY_CLOCK_APP);
     calendarAppNotifier = ValueNotifierWithKey(AppInfo.fromJsonString(SharedPrefsManager.readData(KEY_CALENDAR_APP)), KEY_CALENDAR_APP);
@@ -100,20 +91,6 @@ class AppShortcutsManager {
     SharedPrefsManager.saveData(KEY_APPS_ARE_SAVED, true);
   }
 
-  void setNotifierValueAndSave(ValueNotifierWithKey notifier) {
-    switch (notifier.key) {
-      case KEY_SHORTCUT_MODE:
-      case KEY_WEATHER_ENABLED:
-      case KEY_CLOCK_ENABLED:
-      case KEY_CALENDAR_ENABLED:
-        notifier.value = !notifier.value;
-        break;
-      case KEY_NUM_OF_SHORTCUT_ITEMS:
-        notifier.value = (notifier.value + 1) % (MAX_NUM_OF_SHORTCUT_ITEMS+1);
-    }
-    SharedPrefsManager.saveData(notifier.key, notifier.value);
-  }
-
   void setSpecialShortcutValue(ValueNotifierWithKey notifier, AppInfo appInfo) {
     notifier.value = appInfo;
     SharedPrefsManager.saveData(notifier.key, notifier.value.toJsonString());
@@ -121,22 +98,15 @@ class AppShortcutsManager {
 }
 
 
-class ValueNotifierWithKey<T> extends ValueNotifier<T> {
-  final String key;
-
-  ValueNotifierWithKey(T value, String key) : this.key = key, super(value);
-}
-
-
 class ShortcutAppsNotifier extends ValueNotifier<List<AppInfo>> {
   ShortcutAppsNotifier(List<AppInfo> initialShortcutApps) : super(initialShortcutApps);
 
   void replaceShortcut(int index, AppInfo newShortcutApp) async {
-    print("INDEX: $index");
+    print("[$runtimeType] replacing index: $index");
 
     if (List.generate(MAX_NUM_OF_SHORTCUT_ITEMS, (i) => i).contains(index)) {
       value[index] = newShortcutApp;
-      print("REPLACED SHORTCUT");
+      print("[$runtimeType] replaced shortcut");
       notifyListeners();
     }
     SharedPrefsManager.saveData("shortcut$index", newShortcutApp.toJsonString());

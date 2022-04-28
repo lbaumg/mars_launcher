@@ -1,14 +1,16 @@
 /// Top row of home screen, contains widgets from pages/fragments/top_row
 
 import 'package:flutter/material.dart';
-import 'package:flutter_mars_launcher/logic/shortcut_logic.dart';
-import 'package:flutter_mars_launcher/pages/fragments/top_row/event.dart';
-import 'package:flutter_mars_launcher/pages/fragments/top_row/clock.dart';
-import 'package:flutter_mars_launcher/pages/fragments/top_row/temperature.dart';
-import 'package:flutter_mars_launcher/services/service_locator.dart';
+import 'package:mars_launcher/logic/settings_logic.dart';
+import 'package:mars_launcher/logic/shortcut_logic.dart';
+import 'package:mars_launcher/pages/fragments/top_row/event.dart';
+import 'package:mars_launcher/pages/fragments/top_row/clock.dart';
+import 'package:mars_launcher/pages/fragments/top_row/temperature.dart';
+import 'package:mars_launcher/services/service_locator.dart';
 
 class TopRow extends StatelessWidget {
   final appShortcutsManager = getIt<AppShortcutsManager>();
+  final settingsLogic = getIt<SettingsLogic>();
 
   TopRow({
     Key? key,
@@ -21,7 +23,7 @@ class TopRow extends StatelessWidget {
       child: Row(
         children: [
           ValueListenableBuilder<bool>(
-              valueListenable: appShortcutsManager.clockEnabledNotifier,
+              valueListenable: settingsLogic.clockEnabledNotifier,
               builder: (context, isEnabled, child) {
                 return isEnabled
                     ? TextButton(
@@ -36,7 +38,7 @@ class TopRow extends StatelessWidget {
               }),
           Expanded(child: Container()),
           ValueListenableBuilder<bool>(
-              valueListenable: appShortcutsManager.weatherEnabledNotifier,
+              valueListenable: settingsLogic.weatherEnabledNotifier,
               builder: (context, isEnabled, child) {
                 return isEnabled
                     ? TextButton(
@@ -49,7 +51,7 @@ class TopRow extends StatelessWidget {
               }),
           Expanded(child: Container()),
           ValueListenableBuilder<bool>(
-              valueListenable: appShortcutsManager.calendarEnabledNotifier,
+              valueListenable: settingsLogic.calendarEnabledNotifier,
               builder: (context, isEnabled, child) {
                 return isEnabled
                     ? EventView()

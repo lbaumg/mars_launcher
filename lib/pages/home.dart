@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mars_launcher/logic/shortcut_logic.dart';
-import 'package:flutter_mars_launcher/pages/fragments/app_shortcuts_fragment.dart';
-import 'package:flutter_mars_launcher/pages/fragments/app_search_fragment.dart';
-import 'package:flutter_mars_launcher/pages/fragments/top_row/top_row.dart';
-import 'package:flutter_mars_launcher/logic/theme_logic.dart';
-import 'package:flutter_mars_launcher/pages/settings.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:flutter_mars_launcher/services/service_locator.dart';
-import 'package:flutter_mars_launcher/logic/apps_logic.dart';
+import 'package:mars_launcher/logic/shortcut_logic.dart';
+import 'package:mars_launcher/pages/fragments/app_shortcuts_fragment.dart';
+import 'package:mars_launcher/pages/fragments/app_search_fragment.dart';
+import 'package:mars_launcher/pages/fragments/top_row/top_row.dart';
+import 'package:mars_launcher/logic/theme_logic.dart';
+import 'package:mars_launcher/pages/settings.dart';
+import 'package:mars_launcher/services/service_locator.dart';
 
 
 class Home extends StatefulWidget {
@@ -17,10 +15,10 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with WidgetsBindingObserver {
 
-  bool searchApps = false;
   final themeManager = getIt<ThemeManager>();
   final appShortcutsManager = getIt<AppShortcutsManager>();
   final sensitivity = 8;
+  var searchApps = false;
 
   @override
   void initState() {

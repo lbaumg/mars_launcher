@@ -2,16 +2,15 @@ import 'dart:convert';
 
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:device_apps/device_apps.dart';
-import 'package:flutter_mars_launcher/global.dart';
+import 'package:mars_launcher/global.dart';
 
 
 class AppInfo {
-  String packageName;
-  String appName;
-  bool systemApp;
+  final String packageName;
+  final String appName;
+  final bool systemApp;
 
-
-  AppInfo({
+  const AppInfo({
     required this.packageName,
     required this.appName,
     this.systemApp = false
@@ -21,7 +20,7 @@ class AppInfo {
     if (this.packageName.isNotEmpty) {
       DeviceApps.openApp(this.packageName);
     } else {
-      print("Could not open app: packageName is empty");
+      print("[$runtimeType] Could not open app: packageName is empty");
     }
   }
 
