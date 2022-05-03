@@ -29,7 +29,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-    if (state == AppLifecycleState.resumed) {
+    if (mounted && state == AppLifecycleState.resumed) {
       setState(() {
         searchApps = false;
       });

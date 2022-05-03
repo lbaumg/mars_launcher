@@ -8,6 +8,7 @@ import 'package:mars_launcher/logic/utils.dart';
 import 'package:mars_launcher/pages/fragments/app_search_fragment.dart';
 import 'package:mars_launcher/services/permission_service.dart';
 import 'package:mars_launcher/services/service_locator.dart';
+import 'package:sizer/sizer.dart';
 
 const TEXT_STYLE_TITLE = TextStyle(fontSize: 35, fontWeight: FontWeight.normal);
 const TEXT_STYLE_ITEMS = TextStyle(fontSize: 22, height: 1);
@@ -63,89 +64,101 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onDoubleTap: () {
-        themeManager.toggleDarkMode();
+    return WillPopScope(
+      onWillPop: () async {
+        currentlyPopping = true;
+        return true;
       },
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: SafeArea(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(50, 50.0, 0, 0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("settings", style: TEXT_STYLE_TITLE),
-                    SizedBox(
-                      height: 20,
-                      width: double.infinity,
-                    ),
-                    SizedBox(height: 10),
-                    // TextButton(
-                    //   onPressed: () {
-                    //     marsLauncherAppInfo.openSettings();
-                    //   },
-                    //   child: Text(
-                    //     "permissions",
-                    //     style: TEXT_STYLE_ITEMS,
-                    //   ),
-                    // ),
-
-                    TextButton(
-                      onPressed: () {
-                        // TODO open settings for setting default launcher
-                        marsLauncherAppInfo.openSettings();
-                      },
-                      child: Text(
-                        "set default launcher",
-                        style: TEXT_STYLE_ITEMS,
+      child: GestureDetector(
+        onDoubleTap: () {
+          themeManager.toggleDarkMode();
+        },
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          body: SafeArea(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(50, 50.0, ROW_PADDING_RIGHT, 0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("settings", style: TEXT_STYLE_TITLE),
+                      SizedBox(
+                        height: 20,
+                        width: double.infinity,
                       ),
-                    ),
+                      SizedBox(height: 10),
 
-                    // TextButton(
-                    //   onPressed: () {
-                    //     appShortcutsManager.toggleEnabled("shortcutMode", appShortcutsManager.shortcutMode);
-                    //   },
-                    //   child: ValueListenableBuilder<bool>(
-                    //       valueListenable: appShortcutsManager.shortcutMode,
-                    //       builder: (context, mode, child){
-                    //       return Text(
-                    //         mode ? "shortcut mode" : "search mode",
-                    //         style: TEXT_STYLE_ITEMS,
-                    //       );
-                    //     }
-                    //   ),
-                    // ),
+                      TextButton(
+                        onPressed: () {
+                          // TODO open settings for setting default launcher
+                          marsLauncherAppInfo.openSettings();
+                        },
+                        child: Text(
+                          "set default launcher",
+                          style: TEXT_STYLE_ITEMS,
+                        ),
+                      ),
 
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        TextButton(
-                          onPressed: () {
-                            settingsLogic.setNotifierValueAndSave(settingsLogic.numberOfShortcutItemsNotifier);
-                          },
-                          child: Text(
-                            "shortcut apps",
-                            style: TEXT_STYLE_ITEMS,
+                      Row(
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (_) => ColorDialog(darkMode: false),
+                              );
+                            },
+                            child: Text(
+                              "light color",
+                              style: TEXT_STYLE_ITEMS,
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        ValueListenableBuilder<int>(
-                            valueListenable: settingsLogic.numberOfShortcutItemsNotifier,
-                            builder: (context, numOfShortcutItems, child) {
-                              return Text(numOfShortcutItems.toString(),
-                                  style: TEXT_STYLE_ITEMS);
-                            }),
-                      ],
-                    ),
+                          Expanded(child: Container()),
+                          TextButton(
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (_) => ColorDialog(darkMode: true),
+                              );
+                            },
+                            child: Text(
+                              "dark color",
+                              style: TEXT_STYLE_ITEMS,
+                            ),
+                          ),
+                        ],
+                      ),
 
-                    Padding(
-                      padding: const EdgeInsets.only(right: ROW_PADDING_RIGHT),
-                      child: Row(
+
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              settingsLogic.setNotifierValueAndSave(settingsLogic.numberOfShortcutItemsNotifier);
+                            },
+                            child: Text(
+                              "shortcut apps",
+                              style: TEXT_STYLE_ITEMS,
+                            ),
+                          ),
+                          Expanded(child: Container()),
+                          ValueListenableBuilder<int>(
+                              valueListenable: settingsLogic.numberOfShortcutItemsNotifier,
+                              builder: (context, numOfShortcutItems, child) {
+                                return SizedBox(
+                                    width: 86,
+                                    child: Center(
+                                        child: Text(numOfShortcutItems.toString(),
+                                            style: TEXT_STYLE_ITEMS)));
+                              }),
+                        ],
+                      ),
+
+                      Row(
                         children: [
                           TextButton(
                               onLongPress: () {},
@@ -156,9 +169,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                                 NAME_TOP_BAR_LEFT,
                                 style: TEXT_STYLE_ITEMS,
                               )),
-                          Expanded(
-                            child: Container(),
-                          ),
+                          Expanded(child: Container(),),
                           ShowHideButton(
                             notifier: settingsLogic.clockEnabledNotifier,
                             onPressed: () {
@@ -167,10 +178,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                           ),
                         ],
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: ROW_PADDING_RIGHT),
-                      child: Row(
+                      Row(
                         children: [
                           TextButton(
                               onLongPress: () {},
@@ -182,9 +190,6 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                                 style: TEXT_STYLE_ITEMS,
                               )),
                           Expanded(child: Container()),
-                          // SizedBox(
-                          //   width: 30,
-                          // ),
                           ShowHideButton(
                             notifier: settingsLogic.weatherEnabledNotifier,
                             onPressed: () {
@@ -196,10 +201,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                           ),
                         ],
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: ROW_PADDING_RIGHT),
-                      child: Row(
+                      Row(
                         children: [
                           TextButton(
                             onLongPress: () {},
@@ -220,31 +222,31 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                           ),
                         ],
                       ),
-                    ),
-                    TextButton(
-                        onLongPress: () {},
-                        onPressed: () {
-                          pushAppSearch(
-                              appShortcutsManager.swipeLeftAppNotifier);
-                        },
-                        child: Text(
-                          NAME_SWIPE_LEFT,
-                          style: TEXT_STYLE_ITEMS,
-                        )),
-                    TextButton(
-                        onLongPress: () {},
-                        onPressed: () {
-                          pushAppSearch(
-                              appShortcutsManager.swipeRightAppNotifier);
-                        },
-                        child: Text(
-                          NAME_SWIPE_RIGHT,
-                          style: TEXT_STYLE_ITEMS,
-                        )),
-                  ],
+                      TextButton(
+                          onLongPress: () {},
+                          onPressed: () {
+                            pushAppSearch(
+                                appShortcutsManager.swipeLeftAppNotifier);
+                          },
+                          child: Text(
+                            NAME_SWIPE_LEFT,
+                            style: TEXT_STYLE_ITEMS,
+                          )),
+                      TextButton(
+                          onLongPress: () {},
+                          onPressed: () {
+                            pushAppSearch(
+                                appShortcutsManager.swipeRightAppNotifier);
+                          },
+                          child: Text(
+                            NAME_SWIPE_RIGHT,
+                            style: TEXT_STYLE_ITEMS,
+                          )),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -277,6 +279,55 @@ class ShowHideButton extends StatelessWidget {
               ),
             );
           }),
+    );
+  }
+}
+
+class ColorDialog extends StatelessWidget {
+  ColorDialog({
+    Key? key,
+    required bool darkMode
+  }) : this.darkMode = darkMode, super(key: key);
+  final themeManager = getIt<ThemeManager>();
+  final darkMode;
+
+  @override
+  Widget build(BuildContext context) {
+    final dialogWidth = 50.w;
+    final backgroundColor = Colors.white; //darkMode ?  Colors.white : Colors.black;
+    const edgeInsets = 5.0;
+    const crossAxisCount = 3;
+
+    return AlertDialog(
+      backgroundColor: backgroundColor,
+      insetPadding: EdgeInsets.zero,
+      titlePadding: EdgeInsets.zero,
+      contentPadding: const EdgeInsets.all(edgeInsets + 7),
+      content: Container(
+        width: dialogWidth,
+        child: GridView.builder(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount (
+                childAspectRatio: 1,
+                crossAxisCount: crossAxisCount,
+                crossAxisSpacing: edgeInsets,
+                mainAxisSpacing: edgeInsets
+            ),
+            itemCount: LIGHT_BACKGROUND_COLORS.length,
+            itemBuilder: (context, index) {
+              return ElevatedButton(
+                onPressed: () {
+                  themeManager.setBackgroundColor(darkMode, index);
+                },
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(darkMode
+                        ? DARK_BACKGROUND_COLORS[index]
+                        : LIGHT_BACKGROUND_COLORS[index])),
+                child: Container(),
+              );
+        }),
+      ),
     );
   }
 }

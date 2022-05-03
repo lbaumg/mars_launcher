@@ -4,6 +4,7 @@ import 'package:mars_launcher/pages/home.dart';
 import 'package:mars_launcher/services/service_locator.dart';
 import 'package:mars_launcher/logic/theme_logic.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sizer/sizer.dart';
 
 late final SharedPreferences prefs;
 
@@ -28,11 +29,15 @@ class MarsLauncher extends StatelessWidget {
       valueListenable: themeManager.themeModeNotifier,
       builder: (context, themeMode, child) =>
           AnnotatedRegion<SystemUiOverlayStyle>(
-              value: themeManager.currentSystemUiOverlayStyle,
-              child: MaterialApp(
-                  debugShowCheckedModeBanner: false,
-                  theme: themeManager.currentTheme,
-                  home: child!)),
+              value: themeManager.systemUiOverlayStyle,
+              child: Sizer(
+                  builder: (context, orientation, deviceType) {
+                  return MaterialApp(
+                      debugShowCheckedModeBanner: false,
+                      theme: themeManager.theme,
+                      home: child!);
+                }
+              )),
       child: Home(),
     );
   }
