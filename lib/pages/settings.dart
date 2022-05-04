@@ -297,6 +297,7 @@ class ColorDialog extends StatelessWidget {
     final backgroundColor = Colors.white; //darkMode ?  Colors.white : Colors.black;
     const edgeInsets = 5.0;
     const crossAxisCount = 3;
+    const overlayOpacity = 0.3;
 
     return AlertDialog(
       backgroundColor: backgroundColor,
@@ -314,16 +315,16 @@ class ColorDialog extends StatelessWidget {
                 crossAxisSpacing: edgeInsets,
                 mainAxisSpacing: edgeInsets
             ),
-            itemCount: LIGHT_BACKGROUND_COLORS.length,
+            itemCount: LIGHT_COLORS.length,
             itemBuilder: (context, index) {
-              return ElevatedButton(
+              return TextButton(
                 onPressed: () {
                   themeManager.setBackgroundColor(darkMode, index);
                 },
                 style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(darkMode
-                        ? DARK_BACKGROUND_COLORS[index]
-                        : LIGHT_BACKGROUND_COLORS[index])),
+                  overlayColor: MaterialStateProperty.all(darkMode ? DARK_COLORS[index].search.withOpacity(overlayOpacity) : LIGHT_COLORS[index].search.withOpacity(overlayOpacity)),
+                  backgroundColor: MaterialStateProperty.all(darkMode ? DARK_COLORS[index].background : LIGHT_COLORS[index].background),
+                ),
                 child: Container(),
               );
         }),
