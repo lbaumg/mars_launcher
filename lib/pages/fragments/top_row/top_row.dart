@@ -1,8 +1,10 @@
 /// Top row of home screen, contains widgets from pages/fragments/top_row
 
 import 'package:flutter/material.dart';
+import 'package:flutter_alarm_clock/flutter_alarm_clock.dart';
 import 'package:mars_launcher/logic/settings_logic.dart';
 import 'package:mars_launcher/logic/shortcut_logic.dart';
+import 'package:mars_launcher/logic/theme_logic.dart';
 import 'package:mars_launcher/pages/fragments/top_row/event.dart';
 import 'package:mars_launcher/pages/fragments/top_row/clock.dart';
 import 'package:mars_launcher/pages/fragments/top_row/temperature.dart';
@@ -11,6 +13,7 @@ import 'package:mars_launcher/services/service_locator.dart';
 class TopRow extends StatelessWidget {
   final appShortcutsManager = getIt<AppShortcutsManager>();
   final settingsLogic = getIt<SettingsLogic>();
+  final themeManager = getIt<ThemeManager>();
 
   TopRow({
     Key? key,
@@ -27,11 +30,22 @@ class TopRow extends StatelessWidget {
               builder: (context, isEnabled, child) {
                 return isEnabled
                     ? TextButton(
-                        onPressed: () {
-                          appShortcutsManager.clockAppNotifier.value.open();
-                        },
-                        onLongPress: () {
-                          // TODO create alarm
+                        onPressed: () => appShortcutsManager.clockAppNotifier.value.open(),
+                        onLongPress: () async {
+                          var time = await showTimePicker(
+                            context: context,
+                            initialTime: TimeOfDay.now(),
+                            helpText: "Create a new alarm",
+                            builder: (context, child) {
+                                return Theme(
+                                  data: themeManager.themeModeNotifier.value ? ThemeData.dark() : ThemeData.light(),
+                                  child: child!,
+                                );
+                            },
+                          );
+                          if (time != null) {
+                            FlutterAlarmClock.createAlarm(time.hour, time.minute);
+                          }
                         },
                         child: Clock())
                     : TextButton(onPressed: () {}, child: Text(""));
@@ -42,9 +56,7 @@ class TopRow extends StatelessWidget {
               builder: (context, isEnabled, child) {
                 return isEnabled
                     ? TextButton(
-                        onPressed: () {
-                          appShortcutsManager.weatherAppNotifier.value.open();
-                        },
+                        onPressed: () => appShortcutsManager.weatherAppNotifier.value.open(),
                         child: Temperature(),
                       )
                     : Container();

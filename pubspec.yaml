@@ -42,12 +42,8 @@ dependencies:
   sqflite: ^2.0.2
   permission_handler: ^10.0.1
   sizer: ^2.0.15
+  flutter_alarm_clock: ^0.0.2
 
-
-#flutter_icons:
-#  android: "launcher_icon"
-#  ios: true
-#  image_path: "assets/_icon.png"
 
 dev_dependencies:
   flutter_test:
