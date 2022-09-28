@@ -16,6 +16,14 @@ allprojects {
         google()
         jcenter()
     }
+
+    // to see deprecated and unchecked operations while compiling
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xlint:deprecation"
+            options.compilerArgs << "-Xlint:unchecked"
+        }
+    }
 }
 
 rootProject.buildDir = '../build'

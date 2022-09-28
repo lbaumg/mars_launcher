@@ -27,7 +27,7 @@ class MarsLauncher extends StatelessWidget {
   Widget build(BuildContext context) {
     return ValueListenableBuilder<bool>(
       valueListenable: themeManager.themeModeNotifier,
-      builder: (context, themeMode, child) =>
+      builder: (context, themeMode, homeScreen) =>
           AnnotatedRegion<SystemUiOverlayStyle>(
               value: themeManager.systemUiOverlayStyle,
               child: Sizer(
@@ -35,7 +35,7 @@ class MarsLauncher extends StatelessWidget {
                   return MaterialApp(
                       debugShowCheckedModeBanner: false,
                       theme: themeManager.theme,
-                      home: child!);
+                      home: homeScreen!);
                 }
               )),
       child: Home(),

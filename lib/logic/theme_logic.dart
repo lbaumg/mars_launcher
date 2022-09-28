@@ -78,7 +78,8 @@ class ThemeManager {
               foregroundColor: MaterialStateProperty.all<Color>(
                   backgroundTextColor),
               overlayColor: MaterialStateProperty.all<Color>(
-                  Colors.transparent))),
+                  Colors.transparent))
+      ),
     );
   }
 

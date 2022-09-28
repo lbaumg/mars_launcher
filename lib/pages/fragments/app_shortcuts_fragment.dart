@@ -1,5 +1,4 @@
 /// Shortcut apps fragment in middle of home screen
-/// TODO save in database after change and load on startup
 
 import 'package:flutter/material.dart';
 import 'package:mars_launcher/logic/settings_logic.dart';

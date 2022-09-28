@@ -46,7 +46,7 @@ class _AppSearchFragmentState extends State<AppSearchFragment> with WidgetsBindi
     print("[$runtimeType] INITIALISING");
     appSearchLogic = AppSearchLogic(callbackPop: callbackPop, appSearchMode: widget.appSearchMode, specialShortcutAppNotifier: widget.specialShortcutAppNotifier, shortcutIndex: widget.shortcutIndex);
     print("[$runtimeType] Shortcut selection mode: ${widget.appSearchMode}");
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     super.initState();
   }
 
