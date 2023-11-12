@@ -68,6 +68,7 @@ class ThemeManager {
       ),
       textTheme: TextTheme(
         bodyLarge: TextStyle(),
+        bodyMedium: TextStyle()
       ).apply(
         bodyColor: backgroundTextColor,
         displayColor: backgroundTextColor,

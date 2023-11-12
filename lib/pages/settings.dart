@@ -19,6 +19,7 @@ const NAME_TOP_BAR_MIDDLE = "weather app";
 const NAME_TOP_BAR_RIGHT = "calendar app";
 const NAME_SWIPE_LEFT = "swipe left";
 const NAME_SWIPE_RIGHT = "swipe right";
+const NAME_HELP = "help";
 
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);
@@ -90,6 +91,8 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                         width: double.infinity,
                       ),
                       SizedBox(height: 10),
+
+                      // SET DEFAULT LAUNCHER
                       TextButton(
                         onPressed: () {
                            settingsLogic.openDefaultLauncherSettings();
@@ -99,6 +102,8 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                           style: TEXT_STYLE_ITEMS,
                         ),
                       ),
+
+                      // LIGHT COLOR / DARK COLOR
                       Row(
                         children: [
                           TextButton(
@@ -128,6 +133,8 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                           ),
                         ],
                       ),
+
+                      // APPS NUMBER
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -137,7 +144,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                                   settingsLogic.numberOfShortcutItemsNotifier);
                             },
                             child: Text(
-                              "shortcut apps",
+                              "app number",
                               style: TEXT_STYLE_ITEMS,
                             ),
                           ),
@@ -148,13 +155,21 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                               builder: (context, numOfShortcutItems, child) {
                                 return SizedBox(
                                     width: 86,
-                                    child: Center(
-                                        child: Text(
-                                            numOfShortcutItems.toString(),
-                                            style: TEXT_STYLE_ITEMS)));
+                                    child: TextButton(
+                                      onPressed: () {
+                                        settingsLogic.setNotifierValueAndSave(
+                                            settingsLogic.numberOfShortcutItemsNotifier);
+                                      },
+                                      child: Center(
+                                          child: Text(
+                                              numOfShortcutItems.toString(),
+                                              style: TEXT_STYLE_ITEMS)),
+                                    ));
                               }),
                         ],
                       ),
+
+                      // CLOCK APP
                       Row(
                         children: [
                           TextButton(
@@ -179,6 +194,8 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                           ),
                         ],
                       ),
+
+                      // WEATHER APP
                       Row(
                         children: [
                           TextButton(
@@ -204,6 +221,8 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                           ),
                         ],
                       ),
+
+                      // CALENDAR APP
                       Row(
                         children: [
                           TextButton(
@@ -227,6 +246,8 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                           ),
                         ],
                       ),
+
+                      // SWIPE LEFT
                       TextButton(
                           onLongPress: () {},
                           onPressed: () {
@@ -237,6 +258,8 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                             NAME_SWIPE_LEFT,
                             style: TEXT_STYLE_ITEMS,
                           )),
+
+                      // SWIPE RIGHT
                       TextButton(
                           onLongPress: () {},
                           onPressed: () {
@@ -246,7 +269,8 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                           child: Text(
                             NAME_SWIPE_RIGHT,
                             style: TEXT_STYLE_ITEMS,
-                          )),
+                          )
+                      ),
                     ],
                   ),
                 ),
@@ -282,7 +306,7 @@ class ShowHideButton extends StatelessWidget {
               width: 70,
               child: Center(
                 child: Text(
-                  enabled ? "show" : "hide",
+                  enabled ? "hide" : "show",
                   style: TEXT_STYLE_ITEMS,
                 ),
               ),
