@@ -8,13 +8,12 @@ import 'package:mars_launcher/services/location_service.dart';
 import 'package:mars_launcher/services/permission_service.dart';
 import 'package:mars_launcher/services/service_locator.dart';
 import 'package:weather/weather.dart';
-
-const API_KEY = "fe944563ad38e93ba270f054ec5b3474";
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class TemperatureLogic {
   final temperatureNotifier = ValueNotifier("");
   final locationService = LocationService();
-  final wf = WeatherFactory(API_KEY);
+  final wf = WeatherFactory(dotenv.env['WEATHER_API_KEY']!);
   final appShortcutManager = getIt<AppShortcutsManager>();
   final permissionService = getIt<PermissionService>();
   final settingsLogic = getIt<SettingsLogic>();
@@ -23,6 +22,7 @@ class TemperatureLogic {
 
   TemperatureLogic() {
     print("[$runtimeType] INITIALIZING");
+
     updateTemperature();
     timer = Timer.periodic(Duration(minutes: UPDATE_TEMPERATURE_EVERY), (timer) => updateTemperature());
     permissionService.weatherActivated.addListener(initializeTemp);

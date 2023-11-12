@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mars_launcher/pages/home.dart';
 import 'package:mars_launcher/services/service_locator.dart';
 import 'package:mars_launcher/logic/theme_logic.dart';
@@ -10,6 +11,7 @@ late final SharedPreferences prefs;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load();
   prefs = await SharedPreferences.getInstance();
   setupGetIt();
 
