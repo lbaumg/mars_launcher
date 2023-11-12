@@ -27,10 +27,10 @@ class PermissionService {
   }
 
   Future ensureCalendarPermission() async {
-    if (await Permission.calendar.isGranted) {
+    if (await Permission.calendarReadOnly.isGranted) {
       calendarActivated.value = true;
     } else {
-      PermissionStatus status = await Permission.calendar.request();
+      PermissionStatus status = await Permission.calendarReadOnly.request();
       calendarActivated.value = status.isGranted;
     }
   }

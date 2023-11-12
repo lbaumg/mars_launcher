@@ -153,9 +153,13 @@ class AppSearchLogic {
 }
 
 class MyBehavior extends ScrollBehavior {
+
+  // Removes animation when arriving at top or bottom of scrollview
   @override
-  Widget buildViewportChrome(
-      BuildContext context, Widget child, AxisDirection axisDirection) {
+  Widget buildOverscrollIndicator(
+      BuildContext context,
+      Widget child,
+      ScrollableDetails scrollableDetails) {
     return child;
   }
 }

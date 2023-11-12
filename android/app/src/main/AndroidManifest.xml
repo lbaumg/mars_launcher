@@ -48,6 +48,9 @@
 
             </intent-filter>
         </activity>
+
+        <activity android:name="com.android.settings.SubSettings"/>
+
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data

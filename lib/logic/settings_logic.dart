@@ -1,4 +1,5 @@
 
+import 'package:flutter/services.dart';
 import 'package:mars_launcher/global.dart';
 import 'package:mars_launcher/logic/utils.dart';
 import 'package:mars_launcher/services/shared_prefs_manager.dart';
@@ -30,4 +31,13 @@ class SettingsLogic {
     SharedPrefsManager.saveData(notifier.key, notifier.value);
   }
 
+
+  Future<void> openDefaultLauncherSettings() async {
+    const platform = MethodChannel('com.cloud-catchers.launcher/settings');
+    try {
+      await platform.invokeMethod('openLauncherSettings');
+    } on PlatformException catch (e) {
+      throw 'Could not launch launcher settings: ${e.message}';
+    }
+  }
 }
