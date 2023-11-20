@@ -33,7 +33,7 @@ class SettingsLogic {
 
 
   Future<void> openDefaultLauncherSettings() async {
-    const platform = MethodChannel('com.cloud-catchers.launcher/settings');
+    const platform = MethodChannel('com.cloudcatcher.launcher/settings');
     try {
       await platform.invokeMethod('openLauncherSettings');
     } on PlatformException catch (e) {

@@ -6,7 +6,7 @@ import android.os.Bundle
 import io.flutter.plugin.common.MethodChannel
 
 class MainActivity: FlutterActivity() {
-    private val CHANNEL = "com.cloud-catchers.launcher/settings"
+    private val CHANNEL = "com.cloudcatcher.launcher/settings"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
