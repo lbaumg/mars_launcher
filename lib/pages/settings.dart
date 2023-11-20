@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:mars_launcher/data/app_info.dart';
 import 'package:mars_launcher/logic/settings_logic.dart';
 import 'package:mars_launcher/logic/shortcut_logic.dart';
@@ -109,7 +110,9 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                             onPressed: () {
                               showDialog(
                                 context: context,
-                                builder: (_) => ColorDialog(darkMode: false),
+                                builder: (BuildContext context) {
+                                  return buildColorPickerDialog(context, false);
+                                },
                               );
                             },
                             child: Text(
@@ -122,7 +125,9 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                             onPressed: () {
                               showDialog(
                                 context: context,
-                                builder: (_) => ColorDialog(darkMode: true),
+                                builder: (BuildContext context) {
+                                  return buildColorPickerDialog(context, true);
+                                },
                               );
                             },
                             child: Text(
@@ -282,6 +287,45 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
   }
 
 
+  Widget buildColorPickerDialog(BuildContext context, bool isDarkMode) {
+    var selectedColor = isDarkMode ? themeManager.darkMode.background : themeManager.lightMode.background;
+
+    return AlertDialog(
+      title: const Text('Pick a background color'),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            ColorPicker(
+              pickerColor: selectedColor,
+              onColorChanged: (Color color) {
+                selectedColor = color;
+              },
+              labelTypes: [],
+              pickerAreaHeightPercent: 0.8,
+            ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: ElevatedButton(
+                child: const Text('APPLY'),
+                onPressed: () {
+                  print(selectedColor);
+                  themeManager.setBackgroundColor(isDarkMode, selectedColor);
+                  Navigator.of(context).pop();
+                },
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.black,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
 }
 
 class ShowHideButton extends StatelessWidget {
@@ -311,59 +355,6 @@ class ShowHideButton extends StatelessWidget {
               ),
             );
           }),
-    );
-  }
-}
-
-class ColorDialog extends StatelessWidget {
-  ColorDialog({Key? key, required bool darkMode})
-      : this.darkMode = darkMode,
-        super(key: key);
-  final themeManager = getIt<ThemeManager>();
-  final darkMode;
-
-  @override
-  Widget build(BuildContext context) {
-    final dialogWidth = 50.w;
-    final backgroundColor =
-        Colors.white; //darkMode ?  Colors.white : Colors.black;
-    const edgeInsets = 5.0;
-    const crossAxisCount = 3;
-    const overlayOpacity = 0.3;
-
-    return AlertDialog(
-      backgroundColor: backgroundColor,
-      insetPadding: EdgeInsets.zero,
-      titlePadding: EdgeInsets.zero,
-      contentPadding: const EdgeInsets.all(edgeInsets + 7),
-      content: Container(
-        width: dialogWidth,
-        child: GridView.builder(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                childAspectRatio: 1,
-                crossAxisCount: crossAxisCount,
-                crossAxisSpacing: edgeInsets,
-                mainAxisSpacing: edgeInsets),
-            itemCount: LIGHT_COLORS.length,
-            itemBuilder: (context, index) {
-              return TextButton(
-                onPressed: () {
-                  themeManager.setBackgroundColor(darkMode, index);
-                },
-                style: ButtonStyle(
-                  overlayColor: MaterialStateProperty.all(darkMode
-                      ? DARK_COLORS[index].search.withOpacity(overlayOpacity)
-                      : LIGHT_COLORS[index].search.withOpacity(overlayOpacity)),
-                  backgroundColor: MaterialStateProperty.all(darkMode
-                      ? DARK_COLORS[index].background
-                      : LIGHT_COLORS[index].background),
-                ),
-                child: Container(),
-              );
-            }),
-      ),
     );
   }
 }
