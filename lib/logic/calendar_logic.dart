@@ -17,13 +17,13 @@ class CalenderLogic {
   CalenderLogic() {
     updateEvents();
     timer = Timer.periodic(Duration(minutes: 1), (timer) => updateEvents());
-    permissionService.calendarActivated.addListener(initializeEvents);
+    permissionService.permissionCalendarGranted.addListener(initializeEvents);
   }
 
   void initializeEvents() {
-    if (permissionService.calendarActivated.value) {
+    if (permissionService.permissionCalendarGranted.value) {
       print("[$runtimeType] initializing events");
-      permissionService.calendarActivated.removeListener(initializeEvents);
+      permissionService.permissionCalendarGranted.removeListener(initializeEvents);
       updateEvents();
     }
   }

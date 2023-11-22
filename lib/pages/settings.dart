@@ -8,7 +8,8 @@ import 'package:mars_launcher/logic/utils.dart';
 import 'package:mars_launcher/pages/fragments/app_search_fragment.dart';
 import 'package:mars_launcher/services/permission_service.dart';
 import 'package:mars_launcher/services/service_locator.dart';
-import 'package:sizer/sizer.dart';
+
+import 'more_settings.dart';
 
 const TEXT_STYLE_TITLE = TextStyle(fontSize: 35, fontWeight: FontWeight.normal);
 const TEXT_STYLE_ITEMS = TextStyle(fontSize: 22, height: 1);
@@ -19,7 +20,7 @@ const NAME_TOP_BAR_MIDDLE = "weather app";
 const NAME_TOP_BAR_RIGHT = "calendar app";
 const NAME_SWIPE_LEFT = "swipe left";
 const NAME_SWIPE_RIGHT = "swipe right";
-const NAME_HELP = "help";
+const NAME_MORE = "more";
 
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);
@@ -190,10 +191,10 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                             child: Container(),
                           ),
                           ShowHideButton(
-                            notifier: settingsLogic.clockEnabledNotifier,
+                            notifier: settingsLogic.clockWidgetEnabledNotifier,
                             onPressed: () {
                               settingsLogic.setNotifierValueAndSave(
-                                  settingsLogic.clockEnabledNotifier);
+                                  settingsLogic.clockWidgetEnabledNotifier);
                             },
                           ),
                         ],
@@ -214,13 +215,9 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                               )),
                           Expanded(child: Container()),
                           ShowHideButton(
-                            notifier: settingsLogic.weatherEnabledNotifier,
+                            notifier: settingsLogic.weatherWidgetEnabledNotifier,
                             onPressed: () {
-                              settingsLogic.setNotifierValueAndSave(
-                                  settingsLogic.weatherEnabledNotifier);
-                              if (settingsLogic.weatherEnabledNotifier.value) {
-                                permissionService.ensureLocationPermission();
-                              }
+                              settingsLogic.setNotifierValueAndSave(settingsLogic.weatherWidgetEnabledNotifier);
                             },
                           ),
                         ],
@@ -242,10 +239,10 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                           ),
                           Expanded(child: Container()),
                           ShowHideButton(
-                            notifier: settingsLogic.calendarEnabledNotifier,
+                            notifier: settingsLogic.calendarWidgetEnabledNotifier,
                             onPressed: () {
                               settingsLogic.setNotifierValueAndSave(
-                                  settingsLogic.calendarEnabledNotifier);
+                                  settingsLogic.calendarWidgetEnabledNotifier);
                             },
                           ),
                         ],
@@ -275,6 +272,22 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                             style: TEXT_STYLE_ITEMS,
                           )
                       ),
+
+
+
+                      // MORE SETTINGS
+                      TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const MoreSettings()),
+                            );
+                          },
+                          child: Text(
+                            NAME_MORE,
+                            style: TEXT_STYLE_ITEMS,
+                          )
+                      )
                     ],
                   ),
                 ),
@@ -291,7 +304,11 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
     var selectedColor = isDarkMode ? themeManager.darkMode.background : themeManager.lightMode.background;
 
     return AlertDialog(
-      title: const Text('Pick a background color'),
+      title: const Text('Pick a background color',
+        style: TextStyle(
+        fontWeight: FontWeight.bold,
+        ),
+      ),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,

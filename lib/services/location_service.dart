@@ -6,25 +6,38 @@ class LocationService {
   var locationData = LocationData.fromMap(Map());
 
   Future<bool> isServiceEnabled() async {
-    bool serviceEnabled = false;
     for (int i = 0; i < 10; i++) {
       try {
-        serviceEnabled = await location.serviceEnabled();
-        return serviceEnabled;
+        return await location.serviceEnabled();
       } on PlatformException {
         await Future.delayed(Duration(milliseconds: 100));
       }
     }
-    return serviceEnabled;
+    return false;
   }
 
   Future<bool> checkPermission() async {
     bool serviceEnabled = await isServiceEnabled();
-    if ((!serviceEnabled && !await location.requestService()) || await location.hasPermission() == PermissionStatus.denied) {
+
+    if (!serviceEnabled && !await location.requestService()) {
+      /// User denied turning on location services
       return false;
-    } else {
-      return true;
     }
+
+    /// Check the permission status
+    PermissionStatus permissionStatus = await location.hasPermission();
+
+    if (permissionStatus == PermissionStatus.denied) {
+      /// Request location permission if not granted
+      permissionStatus = await location.requestPermission();
+      if (permissionStatus != PermissionStatus.granted) {
+        /// User denied location permission
+        return false;
+      }
+    }
+
+    /// Location services are enabled, and permission is granted
+    return true;
   }
 
   updateLocation() async {

@@ -11,7 +11,6 @@ late final SharedPreferences prefs;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load();
   prefs = await SharedPreferences.getInstance();
   setupGetIt();
 

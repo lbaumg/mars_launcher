@@ -26,7 +26,7 @@ class TopRow extends StatelessWidget {
       child: Row(
         children: [
           ValueListenableBuilder<bool>(
-              valueListenable: settingsLogic.clockEnabledNotifier,
+              valueListenable: settingsLogic.clockWidgetEnabledNotifier,
               builder: (context, isEnabled, child) {
                 return isEnabled
                     ? TextButton(
@@ -52,7 +52,7 @@ class TopRow extends StatelessWidget {
               }),
           Expanded(child: Container()),
           ValueListenableBuilder<bool>(
-              valueListenable: settingsLogic.weatherEnabledNotifier,
+              valueListenable: settingsLogic.weatherWidgetEnabledNotifier,
               builder: (context, isEnabled, child) {
                 return isEnabled
                     ? TextButton(
@@ -63,7 +63,7 @@ class TopRow extends StatelessWidget {
               }),
           Expanded(child: Container()),
           ValueListenableBuilder<bool>(
-              valueListenable: settingsLogic.calendarEnabledNotifier,
+              valueListenable: settingsLogic.calendarWidgetEnabledNotifier,
               builder: (context, isEnabled, child) {
                 return isEnabled
                     ? EventView()

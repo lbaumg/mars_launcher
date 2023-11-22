@@ -4,34 +4,22 @@ import 'package:permission_handler/permission_handler.dart';
 
 
 class PermissionService {
-  final calendarActivated = ValueNotifier(false);
-  final weatherActivated = ValueNotifier(false);
+  final permissionCalendarGranted = ValueNotifier(false);
 
   PermissionService() {
-    ensurePermissions();
+    checkPermissionsOnStartup();
   }
 
-  Future ensurePermissions() async {
+  Future checkPermissionsOnStartup() async{
     await ensureCalendarPermission();
-    await ensureLocationPermission();
-  }
-
-  Future ensureLocationPermission() async {
-    if (await Permission.location.isGranted) {
-      weatherActivated.value = true;
-    } else {
-      PermissionStatus status = await Permission.location.request();
-      weatherActivated.value = status.isGranted;
-      print("[$runtimeType] Location permission status: $status");
-    }
   }
 
   Future ensureCalendarPermission() async {
     if (await Permission.calendarReadOnly.isGranted) {
-      calendarActivated.value = true;
+      permissionCalendarGranted.value = true;
     } else {
       PermissionStatus status = await Permission.calendarReadOnly.request();
-      calendarActivated.value = status.isGranted;
+      permissionCalendarGranted.value = status.isGranted;
     }
   }
 }

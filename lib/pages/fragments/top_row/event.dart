@@ -25,7 +25,7 @@ class _EventViewState extends State<EventView> {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<bool>(
-        valueListenable: settingsLogic.weatherEnabledNotifier,
+        valueListenable: settingsLogic.weatherWidgetEnabledNotifier,
         builder: (context, isWeatherEnabled, child) {
           var letterLength = isWeatherEnabled ? 15 : 21;
           return Container(

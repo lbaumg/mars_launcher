@@ -11,9 +11,9 @@ const KEY_NUM_OF_SHORTCUT_ITEMS = "numOfShortcutItems";
 const KEY_SHORTCUT_MODE = "shortcutMode";
 
 class SettingsLogic {
-  final ValueNotifierWithKey<bool> weatherEnabledNotifier = ValueNotifierWithKey(SharedPrefsManager.readData(KEY_WEATHER_ENABLED) ?? true, KEY_WEATHER_ENABLED);
-  final ValueNotifierWithKey<bool> clockEnabledNotifier = ValueNotifierWithKey(SharedPrefsManager.readData(KEY_CLOCK_ENABLED) ?? true, KEY_CLOCK_ENABLED);
-  final ValueNotifierWithKey<bool> calendarEnabledNotifier = ValueNotifierWithKey(SharedPrefsManager.readData(KEY_CALENDAR_ENABLED) ?? true, KEY_CALENDAR_ENABLED);
+  final ValueNotifierWithKey<bool> weatherWidgetEnabledNotifier = ValueNotifierWithKey(SharedPrefsManager.readData(KEY_WEATHER_ENABLED) ?? false, KEY_WEATHER_ENABLED);
+  final ValueNotifierWithKey<bool> clockWidgetEnabledNotifier = ValueNotifierWithKey(SharedPrefsManager.readData(KEY_CLOCK_ENABLED) ?? true, KEY_CLOCK_ENABLED);
+  final ValueNotifierWithKey<bool> calendarWidgetEnabledNotifier = ValueNotifierWithKey(SharedPrefsManager.readData(KEY_CALENDAR_ENABLED) ?? true, KEY_CALENDAR_ENABLED);
   final ValueNotifierWithKey<int> numberOfShortcutItemsNotifier = ValueNotifierWithKey(SharedPrefsManager.readData(KEY_NUM_OF_SHORTCUT_ITEMS) ?? 4, KEY_NUM_OF_SHORTCUT_ITEMS);
   final ValueNotifierWithKey<bool> shortcutMode = ValueNotifierWithKey(SharedPrefsManager.readData(KEY_SHORTCUT_MODE) ?? true, KEY_SHORTCUT_MODE);
 
