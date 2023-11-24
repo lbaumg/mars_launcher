@@ -30,7 +30,7 @@ class _EventViewState extends State<EventView> {
         builder: (context, isWeatherEnabled, child) {
           var letterLength = isWeatherEnabled ? 15 : 21;
           return Container(
-            constraints: BoxConstraints(maxWidth: isWeatherEnabled ? 140 : 180),
+            // constraints: BoxConstraints(maxWidth: isWeatherEnabled ? 140 : 180),
             child: TextButton(
               onPressed: () {
                 appShortcutsManager.calendarAppNotifier.value.open();
@@ -58,9 +58,10 @@ class _EventViewState extends State<EventView> {
                   valueListenable: calenderLogic.eventNotifier,
                   builder: (context, event, child) {
                     return Text(
-                      event.length > letterLength
-                          ? ".." + event.substring(event.length - letterLength)
-                          : event,
+                      // event.length > letterLength
+                      //     ? ".." + event.substring(event.length - letterLength)
+                      //     : event,
+                      event,
                       softWrap: false,
                       style: TextStyle(
                         fontSize: FONT_SIZE_EVENTS,

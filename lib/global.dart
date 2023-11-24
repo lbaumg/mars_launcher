@@ -14,9 +14,9 @@ const int MAX_NUM_OF_SHORTCUT_ITEMS = 7;
 const bool LOAD_FROM_JSON = true;
 const UPDATE_TEMPERATURE_EVERY = 5; // in minutes
 
-const TEXT_CALENDER_EMPTY = "nothing to do";
+const TEXT_CALENDER_EMPTY = "nothing scheduled";
 
 const double FONT_SIZE_TEMPERATURE = 20;
 const double FONT_SIZE_CLOCK = 20;
-const double FONT_SIZE_CLOCK_DATE = 14;
+const double FONT_SIZE_CLOCK_DATE = 12;
 const double FONT_SIZE_EVENTS = 16;

@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:mars_launcher/global.dart';
+import 'package:mars_launcher/logic/battery_logic.dart';
 import 'package:mars_launcher/logic/theme_logic.dart';
+import 'package:mars_launcher/services/service_locator.dart';
 
 const INDEX_TO_WEEKDAY = {
   1: 'Monday',
@@ -28,6 +30,18 @@ const INDEX_TO_MONTH = {
   11: 'November',
   12: 'December',
 };
+
+String getPostfixForDayIndex(index) {
+  switch (index) {
+    case 1:
+      return "st";
+    case 2:
+      return "nd";
+    default:
+      return "th";
+  }
+}
+
 
 class Clock extends StatefulWidget {
   const Clock({Key? key}) : super(key: key);
@@ -79,6 +93,8 @@ class ClockLogic {
   late Timer timer;
   var currentDate = "";
 
+  final batteryLogic = getIt<BatteryLogic>();
+
   ClockLogic() {
     _updateClock();
     timer = Timer.periodic(Duration(seconds: 1), (timer) => _updateClock());
@@ -88,9 +104,12 @@ class ClockLogic {
     var now = DateTime.now();
     String hour = now.hour.toString().padLeft(2, '0');
     String minute = now.minute.toString().padLeft(2, '0');
-    timeNotifier.value = "$hour:$minute\n";
-    currentDate =
-        "${INDEX_TO_WEEKDAY[now.weekday]}, ${now.day}. ${INDEX_TO_MONTH[now.month]}";
+    var newTime = "$hour : $minute\n";
+    if (newTime != timeNotifier.value) {
+      timeNotifier.value = newTime;
+      currentDate = "${INDEX_TO_WEEKDAY[now.weekday]},  ${now.day}${getPostfixForDayIndex(now.day)} ${INDEX_TO_MONTH[now.month]?.substring(0,3)}";
+      batteryLogic.updateBatteryLevel();
+    }
   }
 
   void stopTimer() {
