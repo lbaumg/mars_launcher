@@ -3,11 +3,12 @@ import 'dart:async';
 import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mars_launcher/global.dart';
 import 'package:mars_launcher/services/permission_service.dart';
 import 'package:mars_launcher/services/service_locator.dart';
 
 class CalenderLogic {
-  final eventNotifier = ValueNotifier("no events");
+  final eventNotifier = ValueNotifier(TEXT_CALENDER_EMPTY);
   final _deviceCalendarPlugin = DeviceCalendarPlugin();
   final permissionService = getIt<PermissionService>();
   var _calendars = <Calendar>[];
@@ -70,7 +71,7 @@ class CalenderLogic {
           calendar.id, RetrieveEventsParams(startDate: now, endDate: midnight));
       events.addAll(calendarEventsResult.data as List<Event>);
     }
-    String newNextEvent = "no events";
+    String newNextEvent = TEXT_CALENDER_EMPTY;
     if (events.isNotEmpty) {
       events.sort((a, b) => a.start!.compareTo(b.start!));
       if (events.length > 1 && events.any((element) => !element.allDay!)) {

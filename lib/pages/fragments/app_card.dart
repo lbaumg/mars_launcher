@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mars_launcher/data/app_info.dart';
 import 'package:mars_launcher/logic/shortcut_logic.dart';
+import 'package:mars_launcher/logic/theme_logic.dart';
 import 'package:mars_launcher/pages/fragments/app_search_fragment.dart';
 import 'package:mars_launcher/services/service_locator.dart';
 
@@ -18,7 +19,7 @@ class AppCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final appShortcutsManager = getIt<AppShortcutsManager>();
 
-    var fontFamily = isShortcutItem ? "NotoSansRegular" : "NotoSansLight";
+    var fontFamily = isShortcutItem ? FONT_REGULAR : FONT_LIGHT;
     var letterSpacing = isShortcutItem ? 1.0 : 0.0;
     var textColor = isShortcutItem ? Theme.of(context).primaryColor : Theme.of(context).disabledColor;
 

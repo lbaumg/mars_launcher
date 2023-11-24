@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:mars_launcher/global.dart';
 import 'package:mars_launcher/logic/calendar_logic.dart';
 import 'package:mars_launcher/logic/settings_logic.dart';
 import 'package:mars_launcher/logic/shortcut_logic.dart';
@@ -34,8 +35,8 @@ class _EventViewState extends State<EventView> {
               onPressed: () {
                 appShortcutsManager.calendarAppNotifier.value.open();
               },
-              onLongPress: () async {
-                /*var time = await showDatePicker(
+/*              onLongPress: () async {
+                var time = await showDatePicker(
                   context: context,
                   initialDate: DateTime.now(),
                   firstDate: DateTime.now(),
@@ -50,9 +51,9 @@ class _EventViewState extends State<EventView> {
                 );
                 if (time != null) {
                   // FlutterAlarmClock.createAlarm(time.hour, time.minute);
-                }*/
+                }
                 // TODO create new event
-              },
+              },*/
               child: ValueListenableBuilder<String>(
                   valueListenable: calenderLogic.eventNotifier,
                   builder: (context, event, child) {
@@ -62,10 +63,19 @@ class _EventViewState extends State<EventView> {
                           : event,
                       softWrap: false,
                       style: TextStyle(
-                        fontSize: 15,
+                        fontSize: FONT_SIZE_EVENTS,
+                        fontFamily: FONT_REGULAR,
                       ),
                     );
                   }),
+              style: ButtonStyle(
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5), // Adjust the radius to control the roundness
+                  ),
+                ),
+                // backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+              ),
             ),
           );
         });

@@ -71,6 +71,12 @@ flutter:
     - .env
 
   fonts:
+    - family: TitilliemWebLight
+      fonts:
+        - asset: assets/fonts/TitilliumWeb-Light.ttf
+    - family: TitilliemWebRegular
+      fonts:
+        - asset: assets/fonts/TitilliumWeb-Regular.ttf
     - family: NotoSansLight
       fonts:
         - asset: assets/fonts/notosans_light.ttf

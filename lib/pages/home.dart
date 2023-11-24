@@ -7,14 +7,12 @@ import 'package:mars_launcher/logic/theme_logic.dart';
 import 'package:mars_launcher/pages/settings.dart';
 import 'package:mars_launcher/services/service_locator.dart';
 
-
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> with WidgetsBindingObserver {
-
   final themeManager = getIt<ThemeManager>();
   final appShortcutsManager = getIt<AppShortcutsManager>();
   final sensitivity = 8;
@@ -65,22 +63,17 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
           resizeToAvoidBottomInset: false,
           body: SafeArea(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                TopRow(),
                 Expanded(
-                    flex: 1,
-                    child: TopRow()),
-
-                Expanded(
-                    flex: 1,
-                    child: Container()),
-
-                Expanded(
-                  flex: 8,
                   child: !searchApps
-                      ? AppShortcutsFragment()
+                      ? Align(
+                          alignment:
+                              Alignment.centerLeft, // Center only vertically
+                          child: AppShortcutsFragment())
                       : AppSearchFragment(),
-                ),
+                )
               ],
             ),
           ),

@@ -24,32 +24,59 @@ class TopRow extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(30, 30, 30, 0),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ValueListenableBuilder<bool>(
-              valueListenable: settingsLogic.clockWidgetEnabledNotifier,
-              builder: (context, isEnabled, child) {
-                return isEnabled
-                    ? TextButton(
-                        onPressed: () => appShortcutsManager.clockAppNotifier.value.open(),
-                        onLongPress: () async {
-                          var time = await showTimePicker(
-                            context: context,
-                            initialTime: TimeOfDay.now(),
-                            helpText: "Create a new alarm",
-                            builder: (context, child) {
-                                return Theme(
-                                  data: themeManager.themeModeNotifier.value ? ThemeData.dark() : ThemeData.light(),
-                                  child: child!,
-                                );
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ValueListenableBuilder<bool>(
+                  valueListenable: settingsLogic.clockWidgetEnabledNotifier,
+                  builder: (context, isEnabled, child) {
+                    return isEnabled
+                        ? TextButton(
+                        style: ButtonStyle(
+                          // backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5), // Adjust the radius to control the roundness
+                            ),
+                          ),
+                        ),
+
+
+                            onPressed: () => appShortcutsManager.clockAppNotifier.value.open(),
+                            onLongPress: () async {
+                              var time = await showTimePicker(
+                                context: context,
+                                initialTime: TimeOfDay.now(),
+                                helpText: "Create a new alarm",
+                                builder: (context, child) {
+                                    return Theme(
+                                      data: themeManager.themeModeNotifier.value ? ThemeData.dark() : ThemeData.light(),
+                                      child: child!,
+                                    );
+                                },
+                              );
+                              if (time != null) {
+                                FlutterAlarmClock.createAlarm(time.hour, time.minute);
+                              }
                             },
-                          );
-                          if (time != null) {
-                            FlutterAlarmClock.createAlarm(time.hour, time.minute);
-                          }
-                        },
-                        child: Clock())
-                    : TextButton(onPressed: () {}, child: Text(""));
-              }),
+                            child: Clock())
+                        : TextButton(onPressed: () {}, child: Text(""));
+                  }),
+
+              ValueListenableBuilder<bool>(
+                  valueListenable: settingsLogic.calendarWidgetEnabledNotifier,
+                  builder: (context, isEnabled, child) {
+                    return isEnabled
+                        ? EventView()
+                        : TextButton(
+                      onPressed: () {},
+                      child: Text(""),
+                    );
+                  }),
+            ],
+          ),
           Expanded(child: Container()),
           ValueListenableBuilder<bool>(
               valueListenable: settingsLogic.weatherWidgetEnabledNotifier,
@@ -59,19 +86,10 @@ class TopRow extends StatelessWidget {
                         onPressed: () => appShortcutsManager.weatherAppNotifier.value.open(),
                         child: Temperature(),
                       )
-                    : Container();
+                    : SizedBox.shrink();
               }),
-          Expanded(child: Container()),
-          ValueListenableBuilder<bool>(
-              valueListenable: settingsLogic.calendarWidgetEnabledNotifier,
-              builder: (context, isEnabled, child) {
-                return isEnabled
-                    ? EventView()
-                    : TextButton(
-                        onPressed: () {},
-                        child: Text(""),
-                      );
-              }),
+          // Expanded(child: Container()),
+
         ],
       ),
     );

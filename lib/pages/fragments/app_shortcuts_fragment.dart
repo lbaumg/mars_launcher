@@ -28,11 +28,13 @@ class AppShortcutsFragment extends StatelessWidget {
         valueListenable: settingsLogic.numberOfShortcutItemsNotifier,
         builder: (context, numOfShortcutItems, child){
         return Padding(
-          padding: EdgeInsets.fromLTRB(22.0, num2topPad[numOfShortcutItems]!, 0, 0),
+          padding: EdgeInsets.fromLTRB(70.0, 0, 0, 20),
+          // padding: EdgeInsets.fromLTRB(22.0, num2topPad[numOfShortcutItems]!, 0, 0),
           child: ValueListenableBuilder<List<AppInfo>>(
             valueListenable: appShortcutsManager.shortcutAppsNotifier,
             builder: (context, shortcutApps, child) {
               return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: shortcutApps.getRange(0, numOfShortcutItems).map((app) => AppCard(
                     appInfo: app,
