@@ -16,6 +16,7 @@ const TEXT_STYLE_ITEMS = TextStyle(fontSize: 22, height: 1);
 const ROW_PADDING_RIGHT = 60.0;
 
 const NAME_TOP_BAR_LEFT = "clock app";
+const NAME_TOP_BAR_BATTERY = "battery";
 const NAME_TOP_BAR_MIDDLE = "weather app";
 const NAME_TOP_BAR_RIGHT = "calendar app";
 const NAME_SWIPE_LEFT = "swipe left";
@@ -86,14 +87,14 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("settings", style: TEXT_STYLE_TITLE),
+                      Text("Settings", style: TEXT_STYLE_TITLE),
                       SizedBox(
                         height: 20,
                         width: double.infinity,
                       ),
                       SizedBox(height: 10),
 
-                      // SET DEFAULT LAUNCHER
+                      /// SET DEFAULT LAUNCHER
                       TextButton(
                         onPressed: () {
                            settingsLogic.openDefaultLauncherSettings();
@@ -104,7 +105,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                         ),
                       ),
 
-                      // LIGHT COLOR / DARK COLOR
+                      /// LIGHT COLOR / DARK COLOR
                       Row(
                         children: [
                           TextButton(
@@ -139,7 +140,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                         ],
                       ),
 
-                      // APPS NUMBER
+                      /// APPS NUMBER
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -174,7 +175,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                         ],
                       ),
 
-                      // CLOCK APP
+                      /// CLOCK APP
                       Row(
                         children: [
                           TextButton(
@@ -200,7 +201,30 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                         ],
                       ),
 
-                      // WEATHER APP
+                      /// BATTERY
+                      Row(
+                        children: [
+                          TextButton(
+                              onLongPress: () {},
+                              onPressed: () {},
+                              child: Text(
+                                NAME_TOP_BAR_BATTERY,
+                                style: TEXT_STYLE_ITEMS,
+                              )),
+                          Expanded(
+                            child: Container(),
+                          ),
+                          ShowHideButton(
+                            notifier: settingsLogic.batteryWidgetEnabledNotifier,
+                            onPressed: () {
+                              settingsLogic.setNotifierValueAndSave(
+                                  settingsLogic.batteryWidgetEnabledNotifier);
+                            },
+                          ),
+                        ],
+                      ),
+
+                      /// WEATHER APP
                       Row(
                         children: [
                           TextButton(
@@ -223,7 +247,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                         ],
                       ),
 
-                      // CALENDAR APP
+                      /// CALENDAR APP
                       Row(
                         children: [
                           TextButton(
@@ -248,7 +272,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                         ],
                       ),
 
-                      // SWIPE LEFT
+                      /// SWIPE LEFT
                       TextButton(
                           onLongPress: () {},
                           onPressed: () {
@@ -260,7 +284,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                             style: TEXT_STYLE_ITEMS,
                           )),
 
-                      // SWIPE RIGHT
+                      /// SWIPE RIGHT
                       TextButton(
                           onLongPress: () {},
                           onPressed: () {
@@ -275,7 +299,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
 
 
 
-                      // MORE SETTINGS
+                      /// MORE SETTINGS
                       TextButton(
                           onPressed: () {
                             Navigator.push(

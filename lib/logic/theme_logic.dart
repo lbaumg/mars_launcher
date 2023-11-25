@@ -31,13 +31,13 @@ class ThemeColors {
 class ThemeManager {
   late final ThemeModeNotifier<bool> themeModeNotifier;
 
-  var lightMode = ThemeColors(
+  final lightMode = ThemeColors(
     background: Color(SharedPrefsManager.readData(KEY_LIGHT_BACKGROUND) ?? Colors.white.value),
     textColor: Colors.black,
     searchTextColor: Color(SharedPrefsManager.readData(KEY_LIGHT_SEARCH_COLOR) ?? Colors.deepOrange.value)
   );
 
-  var darkMode = ThemeColors(
+  final darkMode = ThemeColors(
     background: Color(SharedPrefsManager.readData(KEY_DARK_BACKGROUND) ?? Colors.black.value),
     textColor: Colors.white,
     searchTextColor: Color(SharedPrefsManager.readData(KEY_DARK_SEARCH_COLOR) ?? Colors.deepOrange.value)
@@ -62,7 +62,7 @@ class ThemeManager {
       ),
       textTheme: TextTheme(
         bodyLarge: TextStyle(),
-        bodyMedium: TextStyle()
+        bodyMedium: TextStyle(),
       ).apply(
         bodyColor: backgroundTextColor,
         displayColor: backgroundTextColor,

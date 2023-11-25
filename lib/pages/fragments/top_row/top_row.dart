@@ -74,7 +74,7 @@ class TopRow extends StatelessWidget {
                                 }
                               },
                               child: Clock())
-                          : TextButton(onPressed: () {}, child: Text(""));
+                          : TextButton(onPressed: () {}, child: SizedBox.shrink());
                     }),
                 ValueListenableBuilder<bool>(
                     valueListenable:
@@ -104,14 +104,27 @@ class TopRow extends StatelessWidget {
                 }),
           ],
         ),
-        Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: ValueListenableBuilder<int>(
-              valueListenable: batteryLogic.batteryLevelNotifier,
-              builder: (context, batteryLevel, child) {
-                return BatteryIcon(batteryLevel: batteryLevel);
-              }),
-        ),
+        ValueListenableBuilder<bool>(
+            valueListenable: settingsLogic.batteryWidgetEnabledNotifier,
+            builder: (context, isEnabled, child) {
+              return isEnabled
+                  ? Padding(
+                      padding: const EdgeInsets.all(17.0),
+                      child: ValueListenableBuilder<bool>(
+                        valueListenable: themeManager.themeModeNotifier,
+                        builder: (context, themeMode, child) {
+                          return ValueListenableBuilder<int>(
+                              valueListenable: batteryLogic.batteryLevelNotifier,
+                              builder: (context, batteryLevel, child) {
+                                print("BUILDING BATTERYICON AGAIN: $batteryLevel");
+                                final paintColor = themeMode ? themeManager.darkMode.textColor : themeManager.lightMode.textColor;
+                                return BatteryIcon(batteryLevel: batteryLevel, paintColor: paintColor);
+                              });
+                        }
+                      ),
+                    )
+                  : Container();
+            })
       ]),
     );
   }

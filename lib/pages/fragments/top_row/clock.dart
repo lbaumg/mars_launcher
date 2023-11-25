@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:mars_launcher/global.dart';
-import 'package:mars_launcher/logic/battery_logic.dart';
 import 'package:mars_launcher/logic/theme_logic.dart';
 import 'package:mars_launcher/services/service_locator.dart';
 
@@ -63,17 +62,16 @@ class _ClockState extends State<Clock> {
             text: currentTime,
             style: TextStyle(
               fontSize: FONT_SIZE_CLOCK,
-              fontWeight: FontWeight.normal,
-              fontFamily: FONT_REGULAR
+              fontFamily: FONT_REGULAR,
             ),
             children: <TextSpan>[
               TextSpan(
                 text: clockLogic.currentDate,
                 style: TextStyle(
                   fontSize: FONT_SIZE_CLOCK_DATE,
-                  fontWeight: FontWeight.normal,
                   height: 1.8,
-                  fontFamily: FONT_LIGHT
+                  fontFamily: FONT_LIGHT,
+
                 ),
               ),
             ],
@@ -93,7 +91,6 @@ class ClockLogic {
   late Timer timer;
   var currentDate = "";
 
-  final batteryLogic = getIt<BatteryLogic>();
 
   ClockLogic() {
     _updateClock();
@@ -108,7 +105,6 @@ class ClockLogic {
     if (newTime != timeNotifier.value) {
       timeNotifier.value = newTime;
       currentDate = "${INDEX_TO_WEEKDAY[now.weekday]},  ${now.day}${getPostfixForDayIndex(now.day)} ${INDEX_TO_MONTH[now.month]?.substring(0,3)}";
-      batteryLogic.updateBatteryLevel();
     }
   }
 

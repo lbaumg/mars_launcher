@@ -2,45 +2,66 @@ import 'package:flutter/material.dart';
 
 class BatteryIcon extends StatelessWidget {
   final int batteryLevel;
+  final Color paintColor;
 
-  BatteryIcon({required this.batteryLevel});
+  const BatteryIcon({required this.batteryLevel, required this.paintColor});
 
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-      painter: BatteryPainter(batteryLevel: batteryLevel),
-      size: Size(45, 30), // Hier kannst du die Größe des Icons anpassen
+      painter: BatteryPainter(batteryLevel: batteryLevel, paintColor: paintColor),
+      size: Size(28, 15), // Hier kannst du die Größe des Icons anpassen
     );
   }
 }
 
 class BatteryPainter extends CustomPainter {
   final int batteryLevel;
+  Color paintColor;
 
-  BatteryPainter({required this.batteryLevel});
+  BatteryPainter({required this.batteryLevel, required this.paintColor});
+
 
   @override
   void paint(Canvas canvas, Size size) {
-    Paint paint = Paint()
-      ..color = Colors.white // Farbe des Batterie-Icons
-      ..strokeWidth = 3.0
+
+    // paintColor = Colors.white54;
+
+    Paint outlinePaint = Paint()
+      ..color = paintColor
+      ..strokeWidth = 1.5
       ..style = PaintingStyle.stroke;
+    RRect backgroundRect = RRect.fromRectAndRadius(
+      Rect.fromLTWH(0, 0, size.width, size.height),
+      Radius.circular(2),
+    );
+    canvas.drawRRect(backgroundRect, outlinePaint);
 
-    Rect batteryRect = Rect.fromPoints(Offset(10, 10), Offset(size.width - 10, size.height - 10));
-
-    canvas.drawRect(batteryRect, paint);
+    // Vorsprung zeichnen
+    Paint protrusionPaint = Paint()
+      ..color = paintColor
+      ..style = PaintingStyle.fill;
+    RRect protrusionRect = RRect.fromRectAndRadius(
+      Rect.fromLTWH(size.width, size.height / 4, 3, size.height / 2),
+      Radius.circular(0.5),
+    );
+    canvas.drawRRect(protrusionRect, protrusionPaint);
 
     if (batteryLevel > 0) {
       Paint fillPaint = Paint()
-        ..color = Colors.white // Farbe des gefüllten Bereichs
+        ..color = paintColor// Farbe des gefüllten Bereichs
         ..style = PaintingStyle.fill;
 
+      double margin = 2.5;
       double fillPercentage = batteryLevel / 100.0;
-      double fillWidth = (size.width - 20) * fillPercentage;
+      double fillWidth = (size.width - 2 * margin) * fillPercentage;
 
-      Rect fillRect = Rect.fromPoints(Offset(10, 10), Offset(10 + fillWidth, size.height - 10));
+      RRect fillRect = RRect.fromRectAndRadius(
+        Rect.fromLTWH(margin, margin, fillWidth, size.height-2*margin),
+        Radius.circular(1),
+      );
 
-      canvas.drawRect(fillRect, fillPaint);
+      canvas.drawRRect(fillRect, fillPaint);
     }
   }
 

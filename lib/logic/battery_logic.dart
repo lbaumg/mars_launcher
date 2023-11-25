@@ -1,6 +1,6 @@
 
 
-import 'package:battery/battery.dart';
+import 'package:battery_plus/battery_plus.dart';
 import 'package:flutter/cupertino.dart';
 
 class BatteryLogic {
@@ -8,11 +8,20 @@ class BatteryLogic {
   final batteryLevelNotifier = ValueNotifier(0);
 
   BatteryLogic() {
-    updateBatteryLevel();
+    _battery.onBatteryStateChanged.listen((BatteryState state) {
+      print('Battery state changed: $state');
+      updateBatteryLevel();
+    });
   }
 
   Future<void> updateBatteryLevel() async {
-    batteryLevelNotifier.value = await _battery.batteryLevel;
+
+    _battery.batteryLevel.then((level) {
+      if (level != batteryLevelNotifier.value) {
+      print("BATTERY LEVEL: $level");
+        batteryLevelNotifier.value = level;
+      }
+    });
   }
 
 }

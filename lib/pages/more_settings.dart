@@ -110,7 +110,6 @@ class _MoreSettingsState extends State<MoreSettings>
   }
 
   Widget buildAddOpenWeatherAPIDialog(BuildContext context) {
-    var apiKey = "";
 
     return AlertDialog(
       title: const Text(
