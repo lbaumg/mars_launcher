@@ -10,7 +10,7 @@ class BatteryIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomPaint(
       painter: BatteryPainter(batteryLevel: batteryLevel, paintColor: paintColor),
-      size: Size(28, 15), // Hier kannst du die Größe des Icons anpassen
+      size: Size(18, 10), // Hier kannst du die Größe des Icons anpassen
     );
   }
 }
@@ -29,7 +29,7 @@ class BatteryPainter extends CustomPainter {
 
     Paint outlinePaint = Paint()
       ..color = paintColor
-      ..strokeWidth = 1.5
+      ..strokeWidth = 1
       ..style = PaintingStyle.stroke;
     RRect backgroundRect = RRect.fromRectAndRadius(
       Rect.fromLTWH(0, 0, size.width, size.height),
@@ -52,7 +52,7 @@ class BatteryPainter extends CustomPainter {
         ..color = paintColor// Farbe des gefüllten Bereichs
         ..style = PaintingStyle.fill;
 
-      double margin = 2.5;
+      double margin = 2;
       double fillPercentage = batteryLevel / 100.0;
       double fillWidth = (size.width - 2 * margin) * fillPercentage;
 

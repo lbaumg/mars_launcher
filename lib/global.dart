@@ -16,7 +16,7 @@ const UPDATE_TEMPERATURE_EVERY = 5; // in minutes
 
 const TEXT_CALENDER_EMPTY = "nothing scheduled";
 
-const double FONT_SIZE_TEMPERATURE = 20;
-const double FONT_SIZE_CLOCK = 20;
+const double FONT_SIZE_TEMPERATURE = 12;
+const double FONT_SIZE_CLOCK = 12;
 const double FONT_SIZE_CLOCK_DATE = 12;
-const double FONT_SIZE_EVENTS = 16;
+const double FONT_SIZE_EVENTS = 12;

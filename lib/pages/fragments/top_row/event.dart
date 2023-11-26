@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:mars_launcher/global.dart';
 import 'package:mars_launcher/logic/calendar_logic.dart';
@@ -6,7 +5,6 @@ import 'package:mars_launcher/logic/settings_logic.dart';
 import 'package:mars_launcher/logic/shortcut_logic.dart';
 import 'package:mars_launcher/logic/theme_logic.dart';
 import 'package:mars_launcher/services/service_locator.dart';
-
 
 class EventView extends StatefulWidget {
   const EventView({
@@ -31,11 +29,60 @@ class _EventViewState extends State<EventView> {
           // var letterLength = isWeatherEnabled ? 15 : 21;
           return Container(
             // constraints: BoxConstraints(maxWidth: isWeatherEnabled ? 140 : 180),
-            child: TextButton(
-              onPressed: () {
-                appShortcutsManager.calendarAppNotifier.value.open();
-              },
+            child: SizedBox(
+              height: 55,
+              child: TextButton(
+                onPressed: () {
+                  appShortcutsManager.calendarAppNotifier.value.open();
+                },
+                child: ValueListenableBuilder<String>(
+                    valueListenable: calenderLogic.eventNotifier,
+                    builder: (context, event, child) {
+                      return Text(
+                        // event.length > letterLength
+                        //     ? ".." + event.substring(event.length - letterLength)
+                        //     : event,
+                        calenderLogic.currentDate + "\n" + event,
+                        softWrap: false,
+                        style: TextStyle(
+                          fontSize: FONT_SIZE_EVENTS,
+                          fontFamily: FONT_LIGHT,
+                        ),
+                      );
+                    }),
+                style: TextButton.styleFrom(
+                    // padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0), // Adjust padding
+                    shape: RoundedRectangleBorder(),
+                    // minimumSize: Size(0, 10.0), // Adjust minimum height
+                    alignment: Alignment.center, // Align text to center
+                    backgroundColor: Colors.green
+                ),
+
+                // ButtonStyle(
+                //   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                //     RoundedRectangleBorder(
+                //       borderRadius: BorderRadius.circular(
+                //           5), // Adjust the radius to control the roundness
+                //     ),
+                //   ),
+                //   backgroundColor:
+                //       MaterialStateProperty.all<Color>(Colors.lightGreen),
+                // ),
+              ),
+            ),
+          );
+        });
+  }
+
+  @override
+  void dispose() {
+    calenderLogic.stopTimer();
+    super.dispose();
+  }
+}
+
 /*              onLongPress: () async {
+                // TODO create new event
                 var time = await showDatePicker(
                   context: context,
                   initialDate: DateTime.now(),
@@ -52,39 +99,5 @@ class _EventViewState extends State<EventView> {
                 if (time != null) {
                   // FlutterAlarmClock.createAlarm(time.hour, time.minute);
                 }
-                // TODO create new event
-              },*/
-              child: ValueListenableBuilder<String>(
-                  valueListenable: calenderLogic.eventNotifier,
-                  builder: (context, event, child) {
-                    return Text(
-                      // event.length > letterLength
-                      //     ? ".." + event.substring(event.length - letterLength)
-                      //     : event,
-                      event,
-                      softWrap: false,
-                      style: TextStyle(
-                        fontSize: FONT_SIZE_EVENTS,
-                        fontFamily: FONT_REGULAR,
-                      ),
-                    );
-                  }),
-              style: ButtonStyle(
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5), // Adjust the radius to control the roundness
-                  ),
-                ),
-                // backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-              ),
-            ),
-          );
-        });
-  }
 
-  @override
-  void dispose() {
-    calenderLogic.stopTimer();
-    super.dispose();
-  }
-}
+              },*/

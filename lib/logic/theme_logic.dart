@@ -11,9 +11,11 @@ const KEY_LIGHT_SEARCH_COLOR = "light_search_color";
 const KEY_DARK_BACKGROUND = "dark_background";
 const KEY_DARK_SEARCH_COLOR = "dark_search_color";
 
-const FONT_LIGHT = "TitilliemWebLight";
-const FONT_REGULAR = "TitilliemWebRegular";
-//"NotoSansRegular" : "NotoSansLight";
+// const FONT_LIGHT = "TitilliemWebLight";
+// const FONT_REGULAR = "TitilliemWebRegular";
+
+const FONT_LIGHT = "NotoSansLight";
+const FONT_REGULAR = "NotoSansRegular";
 
 
 class ThemeColors {

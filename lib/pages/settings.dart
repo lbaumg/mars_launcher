@@ -8,6 +8,7 @@ import 'package:mars_launcher/logic/utils.dart';
 import 'package:mars_launcher/pages/fragments/app_search_fragment.dart';
 import 'package:mars_launcher/services/permission_service.dart';
 import 'package:mars_launcher/services/service_locator.dart';
+import 'package:mars_launcher/strings.dart';
 
 import 'more_settings.dart';
 
@@ -15,13 +16,6 @@ const TEXT_STYLE_TITLE = TextStyle(fontSize: 35, fontWeight: FontWeight.normal);
 const TEXT_STYLE_ITEMS = TextStyle(fontSize: 22, height: 1);
 const ROW_PADDING_RIGHT = 60.0;
 
-const NAME_TOP_BAR_LEFT = "clock app";
-const NAME_TOP_BAR_BATTERY = "battery";
-const NAME_TOP_BAR_MIDDLE = "weather app";
-const NAME_TOP_BAR_RIGHT = "calendar app";
-const NAME_SWIPE_LEFT = "swipe left";
-const NAME_SWIPE_RIGHT = "swipe right";
-const NAME_MORE = "more";
 
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);
@@ -87,7 +81,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Settings", style: TEXT_STYLE_TITLE),
+                      Text(Strings.settingsTitle, style: TEXT_STYLE_TITLE),
                       SizedBox(
                         height: 20,
                         width: double.infinity,
@@ -100,7 +94,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                            settingsLogic.openDefaultLauncherSettings();
                         },
                         child: Text(
-                          "set default launcher",
+                          Strings.settingsChangeDefaultLauncher,
                           style: TEXT_STYLE_ITEMS,
                         ),
                       ),
@@ -118,7 +112,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                               );
                             },
                             child: Text(
-                              "light color",
+                              Strings.settingsLightColor,
                               style: TEXT_STYLE_ITEMS,
                             ),
                           ),
@@ -133,7 +127,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                               );
                             },
                             child: Text(
-                              "dark color",
+                              Strings.settingsDarkColor,
                               style: TEXT_STYLE_ITEMS,
                             ),
                           ),
@@ -150,7 +144,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                                   settingsLogic.numberOfShortcutItemsNotifier);
                             },
                             child: Text(
-                              "app number",
+                              Strings.settingsAppNumber,
                               style: TEXT_STYLE_ITEMS,
                             ),
                           ),
@@ -185,7 +179,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                                     appShortcutsManager.clockAppNotifier);
                               },
                               child: Text(
-                                NAME_TOP_BAR_LEFT,
+                                Strings.settingsClockApp,
                                 style: TEXT_STYLE_ITEMS,
                               )),
                           Expanded(
@@ -208,7 +202,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                               onLongPress: () {},
                               onPressed: () {},
                               child: Text(
-                                NAME_TOP_BAR_BATTERY,
+                                Strings.settingsBattery,
                                 style: TEXT_STYLE_ITEMS,
                               )),
                           Expanded(
@@ -234,7 +228,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                                     appShortcutsManager.weatherAppNotifier);
                               },
                               child: Text(
-                                NAME_TOP_BAR_MIDDLE,
+                                Strings.settingsWeatherApp,
                                 style: TEXT_STYLE_ITEMS,
                               )),
                           Expanded(child: Container()),
@@ -257,7 +251,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                                   appShortcutsManager.calendarAppNotifier);
                             },
                             child: Text(
-                              NAME_TOP_BAR_RIGHT,
+                              Strings.settingsCalendarApp,
                               style: TEXT_STYLE_ITEMS,
                             ),
                           ),
@@ -280,7 +274,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                                 appShortcutsManager.swipeLeftAppNotifier);
                           },
                           child: Text(
-                            NAME_SWIPE_LEFT,
+                            Strings.settingsSwipeLeft,
                             style: TEXT_STYLE_ITEMS,
                           )),
 
@@ -292,7 +286,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                                 appShortcutsManager.swipeRightAppNotifier);
                           },
                           child: Text(
-                            NAME_SWIPE_RIGHT,
+                            Strings.settingsSwipeRight,
                             style: TEXT_STYLE_ITEMS,
                           )
                       ),
@@ -308,7 +302,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                             );
                           },
                           child: Text(
-                            NAME_MORE,
+                            Strings.settingsMore,
                             style: TEXT_STYLE_ITEMS,
                           )
                       )
@@ -327,8 +321,12 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
   Widget buildColorPickerDialog(BuildContext context, bool isDarkMode) {
     var selectedColor = isDarkMode ? themeManager.darkMode.background : themeManager.lightMode.background;
 
+    const title = 'Pick a background color';
+    const textButton = 'APPLY';
+
+
     return AlertDialog(
-      title: const Text('Pick a background color',
+      title: const Text(title,
         style: TextStyle(
         fontWeight: FontWeight.bold,
         ),
@@ -349,7 +347,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
             Align(
               alignment: Alignment.centerRight,
               child: ElevatedButton(
-                child: const Text('APPLY'),
+                child: const Text(textButton),
                 onPressed: () {
                   print(selectedColor);
                   themeManager.setBackgroundColor(isDarkMode, selectedColor);

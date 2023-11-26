@@ -27,7 +27,7 @@ class TopRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(30, 30, 30, 0),
+      padding: const EdgeInsets.fromLTRB(30, 20, 30, 0),
       child: Stack(alignment: Alignment.topCenter, children: [
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,60 +36,52 @@ class TopRow extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                /// CLOCK WIDGET
                 ValueListenableBuilder<bool>(
                     valueListenable: settingsLogic.clockWidgetEnabledNotifier,
                     builder: (context, isEnabled, child) {
-                      return isEnabled
-                          ? TextButton(
-                              style: ButtonStyle(
-                                // backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-                                shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        5), // Adjust the radius to control the roundness
-                                  ),
+                      return SizedBox(
+                        height: 30,
+                        child: isEnabled
+                            ? TextButton(
+                                style: TextButton.styleFrom(
+                                    shape: RoundedRectangleBorder(),
+                                  // padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0),
+                                  // minimumSize: Size(0, 25.0), // Adjust minimum height
+                                  alignment: Alignment.center,
+                                  backgroundColor: Colors.blue
                                 ),
-                              ),
-                              onPressed: () => appShortcutsManager
-                                  .clockAppNotifier.value
-                                  .open(),
-                              onLongPress: () async {
-                                var time = await showTimePicker(
-                                  context: context,
-                                  initialTime: TimeOfDay.now(),
-                                  helpText: "Create a new alarm",
-                                  builder: (context, child) {
-                                    return Theme(
-                                      data: themeManager.themeModeNotifier.value
-                                          ? ThemeData.dark()
-                                          : ThemeData.light(),
-                                      child: child!,
-                                    );
-                                  },
-                                );
-                                if (time != null) {
-                                  FlutterAlarmClock.createAlarm(
-                                      time.hour, time.minute);
-                                }
-                              },
-                              child: Clock())
-                          : TextButton(onPressed: () {}, child: SizedBox.shrink());
+                                onPressed: () => appShortcutsManager
+                                    .clockAppNotifier.value
+                                    .open(),
+                                onLongPress: () {
+                                  openCreateAlarmDialog(context, themeManager.themeModeNotifier.value);
+                                },
+                                child: Clock())
+                            : TextButton(onPressed: () {}, child: SizedBox.shrink()),
+                      );
                     }),
-                ValueListenableBuilder<bool>(
-                    valueListenable:
-                        settingsLogic.calendarWidgetEnabledNotifier,
-                    builder: (context, isEnabled, child) {
-                      return isEnabled
-                          ? EventView()
-                          : TextButton(
-                              onPressed: () {},
-                              child: Text(""),
-                            );
-                    }),
+
+                /// CALENDAR WIDGET
+                SizedBox(
+                  height: 50,
+                  child: ValueListenableBuilder<bool>(
+                      valueListenable:
+                          settingsLogic.calendarWidgetEnabledNotifier,
+                      builder: (context, isEnabled, child) {
+                        return isEnabled
+                            ? EventView()
+                            : TextButton( onPressed: () {},     style: TextButton.styleFrom(
+                            shape: RoundedRectangleBorder(),
+                            backgroundColor: Colors.blue
+                        ), child: SizedBox.shrink(),); // SizedBox.shrink();
+                      }),
+                ),
               ],
             ),
             Expanded(child: Container()),
+
+            /// WEATHER WIDGET
             ValueListenableBuilder<bool>(
                 valueListenable: settingsLogic.weatherWidgetEnabledNotifier,
                 builder: (context, isEnabled, child) {
@@ -104,6 +96,7 @@ class TopRow extends StatelessWidget {
                 }),
           ],
         ),
+        /// BATTERY WIDGET
         ValueListenableBuilder<bool>(
             valueListenable: settingsLogic.batteryWidgetEnabledNotifier,
             builder: (context, isEnabled, child) {
@@ -123,9 +116,31 @@ class TopRow extends StatelessWidget {
                         }
                       ),
                     )
-                  : Container();
+                  : SizedBox.shrink();
             })
       ]),
     );
+  }
+}
+
+
+void openCreateAlarmDialog(context, isDarkMode) async {
+  // TODO maybe adjust theme?
+  var time = await showTimePicker(
+    context: context,
+    initialTime: TimeOfDay.now(),
+    helpText: "Create a new alarm",
+    builder: (context, child) {
+      return Theme(
+        data: isDarkMode
+            ? ThemeData.dark()
+            : ThemeData.light(),
+        child: child!,
+      );
+    },
+  );
+  if (time != null) {
+    FlutterAlarmClock.createAlarm(
+        time.hour, time.minute);
   }
 }

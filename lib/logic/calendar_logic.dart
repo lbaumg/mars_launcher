@@ -7,6 +7,43 @@ import 'package:mars_launcher/global.dart';
 import 'package:mars_launcher/services/permission_service.dart';
 import 'package:mars_launcher/services/service_locator.dart';
 
+const INDEX_TO_WEEKDAY = {
+  1: 'Monday',
+  2: 'Tuesday',
+  3: 'Wednesday',
+  4: 'Thursday',
+  5: 'Friday',
+  6: 'Saturday',
+  7: 'Sunday',
+};
+
+const INDEX_TO_MONTH = {
+  1: 'January',
+  2: 'February',
+  3: 'March',
+  4: 'April',
+  5: 'May',
+  6: 'June',
+  7: 'July',
+  8: 'August',
+  9: 'September',
+  10: 'October',
+  11: 'November',
+  12: 'December',
+};
+
+String getPostfixForDayIndex(index) {
+  switch (index) {
+    case 1:
+      return "st";
+    case 2:
+      return "nd";
+    default:
+      return "th";
+  }
+}
+
+
 class CalenderLogic {
   final eventNotifier = ValueNotifier(TEXT_CALENDER_EMPTY);
   final _deviceCalendarPlugin = DeviceCalendarPlugin();
@@ -14,6 +51,7 @@ class CalenderLogic {
   var _calendars = <Calendar>[];
   var _lastUpdatedCalendars = DateTime.now();
   late Timer timer;
+  var currentDate = "";
 
   CalenderLogic() {
     updateEvents();
@@ -35,6 +73,11 @@ class CalenderLogic {
       await _retrieveCalendars();
       _lastUpdatedCalendars = now.add(Duration(days: 7));
     }
+
+
+    currentDate = "${INDEX_TO_WEEKDAY[now.weekday]},  ${now.day}${getPostfixForDayIndex(now.day)} ${INDEX_TO_MONTH[now.month]?.substring(0,3)}";
+    // var event = "$currentDate\n${await _retrieveCalendarEvents()}";
+
     eventNotifier.value = await _retrieveCalendarEvents();
   }
 
