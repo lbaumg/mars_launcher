@@ -26,49 +26,47 @@ class _EventViewState extends State<EventView> {
     return ValueListenableBuilder<bool>(
         valueListenable: settingsLogic.weatherWidgetEnabledNotifier,
         builder: (context, isWeatherEnabled, child) {
-          // var letterLength = isWeatherEnabled ? 15 : 21;
+          var letterLength = isWeatherEnabled ? 15 : 21;
           return Container(
-            // constraints: BoxConstraints(maxWidth: isWeatherEnabled ? 140 : 180),
-            child: SizedBox(
-              height: 55,
-              child: TextButton(
-                onPressed: () {
-                  appShortcutsManager.calendarAppNotifier.value.open();
-                },
-                child: ValueListenableBuilder<String>(
-                    valueListenable: calenderLogic.eventNotifier,
-                    builder: (context, event, child) {
-                      return Text(
-                        // event.length > letterLength
-                        //     ? ".." + event.substring(event.length - letterLength)
-                        //     : event,
-                        calenderLogic.currentDate + "\n" + event,
-                        softWrap: false,
-                        style: TextStyle(
-                          fontSize: FONT_SIZE_EVENTS,
-                          fontFamily: FONT_LIGHT,
-                        ),
-                      );
-                    }),
-                style: TextButton.styleFrom(
-                    // padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0), // Adjust padding
-                    shape: RoundedRectangleBorder(),
-                    // minimumSize: Size(0, 10.0), // Adjust minimum height
-                    alignment: Alignment.center, // Align text to center
-                    backgroundColor: Colors.green
-                ),
-
-                // ButtonStyle(
-                //   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                //     RoundedRectangleBorder(
-                //       borderRadius: BorderRadius.circular(
-                //           5), // Adjust the radius to control the roundness
-                //     ),
-                //   ),
-                //   backgroundColor:
-                //       MaterialStateProperty.all<Color>(Colors.lightGreen),
-                // ),
+            constraints: BoxConstraints(maxWidth: isWeatherEnabled ? 140 : 180),
+            child: TextButton(
+              onPressed: () {
+                appShortcutsManager.calendarAppNotifier.value.open();
+              },
+              child: ValueListenableBuilder<String>(
+                  valueListenable: calenderLogic.eventNotifier,
+                  builder: (context, event, child) {
+                    return Text(
+                      event.length > letterLength
+                          ? ".." + event.substring(event.length - letterLength)
+                          : event,
+                      // calenderLogic.currentDate + "\n" + event,
+                      softWrap: false,
+                      style: TextStyle(
+                        fontSize: FONT_SIZE_EVENTS,
+                        fontFamily: FONT_LIGHT,
+                      ),
+                    );
+                  }),
+              style: TextButton.styleFrom(
+                  shape: RoundedRectangleBorder(),
+                  // padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0),
+                  // minimumSize: Size(0, 25.0), // Adjust minimum height
+                  alignment: Alignment.center,
+                  // padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0), // Adjust padding
+                  // minimumSize: Size(0, 10.0), // Adjust minimum height
               ),
+
+              // ButtonStyle(
+              //   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              //     RoundedRectangleBorder(
+              //       borderRadius: BorderRadius.circular(
+              //           5), // Adjust the radius to control the roundness
+              //     ),
+              //   ),
+              //   backgroundColor:
+              //       MaterialStateProperty.all<Color>(Colors.lightGreen),
+              // ),
             ),
           );
         });
