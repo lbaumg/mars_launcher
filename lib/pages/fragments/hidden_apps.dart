@@ -1,16 +1,9 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:mars_launcher/data/app_info.dart';
 import 'package:mars_launcher/logic/apps_logic.dart';
-import 'package:mars_launcher/logic/settings_logic.dart';
-import 'package:mars_launcher/logic/temperature_logic.dart';
 import 'package:mars_launcher/logic/theme_logic.dart';
-import 'package:mars_launcher/logic/utils.dart';
-import 'package:mars_launcher/pages/fragments/app_search_fragment.dart';
 import 'package:mars_launcher/pages/fragments/hidden_app_card.dart';
 import 'package:mars_launcher/services/service_locator.dart';
-import 'package:mars_launcher/strings.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 const TEXT_STYLE_TITLE = TextStyle(fontSize: 35, fontWeight: FontWeight.normal);
 const TEXT_STYLE_ITEMS = TextStyle(fontSize: 22, height: 1);

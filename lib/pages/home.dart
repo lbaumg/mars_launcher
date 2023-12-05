@@ -66,6 +66,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 TopRow(),
+                SizedBox(height: 50,),
                 Expanded(
                   child: !searchApps
                       ? Align(

@@ -1,11 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:mars_launcher/data/app_info.dart';
 import 'package:mars_launcher/logic/settings_logic.dart';
 import 'package:mars_launcher/logic/temperature_logic.dart';
 import 'package:mars_launcher/logic/theme_logic.dart';
-import 'package:mars_launcher/logic/utils.dart';
-import 'package:mars_launcher/pages/fragments/app_search_fragment.dart';
 import 'package:mars_launcher/pages/fragments/hidden_apps.dart';
 import 'package:mars_launcher/services/service_locator.dart';
 import 'package:mars_launcher/strings.dart';
