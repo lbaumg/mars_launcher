@@ -18,18 +18,25 @@ class HiddenAppCard extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        TextButton(
-          onPressed: () {},
-          child: Text(
-            appInfo.getDisplayName(),
-            style: TextStyle(
-              fontSize: 19,
-              fontWeight: FontWeight.w100,
-              fontFamily: fontFamily,
-            ),
+        Container(
+          constraints: BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width * 0.6
           ),
-          style: ButtonStyle(
-            foregroundColor: MaterialStateProperty.all(textColor),
+          child: TextButton(
+            onPressed: () {},
+            child: Text(
+              appInfo.getDisplayName(),
+              overflow: TextOverflow.ellipsis, // Specify how to handle overflow
+              maxLines: 2,
+              style: TextStyle(
+                fontSize: 19,
+                fontWeight: FontWeight.w100,
+                fontFamily: fontFamily,
+              ),
+            ),
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all(textColor),
+            ),
           ),
         ),
         IconButton(

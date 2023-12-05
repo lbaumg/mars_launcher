@@ -36,13 +36,13 @@ class ThemeManager {
   final lightMode = ThemeColors(
     background: Color(SharedPrefsManager.readData(KEY_LIGHT_BACKGROUND) ?? Colors.white.value),
     textColor: Colors.black,
-    searchTextColor: Color(SharedPrefsManager.readData(KEY_LIGHT_SEARCH_COLOR) ?? Colors.deepOrange.value)
+    searchTextColor: Color(SharedPrefsManager.readData(KEY_LIGHT_SEARCH_COLOR) ?? 0xffc9184a) // Colors.deepOrange.value)
   );
 
   final darkMode = ThemeColors(
     background: Color(SharedPrefsManager.readData(KEY_DARK_BACKGROUND) ?? Colors.black.value),
     textColor: Colors.white,
-    searchTextColor: Color(SharedPrefsManager.readData(KEY_DARK_SEARCH_COLOR) ?? Colors.deepOrange.value)
+    searchTextColor: Color(SharedPrefsManager.readData(KEY_DARK_SEARCH_COLOR) ?? 0xffc9184a)// Colors.deepOrange.value)
   );
 
   ThemeManager() {

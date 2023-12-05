@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mars_launcher/logic/settings_logic.dart';
 import 'package:mars_launcher/logic/temperature_logic.dart';
 import 'package:mars_launcher/logic/theme_logic.dart';
-import 'package:mars_launcher/pages/fragments/hidden_apps.dart';
+import 'package:mars_launcher/pages/hidden_apps.dart';
 import 'package:mars_launcher/services/service_locator.dart';
 import 'package:mars_launcher/strings.dart';
 import 'package:url_launcher/url_launcher.dart';

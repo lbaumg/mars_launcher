@@ -96,19 +96,18 @@ class AppInfoDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final titleColor = Theme.of(context).primaryColor; // Color(0xffa4133c);
+    final actionColor = Colors.redAccent; //Color(0xffc9184a); // Theme.of(context).primaryColor;
+    final buttonStyle = ButtonStyle(overlayColor: MaterialStateProperty.all<Color>(Colors.transparent));
+
     return AlertDialog(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(8.0))),
         title: Text(
           appInfo.appName,
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(fontWeight: FontWeight.bold, color: titleColor),
         ),
-        // contentPadding: EdgeInsets.zero, // Adjust content padding
-        // actionsPadding: EdgeInsets.only(left: 10, bottom: 10, right: 0), // Align actions to the left
-        // insetPadding: EdgeInsets.all(10),
-        // actionsAlignment: MainAxisAlignment.start,
-
-        // actionsPadding: EdgeInsets.symmetric(horizontal: 50, vertical: 10), // Adjust content padding
         content: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -126,55 +125,60 @@ class AppInfoDialog extends StatelessWidget {
                     },
                     child: Text(
                       "Rename",
-                      style: TextStyle(color: Colors.blue),
+                      style: TextStyle(color: actionColor),
                     ),
+                    style: buttonStyle,
                   ),
                   TextButton(
-                    onPressed: () {
-                      appInfo.hide(true);
-                      appsManager.addOrUpdateRenamedOrHiddenApp(appInfo);
-                      Fluttertoast.showToast(
-                          msg: "${appInfo.appName} is now hidden!",
-                          backgroundColor: themeManager.themeModeNotifier.value
-                              ? Colors.white
-                              : Colors.black,
-                          textColor: themeManager.themeModeNotifier.value
-                              ? Colors.black
-                              : Colors.white);
+                      onPressed: () {
+                        appInfo.hide(true);
+                        appsManager.addOrUpdateRenamedOrHiddenApp(appInfo);
+                        Fluttertoast.showToast(
+                            msg: "${appInfo.appName} is now hidden!",
+                            backgroundColor:
+                                themeManager.themeModeNotifier.value
+                                    ? Colors.white
+                                    : Colors.black,
+                            textColor: themeManager.themeModeNotifier.value
+                                ? Colors.black
+                                : Colors.white);
 
-                      Navigator.pop(context, null);
-                    },
-                    child: Text(
-                      "Hide",
-                      style: TextStyle(color: Colors.blue),
-                    ),
-                  ),
+                        Navigator.pop(context, null);
+                      },
+                      child: Text(
+                        "Hide",
+                        style: TextStyle(color: actionColor),
+                      ),
+                      style: buttonStyle),
                 ]),
             Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-              TextButton(
-                onPressed: () {
-                  appInfo.openSettings();
-                  Navigator.pop(context, null);
-                },
-                child: Text(
-                  "Info",
-                  style: TextStyle(color: Colors.blue),
-                ),
-              ),
-              appInfo.systemApp
-                  ? SizedBox.shrink()
-                  : TextButton(
-                      onPressed: () {
-                        appInfo.uninstall();
-                        Navigator.pop(context, null);
-                      },
-                      child: Text(
-                        "Uninstall",
-                        style: TextStyle(color: Colors.blue),
-                      )),
-            ])
+                  TextButton(
+                    onPressed: () {
+                      appInfo.openSettings();
+                      Navigator.pop(context, null);
+                    },
+                    child: Text(
+                      "Info",
+                      style: TextStyle(color: actionColor),
+                    ),
+                    style: buttonStyle,
+                  ),
+                  appInfo.systemApp
+                      ? SizedBox.shrink()
+                      : TextButton(
+                          onPressed: () {
+                            appInfo.uninstall();
+                            Navigator.pop(context, null);
+                          },
+                          child: Text(
+                            "Uninstall",
+                            style: TextStyle(color: actionColor),
+                          ),
+                          style: buttonStyle,
+                        ),
+                ])
           ],
         ));
   }
