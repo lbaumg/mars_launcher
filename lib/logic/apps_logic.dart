@@ -15,18 +15,17 @@ class AppsManager {
   final appsNotifier = ValueNotifier<List<AppInfo>>([]);
 
   /// LIST OF RENAMED OR HIDDEN APPS
-  late final renamedOrHiddenApps;
-  int numberOfRenamedOrHiddenApps = SharedPrefsManager.readData(KEY_NUMBER_OF_RENAMED_OR_HIDDEN_APPS) ?? 0;
+  late final ValueNotifier<List<AppInfo>> hiddenAppsNotifier;
+  int numberOfHiddenApps = SharedPrefsManager.readData(KEY_NUMBER_OF_RENAMED_OR_HIDDEN_APPS) ?? 0;
 
-  late final List<String> hiddenApps;
-  late final Map<String, String> renamedApps;
+  // late final Map<String, String> renamedApps;
 
   var currentlySyncing = false;
 
   AppsManager() {
     print("[$runtimeType] INITIALISING");
 
-    loadRenamedOrHiddenAppsFromSharedPrefs();
+    loadHiddenAppsFromSharedPrefs();
 
     syncInstalledApps();
 
@@ -36,23 +35,30 @@ class AppsManager {
 
   void addOrUpdateRenamedOrHiddenApp(AppInfo updatedAppInfo) {
     /// Check if the appInfo with the same packageName already exists in the list
+    var updatedList = List.of(hiddenAppsNotifier.value);
 
-    int existingIndex = renamedOrHiddenApps.indexWhere(
+    int existingIndex = updatedList.indexWhere(
           (appInfo) => appInfo.packageName == updatedAppInfo.packageName,
     );
 
     if (existingIndex == -1) {
       /// If the appInfo is not found, add it to the list
-      renamedOrHiddenApps.add(updatedAppInfo);
-      saveNewRenamedOrHiddenAppToSharedPrefs(updatedAppInfo);
+      updatedList.add(updatedAppInfo);
+      saveNewHiddenAppToSharedPrefs(updatedAppInfo);
 
     } else {
       /// If the appInfo is found, update its values
-      renamedOrHiddenApps[existingIndex] = updatedAppInfo;
-      updateRenamedOrHiddenAppInSharedPrefs(updatedAppInfo, existingIndex);
+      updatedList[existingIndex] = updatedAppInfo;
+      updateHiddenAppInSharedPrefs(updatedAppInfo, existingIndex);
     }
 
+    updateAppsNotifierWithHideStatus(updatedAppInfo);
 
+
+    hiddenAppsNotifier.value = updatedList;
+  }
+
+  updateAppsNotifierWithHideStatus(updatedAppInfo)  {
     /// Update appsNotifier by replacing the element
     int appNotifierIndex = appsNotifier.value.indexWhere(
           (appInfo) => appInfo.packageName == updatedAppInfo.packageName,
@@ -66,7 +72,11 @@ class AppsManager {
 
   removeHiddenApp(AppInfo appInfo) {
     // TODO check again if correct
-    renamedOrHiddenApps.removeWhere((element) => element.packageName == appInfo.packageName);
+    appInfo.hide(false);
+    var appsList = List.of(hiddenAppsNotifier.value);
+    appsList.removeWhere((element) => element.packageName == appInfo.packageName);
+    hiddenAppsNotifier.value = appsList;
+    updateAppsNotifierWithHideStatus(appInfo);
   }
 
   handleAppEvent(ApplicationEvent event) async {
@@ -91,14 +101,14 @@ class AppsManager {
       if (IGNORED_APPS.contains(app.packageName)) {
         continue;
       }
-      /// Check if the app is in renamedOrHiddenAppsNotifier.value
-      AppInfo renamedOrHiddenApp = renamedOrHiddenApps
+      /// Check if the app is in hiddenAppsNotifier.value
+      AppInfo hiddenApp = hiddenAppsNotifier.value
           .firstWhere((element) => element.packageName == app.packageName,
               orElse: () => AppInfo(packageName: "null", appName: "null"));
 
-      if (renamedOrHiddenApp.packageName != "null") {
+      if (hiddenApp.packageName != "null") {
         /// If found, use the stored AppInfo
-        apps.add(renamedOrHiddenApp);
+        apps.add(hiddenApp);
       } else {
         /// If not found, create a new AppInfo
         apps.add(AppInfo(
@@ -117,37 +127,37 @@ class AppsManager {
 
 
   /// Load renamed or hidden apps from shared prefs
-  loadRenamedOrHiddenAppsFromSharedPrefs() {
-    renamedOrHiddenApps = List.generate(numberOfRenamedOrHiddenApps,
+  loadHiddenAppsFromSharedPrefs() {
+    hiddenAppsNotifier = ValueNotifier(List.generate(numberOfHiddenApps,
           (index) => AppInfo.fromJsonString(
         SharedPrefsManager.readData("renamedOrHiddenApp$index"),
       ),
-    );
+    ));
   }
 
   /// Save renamed or hidden apps to shared prefs
-  void saveAllRenamedOrHiddenAppsToSharedPrefs() {
+  void saveAllHiddenAppsToSharedPrefs() {
     int i = 0;
-    for (var appInfo in renamedOrHiddenApps) {
+    for (var appInfo in hiddenAppsNotifier.value) {
       SharedPrefsManager.saveData("renamedOrHiddenApp$i", appInfo.toJsonString());
       i++;
     }
 
     /// Save number of apps into shared prefs
-    SharedPrefsManager.saveData(KEY_NUMBER_OF_RENAMED_OR_HIDDEN_APPS, renamedOrHiddenApps.length);
+    SharedPrefsManager.saveData(KEY_NUMBER_OF_RENAMED_OR_HIDDEN_APPS, hiddenAppsNotifier.value.length);
   }
 
   /// Save a new renamed or hidden app in shared prefs
-  void saveNewRenamedOrHiddenAppToSharedPrefs(newAppInfo) {
-    SharedPrefsManager.saveData(PREFIX_RENAMED_OR_HIDDEN_APPS + numberOfRenamedOrHiddenApps.toString(), newAppInfo.toJsonString());
+  void saveNewHiddenAppToSharedPrefs(newAppInfo) {
+    SharedPrefsManager.saveData(PREFIX_RENAMED_OR_HIDDEN_APPS + numberOfHiddenApps.toString(), newAppInfo.toJsonString());
 
     /// Update count of renamed or hidden apps
-    numberOfRenamedOrHiddenApps += 1;
-    SharedPrefsManager.saveData(KEY_NUMBER_OF_RENAMED_OR_HIDDEN_APPS, numberOfRenamedOrHiddenApps);
+    numberOfHiddenApps += 1;
+    SharedPrefsManager.saveData(KEY_NUMBER_OF_RENAMED_OR_HIDDEN_APPS, numberOfHiddenApps);
   }
 
   /// Update existing renamed or hidden app in shared prefs
-  void updateRenamedOrHiddenAppInSharedPrefs(updatedAppInfo, index) {
+  void updateHiddenAppInSharedPrefs(updatedAppInfo, index) {
     SharedPrefsManager.saveData(PREFIX_RENAMED_OR_HIDDEN_APPS + index.toString(), updatedAppInfo.toJsonString());
   }
 }

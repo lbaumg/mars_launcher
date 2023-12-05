@@ -60,7 +60,7 @@ class _AppSearchFragmentState extends State<AppSearchFragment>
   Widget build(BuildContext context) {
     return GestureDetector(
       child: ScrollConfiguration(
-        behavior: MyBehavior(),
+        behavior: MyScrollBehavior(),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -170,7 +170,7 @@ class AppSearchLogic {
   }
 }
 
-class MyBehavior extends ScrollBehavior {
+class MyScrollBehavior extends ScrollBehavior {
   // Removes animation when arriving at top or bottom of scrollview
   @override
   Widget buildOverscrollIndicator(

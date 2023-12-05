@@ -1,11 +1,14 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:mars_launcher/data/app_info.dart';
+import 'package:mars_launcher/logic/settings_logic.dart';
 import 'package:mars_launcher/logic/temperature_logic.dart';
 import 'package:mars_launcher/logic/theme_logic.dart';
 import 'package:mars_launcher/logic/utils.dart';
 import 'package:mars_launcher/pages/fragments/app_search_fragment.dart';
+import 'package:mars_launcher/pages/fragments/hidden_apps.dart';
 import 'package:mars_launcher/services/service_locator.dart';
+import 'package:mars_launcher/strings.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const TEXT_STYLE_TITLE = TextStyle(fontSize: 35, fontWeight: FontWeight.normal);
@@ -24,6 +27,8 @@ class _MoreSettingsState extends State<MoreSettings>
   final themeManager = getIt<ThemeManager>();
   final temperatureLogic = getIt<TemperatureLogic>();
   var currentlyPopping = false;
+  final settingsLogic = getIt<SettingsLogic>();
+
 
   @override
   void initState() {
@@ -38,19 +43,6 @@ class _MoreSettingsState extends State<MoreSettings>
       Navigator.of(context).pop();
     }
     super.didChangeAppLifecycleState(state);
-  }
-
-  void pushAppSearch(ValueNotifierWithKey<AppInfo> specialAppNotifier) {
-    Navigator.push(
-      context,
-      MaterialPageRoute<void>(
-          builder: (_) => Scaffold(
-                  body: SafeArea(
-                      child: AppSearchFragment(
-                appSearchMode: AppSearchMode.chooseSpecialShortcut,
-                specialShortcutAppNotifier: specialAppNotifier,
-              )))),
-    );
   }
 
   @override
@@ -82,8 +74,32 @@ class _MoreSettingsState extends State<MoreSettings>
                       ),
                       SizedBox(height: 10),
 
-                      // SET API KEY
+                      /// SET DEFAULT LAUNCHER
+                      TextButton(
+                        onPressed: () {
+                          settingsLogic.openDefaultLauncherSettings();
+                        },
+                        child: Text(
+                          Strings.settingsChangeDefaultLauncher,
+                          style: TEXT_STYLE_ITEMS,
+                        ),
+                      ),
 
+                      /// HIDDEN APPS
+                      TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const HiddenApps()),
+                            );
+                          },
+                          child: Text(
+                            Strings.settingsHiddenApps,
+                            style: TEXT_STYLE_ITEMS,
+                          )
+                      ),
+
+                      /// SET API KEY
                       TextButton(
                         onPressed: () {
                           showDialog(
