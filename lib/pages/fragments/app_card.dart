@@ -76,6 +76,7 @@ class AppCard extends StatelessWidget {
           ),
         ),
         style: ButtonStyle(
+          shape: MaterialStateProperty.all(RoundedRectangleBorder()),
           foregroundColor: MaterialStateProperty.all(textColor),
         ),
       ),

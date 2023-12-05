@@ -71,10 +71,9 @@ class ThemeManager {
       ),
       textButtonTheme: TextButtonThemeData(
           style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(
-                  backgroundTextColor),
-              overlayColor: MaterialStateProperty.all<Color>(
-                  Colors.transparent))
+              foregroundColor: MaterialStateProperty.all<Color>(backgroundTextColor),
+              overlayColor: MaterialStateProperty.all<Color>(backgroundColor)
+          )
       ),
     );
   }
