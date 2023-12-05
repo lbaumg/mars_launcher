@@ -17,6 +17,7 @@ const KEY_DARK_SEARCH_COLOR = "dark_search_color";
 const FONT_LIGHT = "NotoSansLight";
 const FONT_REGULAR = "NotoSansRegular";
 
+const COLOR_ACCENT = Color(0xffc9184a);
 
 class ThemeColors {
   Color background;
@@ -36,13 +37,13 @@ class ThemeManager {
   final lightMode = ThemeColors(
     background: Color(SharedPrefsManager.readData(KEY_LIGHT_BACKGROUND) ?? Colors.white.value),
     textColor: Colors.black,
-    searchTextColor: Color(SharedPrefsManager.readData(KEY_LIGHT_SEARCH_COLOR) ?? 0xffc9184a) // Colors.deepOrange.value)
+    searchTextColor: Color(SharedPrefsManager.readData(KEY_LIGHT_SEARCH_COLOR) ?? COLOR_ACCENT.value) // Colors.deepOrange.value)
   );
 
   final darkMode = ThemeColors(
     background: Color(SharedPrefsManager.readData(KEY_DARK_BACKGROUND) ?? Colors.black.value),
     textColor: Colors.white,
-    searchTextColor: Color(SharedPrefsManager.readData(KEY_DARK_SEARCH_COLOR) ?? 0xffc9184a)// Colors.deepOrange.value)
+    searchTextColor: Color(SharedPrefsManager.readData(KEY_DARK_SEARCH_COLOR) ?? COLOR_ACCENT.value)// Colors.deepOrange.value)
   );
 
   ThemeManager() {
@@ -53,12 +54,15 @@ class ThemeManager {
     final backgroundTextColor = themeModeNotifier.value ? darkMode.textColor : lightMode.textColor;
     final searchItemColor = themeModeNotifier.value ? darkMode.searchTextColor : lightMode.searchTextColor;
     final backgroundColor = themeModeNotifier.value ? darkMode.background: lightMode.background;
+    final brightness = themeModeNotifier.value ? Brightness.light : Brightness.dark;
+
 
     return ThemeData(
       primaryColor: backgroundTextColor,
       disabledColor: searchItemColor, // search item color
       fontFamily: 'NotoSansLight',
       scaffoldBackgroundColor: backgroundColor,
+      brightness: brightness,
       iconTheme: IconThemeData(
         color: backgroundTextColor,
       ),

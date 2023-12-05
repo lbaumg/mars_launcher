@@ -61,7 +61,7 @@ class AppCard extends StatelessWidget {
               if (result != null) {
                 print('Dialog result: $result');
                 // TODO change name somehow or reload
-                appInfo.displayName = result;
+                // appInfo.displayName = result;
               }
             }
           }
@@ -117,11 +117,17 @@ class AppInfoDialog extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   TextButton(
-                    onPressed: () {
+                    onPressed: () async {
                       // TODO open new screen to rename app
-
+                      final result = await showDialog(
+                        context: context,
+                        builder: (_) => RenameAppDialog(appInfo: appInfo),
+                      );
                       // TODO trigger reload of app search
-                      Navigator.pop(context, "newName");
+                      if (result != null) {
+                        appsManager.addOrUpdateRenamedApp(appInfo, result);
+                        Navigator.pop(context, result);
+                      }
                     },
                     child: Text(
                       "Rename",
@@ -132,7 +138,7 @@ class AppInfoDialog extends StatelessWidget {
                   TextButton(
                       onPressed: () {
                         appInfo.hide(true);
-                        appsManager.addOrUpdateRenamedOrHiddenApp(appInfo);
+                        appsManager.addOrUpdateHiddenApp(appInfo);
                         Fluttertoast.showToast(
                             msg: "${appInfo.appName} is now hidden!",
                             backgroundColor:
@@ -181,5 +187,129 @@ class AppInfoDialog extends StatelessWidget {
                 ])
           ],
         ));
+  }
+}
+
+class RenameAppDialog extends StatelessWidget {
+  final AppInfo appInfo;
+
+  RenameAppDialog({
+    Key? key,
+    required this.appInfo,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final titleColor = Theme
+        .of(context)
+        .primaryColor; // Color(0xffa4133c);
+
+    return AlertDialog(
+      backgroundColor: Theme
+          .of(context)
+          .scaffoldBackgroundColor,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(8.0))),
+      title: Text(
+        "Rename app",
+        style: TextStyle(fontWeight: FontWeight.bold, color: titleColor),
+      ),
+      content: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            "App name: ${appInfo.appName}",
+          ),
+          Text(
+              "Display name: ${appInfo.getDisplayName()}"
+          ),
+          AppNameTextFieldWithValidation(appInfo.getDisplayName()),
+
+        ],
+      ),
+
+    );
+  }
+}
+
+class AppNameTextFieldWithValidation extends StatefulWidget {
+  final String currentDisplayName;
+  AppNameTextFieldWithValidation(this.currentDisplayName);
+
+  @override
+  _AppNameTextFieldWithValidation createState() =>
+      _AppNameTextFieldWithValidation();
+}
+
+class _AppNameTextFieldWithValidation extends State<AppNameTextFieldWithValidation> {
+  TextEditingController _controller = TextEditingController();
+  String? _errorText;
+
+
+  @override
+  Widget build(BuildContext context) {
+    _controller.text = widget.currentDisplayName;
+    return Column(
+      children: [
+        TextField(
+          maxLength: 20,
+          controller: _controller,
+          cursorColor: COLOR_ACCENT,
+          decoration: InputDecoration(
+            // counterText: "",
+              errorText: _errorText,
+              enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: COLOR_ACCENT)
+              ),
+              focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: COLOR_ACCENT)
+              ),
+              border: UnderlineInputBorder(
+                  borderSide: BorderSide(color: COLOR_ACCENT)
+              ),
+              focusColor: Colors.redAccent,
+              hintText: "Enter new name",
+              hintStyle: TextStyle(
+                color: Theme.of(context).brightness == Brightness.light ? COLOR_ACCENT.withOpacity(0.4) : COLOR_ACCENT.withOpacity(0.3), //Colors.black45,
+              )
+          ),
+        ),
+
+        Align(
+          alignment: Alignment.centerRight,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 20, 10, 0),
+            child: TextButton(
+              onPressed: () {
+                var newName = _controller.text.trim();
+                if (newName.isEmpty) {
+                  setErrorText("Name can't be empty.");
+                } else if (newName == widget.currentDisplayName) {
+                  /// If name didn't change, don't call logic
+                  Navigator.pop(context, null);
+                } else {
+                  /// If name did change return newName
+                  Navigator.pop(context, newName);
+                }
+              },
+              child: Text(
+                "Change",
+                style: TextStyle(
+                    color: Colors.redAccent
+                ),
+              ),
+            ),
+          ),
+        )
+      ],
+    );
+
+  }
+  void setErrorText(errorText) {
+    setState(() {
+      _errorText = errorText;
+    });
   }
 }
