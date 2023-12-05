@@ -35,7 +35,9 @@ class AppShortcutsManager {
       loadShortcutAppsFromSharedPrefs();
     } else {
       generateGenericShortcutApps();
-      loadShortcutAppsFromJson();
+      if (LOAD_APPS_FROM_JSON) {
+        loadShortcutAppsFromJson();
+      }
     }
   }
 
@@ -91,10 +93,13 @@ class AppShortcutsManager {
     SharedPrefsManager.saveData(KEY_APPS_ARE_SAVED, true);
   }
 
+  //
   void setSpecialShortcutValue(ValueNotifierWithKey notifier, AppInfo appInfo) {
     notifier.value = appInfo;
     SharedPrefsManager.saveData(notifier.key, notifier.value.toJsonString());
   }
+
+
 }
 
 

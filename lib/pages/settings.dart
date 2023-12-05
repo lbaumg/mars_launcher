@@ -14,7 +14,7 @@ import 'more_settings.dart';
 
 const TEXT_STYLE_TITLE = TextStyle(fontSize: 35, fontWeight: FontWeight.normal);
 const TEXT_STYLE_ITEMS = TextStyle(fontSize: 22, height: 1);
-const ROW_PADDING_RIGHT = 60.0;
+const ROW_PADDING_RIGHT = 50.0; // TODO look for overflow
 
 
 class Settings extends StatefulWidget {
@@ -116,7 +116,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                               style: TEXT_STYLE_ITEMS,
                             ),
                           ),
-                          Expanded(child: Container()),
+                          // Expanded(child: Container()),
                           TextButton(
                             onPressed: () {
                               showDialog(
@@ -291,6 +291,19 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                           )
                       ),
 
+                      /// HIDDEN APPS
+                      TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const MoreSettings()),
+                            );
+                          },
+                          child: Text(
+                            Strings.settingsHiddenApps,
+                            style: TEXT_STYLE_ITEMS,
+                          )
+                      ),
 
 
                       /// MORE SETTINGS
@@ -305,7 +318,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                             Strings.settingsMore,
                             style: TEXT_STYLE_ITEMS,
                           )
-                      )
+                      ),
                     ],
                   ),
                 ),

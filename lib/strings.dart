@@ -8,6 +8,7 @@ class Strings {
   static const settingsCalendarApp = "calendar app";
   static const settingsSwipeLeft = "swipe left";
   static const settingsSwipeRight = "swipe right";
+  static const settingsHiddenApps = "hidden apps";
   static const settingsMore = "more";
   static const settingsChangeDefaultLauncher = "change default launcher";
   static const settingsLightColor = "light color";
