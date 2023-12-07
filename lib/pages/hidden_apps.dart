@@ -47,10 +47,10 @@ class _HiddenAppsState extends State<HiddenApps> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
 
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      onPopInvoked: (didPop) async {
         currentlyPopping = true;
-        return true;
+        return;
       },
       child: GestureDetector(
         onDoubleTap: () {

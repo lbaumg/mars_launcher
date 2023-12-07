@@ -36,8 +36,8 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: _onWillPop,
+    return PopScope(
+      onPopInvoked: (didPop) {_onWillPop(didPop);},
       child: GestureDetector(
         // SWIPE DETECTION
         onHorizontalDragUpdate: _horizontalDragHandler,
@@ -83,13 +83,13 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     );
   }
 
-  Future<bool> _onWillPop() async {
+  _onWillPop(didPop) async {
     if (searchApps) {
       setState(() {
         searchApps = false;
       });
     }
-    return false;
+    return;
   }
 
   _horizontalDragHandler(details) {

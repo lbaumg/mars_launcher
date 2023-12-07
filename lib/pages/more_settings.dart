@@ -44,10 +44,10 @@ class _MoreSettingsState extends State<MoreSettings>
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      onPopInvoked: (didPop) async {
         currentlyPopping = true;
-        return true;
+        return;
       },
       child: GestureDetector(
         onDoubleTap: () {

@@ -160,6 +160,6 @@ void openCreateAlarmDialog(context, isDarkMode) async {
     },
   );
   if (time != null) {
-    FlutterAlarmClock.createAlarm(time.hour, time.minute);
+    FlutterAlarmClock.createAlarm(hour: time.hour, minutes: time.minute);
   }
 }
