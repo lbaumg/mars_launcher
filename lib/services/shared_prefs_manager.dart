@@ -22,6 +22,12 @@ class SharedPrefsManager {
     return obj;
   }
 
+  static List<String>? readStringList(String key) {
+    List<String>? objList = prefs.getStringList(key);
+    print("[SharedPrefsManager] READ $key: $objList");
+    return objList;
+  }
+
   static Future<bool> deleteData(String key) async {
     return prefs.remove(key);
   }

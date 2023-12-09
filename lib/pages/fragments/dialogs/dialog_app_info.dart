@@ -59,8 +59,7 @@ class AppInfoDialog extends StatelessWidget {
                   ),
                   TextButton(
                       onPressed: () {
-                        appInfo.hide(true);
-                        appsManager.addOrUpdateHiddenApp(appInfo);
+                        appsManager.updateHiddenApps(appInfo.packageName, true);
                         Fluttertoast.showToast(
                             msg: "${appInfo.appName} is now hidden!",
                             backgroundColor:

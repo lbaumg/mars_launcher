@@ -41,7 +41,7 @@ class _HiddenAppsState extends State<HiddenApps> with WidgetsBindingObserver {
   }
 
   void callbackRemoveFromHiddenApps(appInfo) {
-    appsManager.removeHiddenApp(appInfo);
+    appsManager.updateHiddenApps(appInfo.packageName, false);
   }
 
   @override
@@ -76,9 +76,9 @@ class _HiddenAppsState extends State<HiddenApps> with WidgetsBindingObserver {
                     child: Padding(
                         padding: const EdgeInsets.fromLTRB(40, 0, 40, 40),
                         child: ValueListenableBuilder<List<AppInfo>>(
-                            valueListenable: appsManager.hiddenAppsNotifier,
-                            builder: (context, renamedOrHiddenApps, child) {
-                              final hiddenApps = renamedOrHiddenApps
+                            valueListenable: appsManager.appsNotifier,
+                            builder: (context, apps, child) {
+                              final hiddenApps = apps
                                   .where((app) => app.isHidden);
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
