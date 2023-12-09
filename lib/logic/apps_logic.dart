@@ -98,6 +98,7 @@ class AppsManager {
     appInfo.hide(false);
     var appsList = List.of(hiddenAppsNotifier.value);
     appsList.removeWhere((element) => element.packageName == appInfo.packageName);
+    // TODO remove from shared prefs
     hiddenAppsNotifier.value = appsList;
     updateAppsNotifierWithHideStatus(appInfo);
   }
@@ -152,7 +153,7 @@ class AppsManager {
   }
 
 
-  /// Load renamed or hidden apps from shared prefs
+  /// Load hidden apps from shared prefs
   loadHiddenAppsFromSharedPrefs() {
     hiddenAppsNotifier = ValueNotifier(List.generate(numberOfHiddenApps,
           (index) => AppInfo.fromJsonString(
@@ -161,7 +162,7 @@ class AppsManager {
     ));
   }
 
-  /// Save a new renamed or hidden app in shared prefs
+  /// Save a new hidden app in shared prefs
   void saveNewHiddenAppToSharedPrefs(newAppInfo) {
     SharedPrefsManager.saveData(PREFIX_RENAMED_OR_HIDDEN_APPS + numberOfHiddenApps.toString(), newAppInfo.toJsonString());
 
@@ -170,7 +171,7 @@ class AppsManager {
     SharedPrefsManager.saveData(KEY_NUMBER_OF_RENAMED_OR_HIDDEN_APPS, numberOfHiddenApps);
   }
 
-  /// Update existing renamed or hidden app in shared prefs
+  /// Update existing hidden app in shared prefs
   void updateHiddenAppInSharedPrefs(updatedAppInfo, index) {
     SharedPrefsManager.saveData(PREFIX_RENAMED_OR_HIDDEN_APPS + index.toString(), updatedAppInfo.toJsonString());
   }

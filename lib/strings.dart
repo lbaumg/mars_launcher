@@ -10,7 +10,7 @@ class Strings {
   static const settingsSwipeRight = "swipe right";
   static const settingsHiddenApps = "hidden apps";
   static const settingsMore = "more";
-  static const settingsChangeDefaultLauncher = "change default launcher";
+  static const settingsChangeDefaultLauncher = "set default launcher";
   static const settingsLightColor = "light color";
   static const settingsDarkColor = "dark color";
   static const settingsAppNumber = "app number";
