@@ -4,6 +4,7 @@ import 'package:mars_launcher/logic/settings_logic.dart';
 import 'package:mars_launcher/logic/shortcut_logic.dart';
 import 'package:mars_launcher/logic/temperature_logic.dart';
 import 'package:mars_launcher/logic/theme_logic.dart';
+import 'package:mars_launcher/logic/todo_logic.dart';
 import 'package:mars_launcher/services/permission_service.dart';
 import 'package:get_it/get_it.dart';
 
@@ -17,4 +18,5 @@ void setupGetIt() {
   getIt.registerSingleton<AppShortcutsManager>(AppShortcutsManager());
   getIt.registerSingleton<TemperatureLogic>(TemperatureLogic());
   getIt.registerSingleton<BatteryLogic>(BatteryLogic());
+  getIt.registerSingleton<TodoLogic>(TodoLogic());
 }

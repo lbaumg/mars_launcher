@@ -4,6 +4,7 @@ import 'package:mars_launcher/logic/calendar_logic.dart';
 import 'package:mars_launcher/logic/settings_logic.dart';
 import 'package:mars_launcher/logic/shortcut_logic.dart';
 import 'package:mars_launcher/logic/theme_logic.dart';
+import 'package:mars_launcher/pages/todo_list.dart';
 import 'package:mars_launcher/services/service_locator.dart';
 
 class EventView extends StatefulWidget {
@@ -32,6 +33,14 @@ class _EventViewState extends State<EventView> {
             child: TextButton(
               onPressed: () {
                 appShortcutsManager.calendarAppNotifier.value.open();
+              },
+              onLongPress: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                      const TodoList()),
+                );
               },
               child: ValueListenableBuilder<String>(
                   valueListenable: calenderLogic.eventNotifier,
