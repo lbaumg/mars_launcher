@@ -22,6 +22,7 @@ class AppsManager {
 
   /// MAP of RENAMED APPs
   final Map<String, String> renamedApps = {}; /// {"packageName": "displayName"}
+  final ValueNotifier<bool> renamedAppsUpdatedNotifier = ValueNotifier(false);
 
   var currentlySyncing = false;
 
@@ -51,6 +52,9 @@ class AppsManager {
       appsNotifier.value.sort((a, b) => a.getDisplayName().toLowerCase().compareTo(b.getDisplayName().toLowerCase()));
       appsNotifier.value = List.from(appsNotifier.value); // Trigger update
     }
+
+    /// Notify that renamedApps have been updated
+    renamedAppsUpdatedNotifier.value = !renamedAppsUpdatedNotifier.value;
 
     saveRenamedAppsToSharedPrefs();
   }

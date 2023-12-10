@@ -5,7 +5,7 @@ import 'package:mars_launcher/services/shared_prefs_manager.dart';
 
 const KEY_TODO_LIST = "todoList";
 
-class TodoLogic {
+class TodoManager {
 
   ValueNotifier<List<String>> todoListNotifier = ValueNotifier(SharedPrefsManager.readStringList(KEY_TODO_LIST) ?? []);
 

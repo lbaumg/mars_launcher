@@ -5,7 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mars_launcher/data/app_info.dart';
 import 'package:mars_launcher/global.dart';
+import 'package:mars_launcher/logic/apps_logic.dart';
 import 'package:mars_launcher/logic/utils.dart';
+import 'package:mars_launcher/services/service_locator.dart';
 import 'package:mars_launcher/services/shared_prefs_manager.dart';
 
 const KEY_APPS_ARE_SAVED = "appsAreSaved";
@@ -28,6 +30,8 @@ class AppShortcutsManager {
   late final ValueNotifierWithKey<AppInfo> swipeRightAppNotifier;
   late final ShortcutAppsNotifier shortcutAppsNotifier;
 
+  final appsManager = getIt<AppsManager>();
+
   AppShortcutsManager() {
     print("[$runtimeType] INITIALIZING");
 
@@ -39,6 +43,8 @@ class AppShortcutsManager {
         loadShortcutAppsFromJson();
       }
     }
+
+    appsManager.renamedAppsUpdatedNotifier.addListener(() {updateDisplayNames();});
   }
 
   void generateGenericShortcutApps() {
@@ -93,13 +99,28 @@ class AppShortcutsManager {
     SharedPrefsManager.saveData(KEY_APPS_ARE_SAVED, true);
   }
 
-  //
   void setSpecialShortcutValue(ValueNotifierWithKey notifier, AppInfo appInfo) {
     notifier.value = appInfo;
     SharedPrefsManager.saveData(notifier.key, notifier.value.toJsonString());
   }
 
+  void updateDisplayNames() {
 
+    final shortcutAppsCopy = List.of(shortcutAppsNotifier.value);
+    var changedShortcutApp = false;
+    for (var shortcutApp in shortcutAppsCopy) {
+      final displayName = appsManager.renamedApps[shortcutApp.packageName];
+      if (displayName != null && displayName != shortcutApp.getDisplayName()) {
+        shortcutApp.changeDisplayName(displayName);
+        changedShortcutApp = true;
+      }
+    }
+
+    if (changedShortcutApp) {
+      shortcutAppsNotifier.value = shortcutAppsCopy;
+    }
+
+  }
 }
 
 

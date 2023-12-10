@@ -3,11 +3,11 @@
 import 'package:battery_plus/battery_plus.dart';
 import 'package:flutter/cupertino.dart';
 
-class BatteryLogic {
+class BatteryManager {
   final Battery _battery = Battery();
   final batteryLevelNotifier = ValueNotifier(0);
 
-  BatteryLogic() {
+  BatteryManager() {
     _battery.onBatteryStateChanged.listen((BatteryState state) {
       print('Battery state changed: $state');
       updateBatteryLevel();

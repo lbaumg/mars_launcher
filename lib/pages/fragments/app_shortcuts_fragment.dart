@@ -20,7 +20,7 @@ var num2topPad = {
 
 class AppShortcutsFragment extends StatelessWidget {
   final appShortcutsManager = getIt<AppShortcutsManager>();
-  final settingsLogic = getIt<SettingsLogic>();
+  final settingsLogic = getIt<SettingsManager>();
 
   @override
   Widget build(BuildContext context) {

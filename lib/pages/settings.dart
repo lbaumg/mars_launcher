@@ -29,7 +29,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
   final appShortcutsManager = getIt<AppShortcutsManager>();
   final themeManager = getIt<ThemeManager>();
   final permissionService = getIt<PermissionService>();
-  final settingsLogic = getIt<SettingsLogic>();
+  final settingsLogic = getIt<SettingsManager>();
   var currentlyPopping = false;
 
   @override

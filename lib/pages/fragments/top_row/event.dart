@@ -18,7 +18,7 @@ class EventView extends StatefulWidget {
 
 class _EventViewState extends State<EventView> {
   final appShortcutsManager = getIt<AppShortcutsManager>();
-  final settingsLogic = getIt<SettingsLogic>();
+  final settingsLogic = getIt<SettingsManager>();
   final calenderLogic = CalenderLogic();
   final themeManager = getIt<ThemeManager>();
 

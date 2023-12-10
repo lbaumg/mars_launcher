@@ -89,7 +89,7 @@ class _OpenWeatherApiKeyTextFieldState extends State<OpenWeatherApiKeyTextField>
   TextEditingController _controller = TextEditingController();
   String? _errorText;
 
-  final temperatureLogic = getIt<TemperatureLogic>();
+  final temperatureLogic = getIt<TemperatureManager>();
 
   @override
   void initState() {

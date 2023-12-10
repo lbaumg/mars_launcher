@@ -11,12 +11,12 @@ import 'package:get_it/get_it.dart';
 final getIt = GetIt.instance;
 
 void setupGetIt() {
-  getIt.registerSingleton<SettingsLogic>(SettingsLogic());
+  getIt.registerSingleton<SettingsManager>(SettingsManager());
   getIt.registerSingleton<PermissionService>(PermissionService());
   getIt.registerSingleton<AppsManager>(AppsManager());
   getIt.registerSingleton<ThemeManager>(ThemeManager());
   getIt.registerSingleton<AppShortcutsManager>(AppShortcutsManager());
-  getIt.registerSingleton<TemperatureLogic>(TemperatureLogic());
-  getIt.registerSingleton<BatteryLogic>(BatteryLogic());
-  getIt.registerSingleton<TodoLogic>(TodoLogic());
+  getIt.registerSingleton<TemperatureManager>(TemperatureManager());
+  getIt.registerSingleton<BatteryManager>(BatteryManager());
+  getIt.registerSingleton<TodoManager>(TodoManager());
 }

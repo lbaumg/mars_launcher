@@ -11,7 +11,7 @@ const KEY_CALENDAR_ENABLED = "calendarEnabled";
 const KEY_NUM_OF_SHORTCUT_ITEMS = "numOfShortcutItems";
 const KEY_SHORTCUT_MODE = "shortcutMode";
 
-class SettingsLogic {
+class SettingsManager {
   final ValueNotifierWithKey<bool> weatherWidgetEnabledNotifier = ValueNotifierWithKey(SharedPrefsManager.readData(KEY_WEATHER_ENABLED) ?? false, KEY_WEATHER_ENABLED);
   final ValueNotifierWithKey<bool> clockWidgetEnabledNotifier = ValueNotifierWithKey(SharedPrefsManager.readData(KEY_CLOCK_ENABLED) ?? true, KEY_CLOCK_ENABLED);
   final ValueNotifierWithKey<bool> batteryWidgetEnabledNotifier = ValueNotifierWithKey(SharedPrefsManager.readData(KEY_BATTERY_ENABLED) ?? true, KEY_BATTERY_ENABLED);

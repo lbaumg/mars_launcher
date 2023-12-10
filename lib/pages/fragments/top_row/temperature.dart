@@ -5,7 +5,7 @@ import 'package:mars_launcher/logic/theme_logic.dart';
 import 'package:mars_launcher/services/service_locator.dart';
 
 class Temperature extends StatelessWidget {
-  final temperatureLogic = getIt<TemperatureLogic>();
+  final temperatureLogic = getIt<TemperatureManager>();
 
   @override
   Widget build(BuildContext context) {

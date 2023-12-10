@@ -14,9 +14,9 @@ import 'package:mars_launcher/services/service_locator.dart';
 
 class TopRow extends StatelessWidget {
   final appShortcutsManager = getIt<AppShortcutsManager>();
-  final settingsLogic = getIt<SettingsLogic>();
+  final settingsLogic = getIt<SettingsManager>();
   final themeManager = getIt<ThemeManager>();
-  final batteryLogic = getIt<BatteryLogic>();
+  final batteryLogic = getIt<BatteryManager>();
 
   TopRow({
     Key? key,

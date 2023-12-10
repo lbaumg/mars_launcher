@@ -15,12 +15,12 @@ import 'package:http/http.dart' as http;
 
 const KEY_API_KEY = "apiKey";
 
-class TemperatureLogic {
+class TemperatureManager {
   final temperatureNotifier = ValueNotifier("-°C");
   final locationService = LocationService();
   final appShortcutManager = getIt<AppShortcutsManager>();
   final permissionService = getIt<PermissionService>();
-  final settingsLogic = getIt<SettingsLogic>();
+  final settingsLogic = getIt<SettingsManager>();
 
   WeatherFactory? wf;
   String? apiKey;
@@ -28,7 +28,7 @@ class TemperatureLogic {
   int lastTemperatureUpdateMillis = 0;
 
 
-  TemperatureLogic() {
+  TemperatureManager() {
     print("[$runtimeType] INITIALIZING");
 
     apiKey = SharedPrefsManager.readData(KEY_API_KEY);
