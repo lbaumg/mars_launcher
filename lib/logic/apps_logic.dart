@@ -106,19 +106,14 @@ class AppsManager {
       if (IGNORED_APPS.contains(app.packageName)) {
         continue;
       }
+
       AppInfo appInfo = AppInfo(
         packageName: app.packageName,
         appName: app.appName,
         systemApp: app.systemApp,
+        isHidden: hiddenAppsNotifier.value.contains(app.packageName), /// If in hiddenApps set hide status true else false
+        displayName: renamedApps[app.packageName] /// Get display name if in renamedApps else null
       );
-
-      /// If in hiddenApps set hide status true
-      if(hiddenAppsNotifier.value.contains(app.packageName)) {
-        appInfo.isHidden = true;
-      }
-
-      /// Change display name if in renamedApps
-      appInfo.changeDisplayName(renamedApps[app.packageName]);
 
       apps.add(appInfo);
     }

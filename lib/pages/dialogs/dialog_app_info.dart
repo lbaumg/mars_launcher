@@ -3,7 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mars_launcher/data/app_info.dart';
 import 'package:mars_launcher/logic/apps_logic.dart';
 import 'package:mars_launcher/logic/theme_logic.dart';
-import 'package:mars_launcher/pages/fragments/dialogs/dialog_rename_app.dart';
+import 'package:mars_launcher/pages/dialogs/dialog_rename_app.dart';
 import 'package:mars_launcher/services/service_locator.dart';
 
 class AppInfoDialog extends StatelessWidget {
@@ -40,12 +40,10 @@ class AppInfoDialog extends StatelessWidget {
                 children: <Widget>[
                   TextButton(
                     onPressed: () async {
-                      // TODO open new screen to rename app
                       final result = await showDialog(
                         context: context,
                         builder: (_) => RenameAppDialog(appInfo: appInfo),
                       );
-                      // TODO trigger reload of app search
                       if (result != null) {
                         appsManager.addOrUpdateRenamedApp(appInfo, result);
                         Navigator.pop(context, result);

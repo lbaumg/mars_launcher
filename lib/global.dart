@@ -14,12 +14,11 @@ final marsLauncherAppInfo = AppInfo(packageName: "com.cloudcatcher.mars_launcher
 final genericAppInfo = AppInfo(packageName: "", appName: UNINITIALIZED_APP_NAME);
 
 
-const LOAD_APPS_FROM_JSON = false;
 
 const int MIN_NUM_OF_SHORTCUT_ITEMS = 0;
 const int MAX_NUM_OF_SHORTCUT_ITEMS = 7;
-const bool LOAD_FROM_JSON = true;
 const UPDATE_TEMPERATURE_EVERY = 5; // in minutes
+const LOAD_APPS_FROM_JSON = false;
 
 const TEXT_CALENDER_EMPTY = "no events";
 

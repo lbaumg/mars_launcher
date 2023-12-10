@@ -35,32 +35,55 @@ class ThemeManager {
   late final ThemeModeNotifier<bool> themeModeNotifier;
 
   final lightMode = ThemeColors(
-    background: Color(SharedPrefsManager.readData(KEY_LIGHT_BACKGROUND) ?? Colors.white.value),
-    textColor: Colors.black,
-    searchTextColor: Color(SharedPrefsManager.readData(KEY_LIGHT_SEARCH_COLOR) ?? COLOR_ACCENT.value) // Colors.deepOrange.value)
-  );
+      background: Color(SharedPrefsManager.readData(KEY_LIGHT_BACKGROUND) ?? Colors.white.value),
+      textColor: Colors.black,
+      searchTextColor:
+          Color(SharedPrefsManager.readData(KEY_LIGHT_SEARCH_COLOR) ?? COLOR_ACCENT.value) // Colors.deepOrange.value)
+      );
 
   final darkMode = ThemeColors(
-    background: Color(SharedPrefsManager.readData(KEY_DARK_BACKGROUND) ?? Colors.black.value),
-    textColor: Colors.white,
-    searchTextColor: Color(SharedPrefsManager.readData(KEY_DARK_SEARCH_COLOR) ?? COLOR_ACCENT.value)// Colors.deepOrange.value)
-  );
+      background: Color(SharedPrefsManager.readData(KEY_DARK_BACKGROUND) ?? Colors.black.value),
+      textColor: Colors.white,
+      searchTextColor:
+          Color(SharedPrefsManager.readData(KEY_DARK_SEARCH_COLOR) ?? COLOR_ACCENT.value) // Colors.deepOrange.value)
+      );
 
   ThemeManager() {
     themeModeNotifier = ThemeModeNotifier<bool>(SharedPrefsManager.readData(KEY_THEME_MODE) ?? true);
   }
 
-  get theme {
-    final backgroundTextColor = themeModeNotifier.value ? darkMode.textColor : lightMode.textColor;
-    final searchItemColor = themeModeNotifier.value ? darkMode.searchTextColor : lightMode.searchTextColor;
-    final backgroundColor = themeModeNotifier.value ? darkMode.background: lightMode.background;
-    final brightness = themeModeNotifier.value ? Brightness.light : Brightness.dark;
+  ThemeData get theme {
+    final isDarkMode = themeModeNotifier.value;
 
+    late final backgroundTextColor;
+    late final searchItemColor;
+    late final backgroundColor;
+    late final brightness;
+    late final colorScheme;
+
+    if (isDarkMode) {
+      backgroundTextColor = darkMode.textColor;
+      searchItemColor = darkMode.searchTextColor;
+      backgroundColor = darkMode.background;
+      brightness = Brightness.light;
+      colorScheme = ColorScheme.light(primary: Colors.white);
+    } else {
+      backgroundTextColor = lightMode.textColor;
+      searchItemColor = lightMode.searchTextColor;
+      backgroundColor = lightMode.background;
+      brightness = Brightness.dark;
+      colorScheme =  ColorScheme.dark(primary: Colors.white);
+    }
+
+    final dialogBackgroundColor = backgroundColor;
 
     return ThemeData(
+      dialogBackgroundColor: dialogBackgroundColor,
+      colorScheme: colorScheme,
       primaryColor: backgroundTextColor,
-      disabledColor: searchItemColor, // search item color
-      fontFamily: 'NotoSansLight',
+      disabledColor: searchItemColor,
+      // search item color
+      fontFamily: FONT_LIGHT,
       scaffoldBackgroundColor: backgroundColor,
       brightness: brightness,
       iconTheme: IconThemeData(
@@ -76,14 +99,12 @@ class ThemeManager {
       textButtonTheme: TextButtonThemeData(
           style: ButtonStyle(
               foregroundColor: MaterialStateProperty.all<Color>(backgroundTextColor),
-              overlayColor: MaterialStateProperty.all<Color>(backgroundColor)
-          )
-      ),
+              overlayColor: MaterialStateProperty.all<Color>(backgroundColor))),
     );
   }
 
   get systemUiOverlayStyle {
-    final backgroundColor = themeModeNotifier.value ? darkMode.background: lightMode.background;
+    final backgroundColor = themeModeNotifier.value ? darkMode.background : lightMode.background;
     final brightness = themeModeNotifier.value ? Brightness.light : Brightness.dark;
     final brightnessInverted = themeModeNotifier.value ? Brightness.dark : Brightness.light;
 
@@ -113,7 +134,6 @@ class ThemeManager {
 }
 
 class ThemeModeNotifier<T> extends ValueNotifier<T> {
-
   ThemeModeNotifier(T value) : super(value);
 
   void notify() {
