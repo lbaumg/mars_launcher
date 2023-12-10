@@ -16,7 +16,8 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   final themeManager = getIt<ThemeManager>();
   final appShortcutsManager = getIt<AppShortcutsManager>();
   final sensitivity = 8;
-  var searchApps = false;
+
+  final ValueNotifier<bool> searchAppsNotifier = ValueNotifier(false);
 
   @override
   void initState() {
@@ -28,15 +29,14 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
     if (mounted && state == AppLifecycleState.resumed) {
-      setState(() {
-        searchApps = false;
-      });
+      searchAppsNotifier.value = false;
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return PopScope(
+      canPop: false,
       onPopInvoked: (didPop) {_onWillPop(didPop);},
       child: GestureDetector(
         // SWIPE DETECTION
@@ -68,12 +68,17 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                 TopRow(),
                 SizedBox(height: 50,),
                 Expanded(
-                  child: !searchApps
-                      ? Align(
+                  child: ValueListenableBuilder<bool>(
+                      valueListenable: searchAppsNotifier,
+                      builder: (context, searchApps, child) {
+                      return !searchApps
+                          ? Align(
                           alignment:
-                              Alignment.centerLeft, // Center only vertically
+                          Alignment.centerLeft, // Center only vertically
                           child: AppShortcutsFragment())
-                      : AppSearchFragment(),
+                          : AppSearchFragment();
+                    },
+                  ),
                 )
               ],
             ),
@@ -84,16 +89,12 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   }
 
   _onWillPop(didPop) async {
-    if (searchApps) {
-      setState(() {
-        searchApps = false;
-      });
-    }
+    searchAppsNotifier.value = false;
     return;
   }
 
   _horizontalDragHandler(details) {
-    if (searchApps) {
+    if (searchAppsNotifier.value) {
       return;
     }
 
@@ -107,22 +108,10 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   }
 
   _verticalDragHandler(details) {
-    if (details.delta.dy > sensitivity) {
-      // Down Swipe
-      if (searchApps) {
-        setState(() {
-          searchApps = false;
-        }); // Close app search
-      } else {
-        // TODO open status bar
-      }
-    } else if (details.delta.dy < -sensitivity) {
-      // Up Swipe
-      if (!searchApps) {
-        setState(() {
-          searchApps = true;
-        }); // Open app search
-      }
+    if (details.delta.dy > sensitivity) { /// Down Swipe
+        searchAppsNotifier.value = false; /// Close app search
+    } else if (details.delta.dy < -sensitivity) { /// Up Swipe
+      searchAppsNotifier.value = true; /// Open app search
     }
   }
 }
