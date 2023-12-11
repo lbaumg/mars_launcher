@@ -28,18 +28,20 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-    if (mounted && state == AppLifecycleState.resumed) {
+
+    if (state == AppLifecycleState.inactive && mounted) {
       searchAppsNotifier.value = false;
+      Navigator.popUntil(context, (route) => route.isFirst);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
+    return PopScope( /// Detect back button to close app search
       canPop: false,
       onPopInvoked: (didPop) {_onWillPop(didPop);},
       child: GestureDetector(
-        // SWIPE DETECTION
+        /// SWIPE DETECTION
         onHorizontalDragUpdate: _horizontalDragHandler,
         onVerticalDragUpdate: _verticalDragHandler,
         onLongPress: () {
@@ -99,17 +101,17 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     }
 
     if (details.delta.dx > sensitivity) {
-      // Right Swipe
+      /// Right Swipe
       appShortcutsManager.swipeRightAppNotifier.value.open();
     } else if (details.delta.dx < -sensitivity) {
-      // Left Swipe
+      /// Left Swipe
       appShortcutsManager.swipeLeftAppNotifier.value.open();
     }
   }
 
   _verticalDragHandler(details) {
     if (details.delta.dy > sensitivity) { /// Down Swipe
-        searchAppsNotifier.value = false; /// Close app search
+      searchAppsNotifier.value = false; /// Close app search
     } else if (details.delta.dy < -sensitivity) { /// Up Swipe
       searchAppsNotifier.value = true; /// Open app search
     }

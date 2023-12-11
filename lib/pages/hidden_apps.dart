@@ -20,24 +20,10 @@ class _HiddenAppsState extends State<HiddenApps> with WidgetsBindingObserver {
   final themeManager = getIt<ThemeManager>();
   final appsManager = getIt<AppsManager>();
 
-  // final temperatureLogic = getIt<TemperatureLogic>();
-  var currentlyPopping = false;
-
-  // final settingsLogic = getIt<SettingsLogic>();
-
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.inactive && mounted && !currentlyPopping) {
-      currentlyPopping = true;
-      Navigator.of(context).pop();
-    }
-    super.didChangeAppLifecycleState(state);
   }
 
   void callbackRemoveFromHiddenApps(appInfo) {
@@ -46,54 +32,47 @@ class _HiddenAppsState extends State<HiddenApps> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-
-    return PopScope(
-      onPopInvoked: (didPop) async {
-        currentlyPopping = true;
-        return;
+    return GestureDetector(
+      onDoubleTap: () {
+        themeManager.toggleDarkMode();
       },
-      child: GestureDetector(
-        onDoubleTap: () {
-          themeManager.toggleDarkMode();
-        },
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          body: SafeArea(
-            child: Column(
-              children: [
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(40, 20, 0, 20),
-                    child: Text("Hidden apps",
-                      textAlign: TextAlign.left,
-                      style: TEXT_STYLE_TITLE,
-                    ),
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: SafeArea(
+          child: Column(
+            children: [
+              Align(
+                alignment: Alignment.topLeft,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(40, 20, 0, 20),
+                  child: Text("Hidden apps",
+                    textAlign: TextAlign.left,
+                    style: TEXT_STYLE_TITLE,
                   ),
                 ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Padding(
-                        padding: const EdgeInsets.fromLTRB(40, 0, 40, 40),
-                        child: ValueListenableBuilder<List<AppInfo>>(
-                            valueListenable: appsManager.appsNotifier,
-                            builder: (context, apps, child) {
-                              final hiddenApps = apps
-                                  .where((app) => app.isHidden);
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: hiddenApps
-                                    .map<Widget>((app) => HiddenAppCard(
-                                        appInfo: app,
-                                        callbackRemoveFromHiddenApps:
-                                            callbackRemoveFromHiddenApps))
-                                    .toList(),
-                              );
-                            })),
-                  ),
-                )
-              ],
-            ),
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Padding(
+                      padding: const EdgeInsets.fromLTRB(40, 0, 40, 40),
+                      child: ValueListenableBuilder<List<AppInfo>>(
+                          valueListenable: appsManager.appsNotifier,
+                          builder: (context, apps, child) {
+                            final hiddenApps = apps
+                                .where((app) => app.isHidden);
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: hiddenApps
+                                  .map<Widget>((app) => HiddenAppCard(
+                                      appInfo: app,
+                                      callbackRemoveFromHiddenApps:
+                                          callbackRemoveFromHiddenApps))
+                                  .toList(),
+                            );
+                          })),
+                ),
+              )
+            ],
           ),
         ),
       ),

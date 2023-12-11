@@ -21,7 +21,6 @@ class _TodoListState extends State<TodoList> with WidgetsBindingObserver {
   final appsManager = getIt<AppsManager>();
   final todoLogic = getIt<TodoManager>();
   final currentlyInTextFieldNotifier = ValueNotifier(false);
-  final FocusNode _focusNode = FocusNode();
   final _scrollController = ScrollController();
 
   @override /// Go back to main screen

@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:mars_launcher/logic/theme_logic.dart';
 
+const BUTTON_BACKGROUND_COLOR_DIALOG = Colors.black;
+const BUTTON_TEXT_COLOR_DIALOG = Colors.white;
+
 class ColorPickerDialog extends StatelessWidget {
   final bool isDarkMode;
   final Color initialColor;
@@ -18,10 +21,11 @@ class ColorPickerDialog extends StatelessWidget {
     var selectedColor = initialColor;
 
     return AlertDialog(
-      title: const Text(
+      title: Text(
         title,
         style: TextStyle(
           fontWeight: FontWeight.bold,
+          color: themeManager.theme.primaryColor
         ),
       ),
       content: SingleChildScrollView(
@@ -47,8 +51,8 @@ class ColorPickerDialog extends StatelessWidget {
                   Navigator.of(context).pop();
                 },
                 style: TextButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  backgroundColor: Colors.black,
+                  foregroundColor: BUTTON_TEXT_COLOR_DIALOG,
+                  backgroundColor: BUTTON_BACKGROUND_COLOR_DIALOG,
                 ),
               ),
             ),

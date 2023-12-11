@@ -28,19 +28,9 @@ class _AppSearchFragmentState extends State<AppSearchFragment>
     with WidgetsBindingObserver {
   final _textController = TextEditingController();
   late final appSearchLogic;
-  var currentlyPopping = false;
 
   callbackPop() {
     Navigator.pop(context);
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
-    if (state == AppLifecycleState.inactive && mounted && !currentlyPopping) {
-      currentlyPopping = true;
-      Navigator.of(context).popUntil((route) => route.isFirst);
-    }
   }
 
   @override
