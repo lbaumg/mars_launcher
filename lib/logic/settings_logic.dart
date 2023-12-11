@@ -10,6 +10,7 @@ const KEY_BATTERY_ENABLED = "batteryEnabled";
 const KEY_CALENDAR_ENABLED = "calendarEnabled";
 const KEY_NUM_OF_SHORTCUT_ITEMS = "numOfShortcutItems";
 const KEY_SHORTCUT_MODE = "shortcutMode";
+const KEY_IS_FIRST_STARTUP = "firstStartup";
 
 class SettingsManager {
   final ValueNotifierWithKey<bool> weatherWidgetEnabledNotifier = ValueNotifierWithKey(SharedPrefsManager.readData(KEY_WEATHER_ENABLED) ?? false, KEY_WEATHER_ENABLED);
@@ -18,6 +19,18 @@ class SettingsManager {
   final ValueNotifierWithKey<bool> calendarWidgetEnabledNotifier = ValueNotifierWithKey(SharedPrefsManager.readData(KEY_CALENDAR_ENABLED) ?? true, KEY_CALENDAR_ENABLED);
   final ValueNotifierWithKey<int> numberOfShortcutItemsNotifier = ValueNotifierWithKey(SharedPrefsManager.readData(KEY_NUM_OF_SHORTCUT_ITEMS) ?? 6, KEY_NUM_OF_SHORTCUT_ITEMS);
   final ValueNotifierWithKey<bool> shortcutMode = ValueNotifierWithKey(SharedPrefsManager.readData(KEY_SHORTCUT_MODE) ?? true, KEY_SHORTCUT_MODE);
+
+  bool isFirstStartup = SharedPrefsManager.readData(KEY_IS_FIRST_STARTUP) ?? true;
+
+  SettingsManager() {
+    /// Ask on first startup to be default launcher
+    if (isFirstStartup) {
+      isFirstStartup = false;
+      SharedPrefsManager.saveData(KEY_IS_FIRST_STARTUP, false);
+
+      openDefaultLauncherSettings();
+    }
+  }
 
   void setNotifierValueAndSave(ValueNotifierWithKey notifier) {
     switch (notifier.key) {
