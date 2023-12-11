@@ -66,10 +66,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(Strings.settingsTitle, style: TEXT_STYLE_TITLE),
-                // SizedBox(
-                //   height: 30,
-                //   width: double.infinity,
-                // ),
+
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),

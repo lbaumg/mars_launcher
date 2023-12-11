@@ -1,13 +1,14 @@
 
 
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:mars_launcher/services/shared_prefs_manager.dart';
+import 'package:mars_launcher/strings.dart';
 
-const KEY_TODO_LIST = "todoList";
+
 
 class TodoManager {
 
-  ValueNotifier<List<String>> todoListNotifier = ValueNotifier(SharedPrefsManager.readStringList(KEY_TODO_LIST) ?? []);
+  ValueNotifier<List<String>> todoListNotifier = ValueNotifier(SharedPrefsManager.readStringList(Keys.todoList) ?? []);
 
   addTodo(String todo) {
     var updatedTodoList = List.of(todoListNotifier.value);
@@ -39,6 +40,6 @@ class TodoManager {
   }
 
   saveTodosToSharedPrefs() {
-    SharedPrefsManager.saveData(KEY_TODO_LIST, todoListNotifier.value);
+    SharedPrefsManager.saveData(Keys.todoList, todoListNotifier.value);
   }
 }

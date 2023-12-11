@@ -10,10 +10,11 @@ import 'package:mars_launcher/services/location_service.dart';
 import 'package:mars_launcher/services/permission_service.dart';
 import 'package:mars_launcher/services/service_locator.dart';
 import 'package:mars_launcher/services/shared_prefs_manager.dart';
+import 'package:mars_launcher/strings.dart';
 import 'package:weather/weather.dart';
 import 'package:http/http.dart' as http;
 
-const KEY_API_KEY = "apiKey";
+
 
 class TemperatureManager {
   final temperatureNotifier = ValueNotifier("-°C");
@@ -31,7 +32,7 @@ class TemperatureManager {
   TemperatureManager() {
     print("[$runtimeType] INITIALIZING");
 
-    apiKey = SharedPrefsManager.readData(KEY_API_KEY);
+    apiKey = SharedPrefsManager.readData(Keys.apiKey);
 
     /// If weather is enabled and working apiKey exists
     if (apiKey != null) {
@@ -67,13 +68,13 @@ class TemperatureManager {
   void addApiKey(String newApiKey) {
     print("[$runtimeType] add new api key: $newApiKey");
     apiKey = newApiKey;
-    SharedPrefsManager.saveData(KEY_API_KEY, apiKey);
+    SharedPrefsManager.saveData(Keys.apiKey, apiKey);
     wf = WeatherFactory(apiKey!);
     updateTemperature();
   }
 
   void deleteAPIKey() {
-    SharedPrefsManager.deleteData(KEY_API_KEY);
+    SharedPrefsManager.deleteData(Keys.apiKey);
     apiKey = null;
     wf = null;
   }

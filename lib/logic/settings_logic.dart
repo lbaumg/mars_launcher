@@ -3,30 +3,25 @@ import 'package:flutter/services.dart';
 import 'package:mars_launcher/global.dart';
 import 'package:mars_launcher/logic/utils.dart';
 import 'package:mars_launcher/services/shared_prefs_manager.dart';
+import 'package:mars_launcher/strings.dart';
 
-const KEY_WEATHER_ENABLED = "weatherEnabled";
-const KEY_CLOCK_ENABLED = "clockEnabled";
-const KEY_BATTERY_ENABLED = "batteryEnabled";
-const KEY_CALENDAR_ENABLED = "calendarEnabled";
-const KEY_NUM_OF_SHORTCUT_ITEMS = "numOfShortcutItems";
-const KEY_SHORTCUT_MODE = "shortcutMode";
-const KEY_IS_FIRST_STARTUP = "firstStartup";
+
 
 class SettingsManager {
-  final ValueNotifierWithKey<bool> weatherWidgetEnabledNotifier = ValueNotifierWithKey(SharedPrefsManager.readData(KEY_WEATHER_ENABLED) ?? false, KEY_WEATHER_ENABLED);
-  final ValueNotifierWithKey<bool> clockWidgetEnabledNotifier = ValueNotifierWithKey(SharedPrefsManager.readData(KEY_CLOCK_ENABLED) ?? true, KEY_CLOCK_ENABLED);
-  final ValueNotifierWithKey<bool> batteryWidgetEnabledNotifier = ValueNotifierWithKey(SharedPrefsManager.readData(KEY_BATTERY_ENABLED) ?? true, KEY_BATTERY_ENABLED);
-  final ValueNotifierWithKey<bool> calendarWidgetEnabledNotifier = ValueNotifierWithKey(SharedPrefsManager.readData(KEY_CALENDAR_ENABLED) ?? true, KEY_CALENDAR_ENABLED);
-  final ValueNotifierWithKey<int> numberOfShortcutItemsNotifier = ValueNotifierWithKey(SharedPrefsManager.readData(KEY_NUM_OF_SHORTCUT_ITEMS) ?? 6, KEY_NUM_OF_SHORTCUT_ITEMS);
-  final ValueNotifierWithKey<bool> shortcutMode = ValueNotifierWithKey(SharedPrefsManager.readData(KEY_SHORTCUT_MODE) ?? true, KEY_SHORTCUT_MODE);
+  final ValueNotifierWithKey<bool> weatherWidgetEnabledNotifier = ValueNotifierWithKey(SharedPrefsManager.readData(Keys.weatherEnabled) ?? false, Keys.weatherEnabled);
+  final ValueNotifierWithKey<bool> clockWidgetEnabledNotifier = ValueNotifierWithKey(SharedPrefsManager.readData(Keys.clockEnabled) ?? true, Keys.clockEnabled);
+  final ValueNotifierWithKey<bool> batteryWidgetEnabledNotifier = ValueNotifierWithKey(SharedPrefsManager.readData(Keys.batteryEnabled) ?? true, Keys.batteryEnabled);
+  final ValueNotifierWithKey<bool> calendarWidgetEnabledNotifier = ValueNotifierWithKey(SharedPrefsManager.readData(Keys.calendarEnabled) ?? true, Keys.calendarEnabled);
+  final ValueNotifierWithKey<int> numberOfShortcutItemsNotifier = ValueNotifierWithKey(SharedPrefsManager.readData(Keys.numOfShortcutItems) ?? 6, Keys.numOfShortcutItems);
+  final ValueNotifierWithKey<bool> shortcutMode = ValueNotifierWithKey(SharedPrefsManager.readData(Keys.shortcutMode) ?? true, Keys.shortcutMode);
 
-  bool isFirstStartup = SharedPrefsManager.readData(KEY_IS_FIRST_STARTUP) ?? true;
+  bool isFirstStartup = SharedPrefsManager.readData(Keys.isFirstStartup) ?? true;
 
   SettingsManager() {
     /// Ask on first startup to be default launcher
     if (isFirstStartup) {
       isFirstStartup = false;
-      SharedPrefsManager.saveData(KEY_IS_FIRST_STARTUP, false);
+      SharedPrefsManager.saveData(Keys.isFirstStartup, false);
 
       openDefaultLauncherSettings();
     }
@@ -34,14 +29,14 @@ class SettingsManager {
 
   void setNotifierValueAndSave(ValueNotifierWithKey notifier) {
     switch (notifier.key) {
-      case KEY_SHORTCUT_MODE:
-      case KEY_WEATHER_ENABLED:
-      case KEY_CLOCK_ENABLED:
-      case KEY_CALENDAR_ENABLED:
-      case KEY_BATTERY_ENABLED:
+      case Keys.shortcutMode:
+      case Keys.weatherEnabled:
+      case Keys.clockEnabled:
+      case Keys.calendarEnabled:
+      case Keys.batteryEnabled:
         notifier.value = !notifier.value;
         break;
-      case KEY_NUM_OF_SHORTCUT_ITEMS:
+      case Keys.numOfShortcutItems:
         notifier.value = (notifier.value + 1) % (MAX_NUM_OF_SHORTCUT_ITEMS+1);
     }
     SharedPrefsManager.saveData(notifier.key, notifier.value);

@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:device_apps/device_apps.dart';
-import 'package:mars_launcher/global.dart';
+import 'package:mars_launcher/strings.dart';
 
 
 class AppInfo {
@@ -46,38 +46,38 @@ class AppInfo {
   }
 
   AppInfo.fromJson(Map<String, dynamic> json)
-    : packageName = json[JSON_KEY_PACKAGE_NAME],
-      appName = json[JSON_KEY_APP_NAME],
-      systemApp = json[JSON_KEY_SYSTEM_APP],
-      isHidden = json[JSON_KEY_APP_IS_HIDDEN],
-      displayName = json[JSON_KEY_DISPLAY_NAME];
+    : packageName = json[JsonKeys.packageName],
+      appName = json[JsonKeys.appName],
+      systemApp = json[JsonKeys.systemApp],
+      isHidden = json[JsonKeys.appIsHidden],
+      displayName = json[JsonKeys.displayName];
 
   Map<String, dynamic> toJson() => {
-    JSON_KEY_PACKAGE_NAME: packageName,
-    JSON_KEY_APP_NAME: appName,
-    JSON_KEY_SYSTEM_APP: systemApp,
-    JSON_KEY_APP_IS_HIDDEN: isHidden,
-    JSON_KEY_DISPLAY_NAME: displayName,
+    JsonKeys.packageName: packageName,
+    JsonKeys.appName: appName,
+    JsonKeys.systemApp: systemApp,
+    JsonKeys.appIsHidden: isHidden,
+    JsonKeys.displayName: displayName,
   };
 
   static AppInfo fromJsonString(String? jsonString) {
-    jsonString = jsonString ?? jsonEncode({JSON_KEY_PACKAGE_NAME: "", JSON_KEY_APP_NAME: UNINITIALIZED_APP_NAME, JSON_KEY_SYSTEM_APP: false});
+    jsonString = jsonString ?? jsonEncode({JsonKeys.packageName: "", JsonKeys.appName: Strings.uninitializedAppName, JsonKeys.systemApp: false});
     Map<String, dynamic> json = jsonDecode(jsonString) as Map<String, dynamic>;
     return AppInfo(
-      packageName: json[JSON_KEY_PACKAGE_NAME],
-      appName: json[JSON_KEY_APP_NAME],
-      systemApp: json[JSON_KEY_SYSTEM_APP],
-      isHidden: json[JSON_KEY_APP_IS_HIDDEN],
-      displayName: json[JSON_KEY_DISPLAY_NAME],
+      packageName: json[JsonKeys.packageName],
+      appName: json[JsonKeys.appName],
+      systemApp: json[JsonKeys.systemApp],
+      isHidden: json[JsonKeys.appIsHidden],
+      displayName: json[JsonKeys.displayName],
     );
   }
 
   String toJsonString() => jsonEncode({
-    JSON_KEY_PACKAGE_NAME: packageName,
-    JSON_KEY_APP_NAME: appName,
-    JSON_KEY_SYSTEM_APP: systemApp,
-    JSON_KEY_APP_IS_HIDDEN: isHidden,
-    JSON_KEY_DISPLAY_NAME: displayName
+    JsonKeys.packageName: packageName,
+    JsonKeys.appName: appName,
+    JsonKeys.systemApp: systemApp,
+    JsonKeys.appIsHidden: isHidden,
+    JsonKeys.displayName: displayName
   });
 
   void changeDisplayName(newName) {

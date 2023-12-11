@@ -1,7 +1,5 @@
-
-
 import 'package:battery_plus/battery_plus.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class BatteryManager {
   final Battery _battery = Battery();
