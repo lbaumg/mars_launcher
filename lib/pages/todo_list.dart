@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mars_launcher/logic/apps_logic.dart';
-import 'package:mars_launcher/logic/theme_logic.dart';
+import 'package:mars_launcher/theme/theme_manager.dart';
 import 'package:mars_launcher/logic/todo_logic.dart';
 import 'package:mars_launcher/pages/fragments/cards/todo_list_card.dart';
 import 'package:mars_launcher/services/service_locator.dart';
+import 'package:mars_launcher/theme/theme_constants.dart';
 
 const TEXT_STYLE_TITLE = TextStyle(fontSize: 30, fontWeight: FontWeight.normal);
 const TEXT_STYLE_ITEMS = TextStyle(fontSize: 22, height: 1);
@@ -54,7 +55,7 @@ class _TodoListState extends State<TodoList> with WidgetsBindingObserver {
 
     return GestureDetector(
       onDoubleTap: () {
-        themeManager.toggleDarkMode();
+        themeManager.toggleTheme();
       },
       onTap: () { /// On tap outside of keyboard unfocus
         FocusScope.of(context).unfocus();

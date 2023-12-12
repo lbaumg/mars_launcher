@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mars_launcher/data/app_info.dart';
 import 'package:mars_launcher/logic/settings_logic.dart';
 import 'package:mars_launcher/logic/shortcut_logic.dart';
-import 'package:mars_launcher/logic/theme_logic.dart';
+import 'package:mars_launcher/theme/theme_manager.dart';
 import 'package:mars_launcher/logic/utils.dart';
 import 'package:mars_launcher/pages/dialogs/dialog_color_picker.dart';
 import 'package:mars_launcher/pages/dialogs/dialog_open_weather_api_key.dart';
@@ -54,7 +54,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return GestureDetector(
       onDoubleTap: () {
-        themeManager.toggleDarkMode();
+        themeManager.toggleTheme();
       },
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -93,7 +93,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
-                                        return ColorPickerDialog(isDarkMode: false, initialColor: themeManager.lightMode.background, themeManager: themeManager);
+                                        return ColorPickerDialog(changeDarkModeColor: false);
                                       },
                                     );
                                   },
@@ -108,7 +108,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
-                                        return ColorPickerDialog(isDarkMode: true, initialColor: themeManager.darkMode.background, themeManager: themeManager);
+                                        return ColorPickerDialog(changeDarkModeColor: true);
                                         }
                                     );
                                   },

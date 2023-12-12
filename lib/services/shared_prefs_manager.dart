@@ -22,6 +22,12 @@ class SharedPrefsManager {
     return obj;
   }
 
+  static dynamic readDataWithDefault(String key, defaultValue) {
+    dynamic obj = prefs.get(key);
+    print("[SharedPrefsManager] READ $key: $obj");
+    return obj != null ? obj : defaultValue;
+  }
+
   static List<String>? readStringList(String key) {
     List<String>? objList = prefs.getStringList(key);
     print("[SharedPrefsManager] READ $key: $objList");

@@ -3,9 +3,9 @@ import 'package:mars_launcher/global.dart';
 import 'package:mars_launcher/logic/calendar_logic.dart';
 import 'package:mars_launcher/logic/settings_logic.dart';
 import 'package:mars_launcher/logic/shortcut_logic.dart';
-import 'package:mars_launcher/logic/theme_logic.dart';
 import 'package:mars_launcher/pages/todo_list.dart';
 import 'package:mars_launcher/services/service_locator.dart';
+import 'package:mars_launcher/theme/theme_constants.dart';
 
 class EventView extends StatefulWidget {
   const EventView({
@@ -20,7 +20,6 @@ class _EventViewState extends State<EventView> {
   final appShortcutsManager = getIt<AppShortcutsManager>();
   final settingsLogic = getIt<SettingsManager>();
   final calenderLogic = CalenderLogic();
-  final themeManager = getIt<ThemeManager>();
 
   @override
   Widget build(BuildContext context) {
@@ -87,24 +86,3 @@ class _EventViewState extends State<EventView> {
     super.dispose();
   }
 }
-
-/*              onLongPress: () async {
-                // TODO create new event
-                var time = await showDatePicker(
-                  context: context,
-                  initialDate: DateTime.now(),
-                  firstDate: DateTime.now(),
-                  lastDate: DateTime.,
-                  helpText: "Create a new event",
-                  builder: (context, child) {
-                    return Theme(
-                      data: themeManager.themeModeNotifier.value ? ThemeData.dark() : ThemeData.light(),
-                      child: child!,
-                    );
-                  },
-                );
-                if (time != null) {
-                  // FlutterAlarmClock.createAlarm(time.hour, time.minute);
-                }
-
-              },*/

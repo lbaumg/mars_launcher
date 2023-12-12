@@ -5,7 +5,6 @@ import 'package:flutter_alarm_clock/flutter_alarm_clock.dart';
 import 'package:mars_launcher/logic/battery_logic.dart';
 import 'package:mars_launcher/logic/settings_logic.dart';
 import 'package:mars_launcher/logic/shortcut_logic.dart';
-import 'package:mars_launcher/logic/theme_logic.dart';
 import 'package:mars_launcher/pages/fragments/top_row/battery.dart';
 import 'package:mars_launcher/pages/fragments/top_row/event.dart';
 import 'package:mars_launcher/pages/fragments/top_row/clock.dart';
@@ -15,7 +14,6 @@ import 'package:mars_launcher/services/service_locator.dart';
 class TopRow extends StatelessWidget {
   final appShortcutsManager = getIt<AppShortcutsManager>();
   final settingsLogic = getIt<SettingsManager>();
-  final themeManager = getIt<ThemeManager>();
   final batteryLogic = getIt<BatteryManager>();
 
   TopRow({
@@ -26,6 +24,7 @@ class TopRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Padding(
       padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
       child: Row(
@@ -48,7 +47,7 @@ class TopRow extends StatelessWidget {
                             appShortcutsManager.clockAppNotifier.value.open(),
                         onLongPress: () {
                           openCreateAlarmDialog(
-                              context, themeManager.themeModeNotifier.value);
+                              context, isDarkMode);
                         },
                         child: Clock())
                     : TextButton(onPressed: () {}, child: SizedBox.shrink());
@@ -69,23 +68,15 @@ class TopRow extends StatelessWidget {
               builder: (context, isEnabled, child) {
                 return isEnabled
                     ? TextButton(
-                  onPressed: () {},
-                  child: ValueListenableBuilder<bool>(
-                      valueListenable: themeManager.themeModeNotifier,
-                      builder: (context, themeMode, child) {
-                        return ValueListenableBuilder<int>(
-                            valueListenable:
-                            batteryLogic.batteryLevelNotifier,
-                            builder: (context, batteryLevel, child) {
-                              print(
-                                  "BUILDING BATTERYICON AGAIN: $batteryLevel");
-                              final paintColor = themeMode
-                                  ? themeManager.darkMode.textColor
-                                  : themeManager.lightMode.textColor;
-                              return BatteryIcon(
-                                  batteryLevel: batteryLevel,
-                                  paintColor: paintColor);
-                            });
+                  onPressed: () {}, //TODO battery
+                  child: ValueListenableBuilder<int>(
+                      valueListenable:
+                      batteryLogic.batteryLevelNotifier,
+                      builder: (context, batteryLevel, child) {
+                        print("BUILDING BATTERYICON AGAIN: $batteryLevel");
+                        return BatteryIcon(
+                            batteryLevel: batteryLevel,
+                            paintColor: Theme.of(context).primaryColor);
                       }),
                 )
                     : SizedBox.shrink();

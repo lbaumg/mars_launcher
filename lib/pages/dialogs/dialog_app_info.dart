@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mars_launcher/data/app_info.dart';
 import 'package:mars_launcher/logic/apps_logic.dart';
-import 'package:mars_launcher/logic/theme_logic.dart';
 import 'package:mars_launcher/pages/dialogs/dialog_rename_app.dart';
 import 'package:mars_launcher/services/service_locator.dart';
+import 'package:mars_launcher/theme/theme_constants.dart';
+
+const TEXT_HIDE = "Hide";
+const TEXT_RENAME = "Rename";
+const TEXT_INFO = "Info";
+const TEXT_UNINSTALL = "Uninstall";
 
 class AppInfoDialog extends StatelessWidget {
   AppInfoDialog({
@@ -13,30 +18,21 @@ class AppInfoDialog extends StatelessWidget {
   }) : super(key: key);
 
   final AppInfo appInfo;
-  final themeManager = getIt<ThemeManager>();
   final appsManager = getIt<AppsManager>();
 
   @override
   Widget build(BuildContext context) {
-    final titleColor = Theme.of(context).primaryColor; // Color(0xffa4133c);
-    final actionColor = Colors.redAccent; //Color(0xffc9184a); // Theme.of(context).primaryColor;
-    final buttonStyle = ButtonStyle(overlayColor: MaterialStateProperty.all<Color>(Colors.transparent));
+    final buttonStyle = getDialogButtonStyle(Theme.of(context).primaryColor);
 
     return AlertDialog(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(8.0))),
-        title: Text(
-          appInfo.appName,
-          style: TextStyle(fontWeight: FontWeight.bold, color: titleColor),
-        ),
-        content: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
+        title: Center(child: Text(appInfo.appName)),
+        content: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   TextButton(
                     onPressed: () async {
@@ -49,10 +45,7 @@ class AppInfoDialog extends StatelessWidget {
                         Navigator.pop(context, result);
                       }
                     },
-                    child: Text(
-                      "Rename",
-                      style: TextStyle(color: actionColor),
-                    ),
+                    child: SizedBox(width: 60, child: Center(child: Text(TEXT_RENAME))),
                     style: buttonStyle,
                   ),
                   TextButton(
@@ -60,50 +53,41 @@ class AppInfoDialog extends StatelessWidget {
                         appsManager.updateHiddenApps(appInfo.packageName, true);
                         Fluttertoast.showToast(
                             msg: "${appInfo.appName} is now hidden!",
-                            backgroundColor:
-                            themeManager.themeModeNotifier.value
-                                ? Colors.white
-                                : Colors.black,
-                            textColor: themeManager.themeModeNotifier.value
-                                ? Colors.black
-                                : Colors.white);
-
+                            backgroundColor: Theme.of(context).primaryColor,
+                            textColor: Theme.of(context).scaffoldBackgroundColor);
                         Navigator.pop(context, null);
                       },
-                      child: Text(
-                        "Hide",
-                        style: TextStyle(color: actionColor),
-                      ),
+                      child: SizedBox(width: 60, child: Center(child: Text(TEXT_HIDE))),
                       style: buttonStyle),
                 ]),
-            Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  TextButton(
-                    onPressed: () {
-                      appInfo.openSettings();
-                      Navigator.pop(context, null);
-                    },
-                    child: Text(
-                      "Info",
-                      style: TextStyle(color: actionColor),
+            Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+              TextButton(
+                onPressed: () {
+                  appInfo.openSettings();
+                  Navigator.pop(context, null);
+                },
+                child: SizedBox(
+                    width: 60,
+                    child: Center(
+                      child: Text(TEXT_INFO),
+                    )),
+                style: buttonStyle,
+              ),
+              appInfo.systemApp
+                  ? SizedBox.shrink()
+                  : TextButton(
+                      onPressed: () {
+                        appInfo.uninstall();
+                        Navigator.pop(context, null);
+                      },
+                      child: SizedBox(
+                          width: 60,
+                          child: Center(
+                            child: Text(TEXT_UNINSTALL),
+                          )),
+                      style: buttonStyle,
                     ),
-                    style: buttonStyle,
-                  ),
-                  appInfo.systemApp
-                      ? SizedBox.shrink()
-                      : TextButton(
-                    onPressed: () {
-                      appInfo.uninstall();
-                      Navigator.pop(context, null);
-                    },
-                    child: Text(
-                      "Uninstall",
-                      style: TextStyle(color: actionColor),
-                    ),
-                    style: buttonStyle,
-                  ),
-                ])
+            ])
           ],
         ));
   }

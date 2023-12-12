@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:mars_launcher/global.dart';
-import 'package:mars_launcher/logic/theme_logic.dart';
+import 'package:mars_launcher/theme/theme_constants.dart';
 
 
 

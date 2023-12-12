@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mars_launcher/data/app_info.dart';
 import 'package:mars_launcher/logic/shortcut_logic.dart';
-import 'package:mars_launcher/logic/theme_logic.dart';
 import 'package:mars_launcher/pages/dialogs/dialog_app_info.dart';
 import 'package:mars_launcher/pages/fragments/app_search_fragment.dart';
 import 'package:mars_launcher/services/service_locator.dart';
+import 'package:mars_launcher/theme/theme_constants.dart';
 
 typedef OpenAppCallback = Function(AppInfo appInfo);
 
@@ -59,8 +59,6 @@ class AppCard extends StatelessWidget {
               // Handle the result
               if (result != null) {
                 print('Dialog result: $result');
-                // TODO change name somehow or reload
-                // appInfo.displayName = result;
               }
             }
           }

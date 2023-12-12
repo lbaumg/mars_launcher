@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mars_launcher/data/app_info.dart';
-import 'package:mars_launcher/logic/theme_logic.dart';
+import 'package:mars_launcher/theme/theme_constants.dart';
 
 typedef OpenAppCallback = Function(AppInfo appInfo);
 

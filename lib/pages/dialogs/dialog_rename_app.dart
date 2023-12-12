@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mars_launcher/data/app_info.dart';
-import 'package:mars_launcher/logic/theme_logic.dart';
+import 'package:mars_launcher/theme/theme_manager.dart';
+import 'package:mars_launcher/logic/utils.dart';
+import 'package:mars_launcher/theme/theme_constants.dart';
 
 const MAX_LENGTH_RENAMED_APP = 30;
 
@@ -14,24 +16,27 @@ class RenameAppDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final titleColor = Theme.of(context).primaryColor; // Color(0xffa4133c);
+    // final titleColor = Theme.of(context).primaryColor; // Color(0xffa4133c);
+
+    final textStyle = TextStyle(
+        color: Theme.of(context).scaffoldBackgroundColor,
+      fontSize: 18
+    );
 
     return AlertDialog(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
       title: Text(
-        "Rename app",
-        style: TextStyle(fontWeight: FontWeight.bold, color: titleColor),
+        "Rename \"${appInfo.appName}\"",
+        style: TextStyle(fontWeight: FontWeight.bold),
       ),
       content: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            "App name: ${appInfo.appName}",
+          Text("Current name: \"${appInfo.getDisplayName()}\"",
+            style: textStyle
           ),
-          Text("Display name: ${appInfo.getDisplayName()}"),
+          insertVerticalSpacing(20),
           AppNameTextFieldWithValidation(appInfo.getDisplayName(), appInfo.appName),
         ],
       ),
@@ -57,29 +62,33 @@ class _AppNameTextFieldWithValidation extends State<AppNameTextFieldWithValidati
   Widget build(BuildContext context) {
     final displayNameEqualsAppName = widget.currentDisplayName == widget.appName;
 
-    _controller.text = widget.currentDisplayName;
+    final buttonStyle = getDialogButtonStyle(Theme.of(context).primaryColor);
+
+    // _controller.text = widget.currentDisplayName;
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Column(
       children: [
         TextField(
           maxLength: MAX_LENGTH_RENAMED_APP,
           controller: _controller,
           cursorColor: COLOR_ACCENT,
+          style: TextStyle(
+            color: COLOR_ACCENT
+          ),
           decoration: InputDecoration(
               // counterText: "",
               errorText: _errorText,
-              enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: COLOR_ACCENT)),
-              focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: COLOR_ACCENT)),
-              border: UnderlineInputBorder(borderSide: BorderSide(color: COLOR_ACCENT)),
+              filled: true,
+              fillColor: isDarkMode ? Colors.black12 : Colors.white,
+              // enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: COLOR_ACCENT)),
+              // focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: COLOR_ACCENT)),
+              // border: UnderlineInputBorder(borderSide: BorderSide(color: COLOR_ACCENT)),
               focusColor: Colors.redAccent,
               hintText: "Enter new name",
-              hintStyle: TextStyle(
-                color: Theme.of(context).brightness == Brightness.light
-                    ? COLOR_ACCENT.withOpacity(0.4)
-                    : COLOR_ACCENT.withOpacity(0.3), //Colors.black45,
-              )),
+              hintStyle: TextStyle(color: Colors.black54,)),
         ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(0, 20, 10, 0),
+          padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -88,9 +97,9 @@ class _AppNameTextFieldWithValidation extends State<AppNameTextFieldWithValidati
                     _controller.text = widget.appName;
                     // Navigator.pop(context, widget.appName);
                   },
-                  child: Text("Reset",
-                    style: TextStyle(color: Colors.redAccent),
-                  )),
+                  style: buttonStyle,
+                  child: Text("Reset")
+              ),
               TextButton(
                 onPressed: () {
                   var newName = _controller.text.trim();
@@ -104,10 +113,8 @@ class _AppNameTextFieldWithValidation extends State<AppNameTextFieldWithValidati
                     Navigator.pop(context, newName);
                   }
                 },
-                child: Text(
-                  "Change",
-                  style: TextStyle(color: Colors.redAccent),
-                ),
+                style: buttonStyle,
+                child: Text("Change"),
               ),
             ],
           ),
