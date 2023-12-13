@@ -1,10 +1,10 @@
-import 'package:mars_launcher/logic/apps_logic.dart';
-import 'package:mars_launcher/logic/battery_logic.dart';
-import 'package:mars_launcher/logic/settings_logic.dart';
-import 'package:mars_launcher/logic/shortcut_logic.dart';
-import 'package:mars_launcher/logic/temperature_logic.dart';
+import 'package:mars_launcher/logic/apps_manager.dart';
+import 'package:mars_launcher/logic/battery_manager.dart';
+import 'package:mars_launcher/logic/settings_manager.dart';
+import 'package:mars_launcher/logic/shortcut_manager.dart';
+import 'package:mars_launcher/logic/temperature_manager.dart';
 import 'package:mars_launcher/theme/theme_manager.dart';
-import 'package:mars_launcher/logic/todo_logic.dart';
+import 'package:mars_launcher/logic/todo_manager.dart';
 import 'package:mars_launcher/services/permission_service.dart';
 import 'package:get_it/get_it.dart';
 

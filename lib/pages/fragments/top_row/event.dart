@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mars_launcher/global.dart';
-import 'package:mars_launcher/logic/calendar_logic.dart';
-import 'package:mars_launcher/logic/settings_logic.dart';
-import 'package:mars_launcher/logic/shortcut_logic.dart';
+import 'package:mars_launcher/logic/calendar_manager.dart';
+import 'package:mars_launcher/logic/settings_manager.dart';
+import 'package:mars_launcher/logic/shortcut_manager.dart';
 import 'package:mars_launcher/pages/todo_list.dart';
 import 'package:mars_launcher/services/service_locator.dart';
 import 'package:mars_launcher/theme/theme_constants.dart';

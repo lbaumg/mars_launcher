@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mars_launcher/data/app_info.dart';
-import 'package:mars_launcher/logic/settings_logic.dart';
-import 'package:mars_launcher/logic/shortcut_logic.dart';
+import 'package:mars_launcher/logic/settings_manager.dart';
+import 'package:mars_launcher/logic/shortcut_manager.dart';
 import 'package:mars_launcher/theme/theme_manager.dart';
 import 'package:mars_launcher/logic/utils.dart';
 import 'package:mars_launcher/pages/dialogs/dialog_color_picker.dart';

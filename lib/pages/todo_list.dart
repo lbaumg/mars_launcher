@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mars_launcher/logic/apps_logic.dart';
+import 'package:mars_launcher/logic/apps_manager.dart';
 import 'package:mars_launcher/theme/theme_manager.dart';
-import 'package:mars_launcher/logic/todo_logic.dart';
+import 'package:mars_launcher/logic/todo_manager.dart';
 import 'package:mars_launcher/pages/fragments/cards/todo_list_card.dart';
 import 'package:mars_launcher/services/service_locator.dart';
 import 'package:mars_launcher/theme/theme_constants.dart';

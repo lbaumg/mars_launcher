@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mars_launcher/logic/shortcut_logic.dart';
+import 'package:mars_launcher/logic/shortcut_manager.dart';
 import 'package:mars_launcher/pages/fragments/app_shortcuts_fragment.dart';
 import 'package:mars_launcher/pages/fragments/app_search_fragment.dart';
 import 'package:mars_launcher/pages/fragments/top_row/top_row.dart';
