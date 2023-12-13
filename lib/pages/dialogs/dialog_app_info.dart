@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mars_launcher/data/app_info.dart';
 import 'package:mars_launcher/logic/apps_manager.dart';
+import 'package:mars_launcher/logic/utils.dart';
 import 'package:mars_launcher/pages/dialogs/dialog_rename_app.dart';
 import 'package:mars_launcher/services/service_locator.dart';
 import 'package:mars_launcher/theme/theme_constants.dart';
@@ -22,7 +23,8 @@ class AppInfoDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final buttonStyle = getDialogButtonStyle(Theme.of(context).primaryColor);
+    final isDarkMode = isThemeDark(context);
+    final buttonStyle = getDialogButtonStyle(isDarkMode);
 
     return AlertDialog(
         title: Center(child: Text(appInfo.appName)),
@@ -42,7 +44,14 @@ class AppInfoDialog extends StatelessWidget {
                       );
                       if (result != null) {
                         appsManager.addOrUpdateRenamedApp(appInfo, result);
-                        Navigator.pop(context, result);
+                        var message = "Renamed \"${appInfo.appName}\" to \"$result\".";
+                        if (appInfo.appName == result) {
+                          message = "Reset name to \"${appInfo.appName}\"";
+                        }
+                        Fluttertoast.showToast(
+                            msg: message,
+                            backgroundColor: Theme.of(context).primaryColor,
+                            textColor: Theme.of(context).scaffoldBackgroundColor);
                       }
                     },
                     child: SizedBox(width: 60, child: Center(child: Text(TEXT_RENAME))),

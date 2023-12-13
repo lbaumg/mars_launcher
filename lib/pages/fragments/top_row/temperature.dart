@@ -5,12 +5,12 @@ import 'package:mars_launcher/services/service_locator.dart';
 import 'package:mars_launcher/theme/theme_constants.dart';
 
 class Temperature extends StatelessWidget {
-  final temperatureLogic = getIt<TemperatureManager>();
+  final temperatureManager = getIt<TemperatureManager>();
 
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<String>(
-        valueListenable: temperatureLogic.temperatureNotifier,
+        valueListenable: temperatureManager.temperatureNotifier,
         builder: (context, temperature, child) {
           return Text(temperature,
               style: TextStyle(

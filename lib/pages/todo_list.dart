@@ -20,7 +20,7 @@ class TodoList extends StatefulWidget {
 class _TodoListState extends State<TodoList> with WidgetsBindingObserver {
   final themeManager = getIt<ThemeManager>();
   final appsManager = getIt<AppsManager>();
-  final todoLogic = getIt<TodoManager>();
+  final todoManager = getIt<TodoManager>();
   final currentlyInTextFieldNotifier = ValueNotifier(false);
   final _scrollController = ScrollController();
 
@@ -39,11 +39,11 @@ class _TodoListState extends State<TodoList> with WidgetsBindingObserver {
   }
 
   void callbackRemoveFromTodoList(index) {
-    todoLogic.removeTodo(index);
+    todoManager.removeTodo(index);
   }
 
   void callbackAddTodo(todo) {
-    todoLogic.addTodo(todo);
+    todoManager.addTodo(todo);
   }
 
   @override
@@ -77,7 +77,7 @@ class _TodoListState extends State<TodoList> with WidgetsBindingObserver {
                     ),
                   TextButton(
                       onPressed: () {
-                        todoLogic.clearTodoList();
+                        todoManager.clearTodoList();
                       },
                       child: Text("clear all",
                         style: TextStyle(
@@ -95,7 +95,7 @@ class _TodoListState extends State<TodoList> with WidgetsBindingObserver {
                       Padding(
                           padding: const EdgeInsets.fromLTRB(40, 0, 40, 30),
                           child: ValueListenableBuilder<List<String>>(
-                              valueListenable: todoLogic.todoListNotifier,
+                              valueListenable: todoManager.todoListNotifier,
                               builder: (context, todoList, child) {
                                 var items = todoList.asMap().entries
                                     .map<Widget>((todo) => TodoListCard(

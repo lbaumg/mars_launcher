@@ -29,7 +29,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
   final appShortcutsManager = getIt<AppShortcutsManager>();
   final themeManager = getIt<ThemeManager>();
   final permissionService = getIt<PermissionService>();
-  final settingsLogic = getIt<SettingsManager>();
+  final settingsManager = getIt<SettingsManager>();
 
   @override
   void initState() {
@@ -77,7 +77,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                             /// SET DEFAULT LAUNCHER
                             TextButton(
                               onPressed: () {
-                                settingsLogic.openDefaultLauncherSettings();
+                                settingsManager.openDefaultLauncherSettings();
                               },
                               child: Text(
                                 Strings.settingsChangeDefaultLauncher,
@@ -126,8 +126,8 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                               children: [
                                 TextButton(
                                   onPressed: () {
-                                    settingsLogic.setNotifierValueAndSave(
-                                        settingsLogic
+                                    settingsManager.setNotifierValueAndSave(
+                                        settingsManager
                                             .numberOfShortcutItemsNotifier);
                                   },
                                   child: Text(
@@ -137,7 +137,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                                 ),
                                 Expanded(child: Container()),
                                 ValueListenableBuilder<int>(
-                                    valueListenable: settingsLogic
+                                    valueListenable: settingsManager
                                         .numberOfShortcutItemsNotifier,
                                     builder:
                                         (context, numOfShortcutItems, child) {
@@ -145,8 +145,8 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                                           width: 86,
                                           child: TextButton(
                                             onPressed: () {
-                                              settingsLogic.setNotifierValueAndSave(
-                                                  settingsLogic
+                                              settingsManager.setNotifierValueAndSave(
+                                                  settingsManager
                                                       .numberOfShortcutItemsNotifier);
                                             },
                                             child: Center(
@@ -177,10 +177,10 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                                 ),
                                 ShowHideButton(
                                   notifier:
-                                      settingsLogic.clockWidgetEnabledNotifier,
+                                      settingsManager.clockWidgetEnabledNotifier,
                                   onPressed: () {
-                                    settingsLogic.setNotifierValueAndSave(
-                                        settingsLogic
+                                    settingsManager.setNotifierValueAndSave(
+                                        settingsManager
                                             .clockWidgetEnabledNotifier);
                                   },
                                 ),
@@ -203,11 +203,11 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                                     )),
                                 Expanded(child: Container()),
                                 ShowHideButton(
-                                  notifier: settingsLogic
+                                  notifier: settingsManager
                                       .weatherWidgetEnabledNotifier,
                                   onPressed: () {
-                                    settingsLogic.setNotifierValueAndSave(
-                                        settingsLogic
+                                    settingsManager.setNotifierValueAndSave(
+                                        settingsManager
                                             .weatherWidgetEnabledNotifier);
                                   },
                                 ),
@@ -230,11 +230,11 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                                 ),
                                 Expanded(child: Container()),
                                 ShowHideButton(
-                                  notifier: settingsLogic
+                                  notifier: settingsManager
                                       .calendarWidgetEnabledNotifier,
                                   onPressed: () {
-                                    settingsLogic.setNotifierValueAndSave(
-                                        settingsLogic
+                                    settingsManager.setNotifierValueAndSave(
+                                        settingsManager
                                             .calendarWidgetEnabledNotifier);
                                   },
                                 ),
@@ -255,11 +255,11 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                                   child: Container(),
                                 ),
                                 ShowHideButton(
-                                  notifier: settingsLogic
+                                  notifier: settingsManager
                                       .batteryWidgetEnabledNotifier,
                                   onPressed: () {
-                                    settingsLogic.setNotifierValueAndSave(
-                                        settingsLogic
+                                    settingsManager.setNotifierValueAndSave(
+                                        settingsManager
                                             .batteryWidgetEnabledNotifier);
                                   },
                                 ),

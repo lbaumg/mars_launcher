@@ -18,10 +18,10 @@ const COLOR_DIALOG_BUTTONS = Color(0xffFF6F5C);
 const FONT_LIGHT = "NotoSansLight";
 const FONT_REGULAR = "NotoSansRegular";
 
-ButtonStyle getDialogButtonStyle(primaryColor) {
+ButtonStyle getDialogButtonStyle(isDarkMode) {
   return ButtonStyle(
       // backgroundColor: MaterialStateProperty.all<Color>(primaryColor),
-      backgroundColor: MaterialStateProperty.all<Color>(COLOR_ACCENT.withOpacity(0.1)),
+      backgroundColor: MaterialStateProperty.all<Color>(COLOR_ACCENT.withOpacity(isDarkMode ? 0.1 : 0.25)),
       overlayColor: MaterialStateProperty.all<Color>(COLOR_ACCENT.withOpacity(0.05)),
       foregroundColor: MaterialStateProperty.all<Color>(COLOR_ACCENT),
       textStyle: MaterialStateProperty.all(TextStyle(

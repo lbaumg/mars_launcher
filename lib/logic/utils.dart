@@ -11,3 +11,7 @@ Widget insertVerticalSpacing(double height) {
     height: height,
   );
 }
+
+bool isThemeDark(context) {
+  return Theme.of(context).brightness == Brightness.dark;
+}

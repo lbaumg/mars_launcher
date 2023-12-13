@@ -44,7 +44,7 @@ String getPostfixForDayIndex(index) {
 }
 
 
-class CalenderLogic {
+class CalenderManager {
   final eventNotifier = ValueNotifier(Strings.textCalendarEmpty);
   final _deviceCalendarPlugin = DeviceCalendarPlugin();
   final permissionService = getIt<PermissionService>();
@@ -53,7 +53,7 @@ class CalenderLogic {
   late Timer timer;
   var currentDate = "";
 
-  CalenderLogic() {
+  CalenderManager() {
     updateEvents();
     timer = Timer.periodic(Duration(minutes: 1), (timer) => updateEvents());
     permissionService.permissionCalendarGranted.addListener(initializeEvents);

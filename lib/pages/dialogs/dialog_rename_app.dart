@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mars_launcher/data/app_info.dart';
-import 'package:mars_launcher/theme/theme_manager.dart';
 import 'package:mars_launcher/logic/utils.dart';
 import 'package:mars_launcher/theme/theme_constants.dart';
 
@@ -26,7 +25,10 @@ class RenameAppDialog extends StatelessWidget {
     return AlertDialog(
       title: Text(
         "Rename \"${appInfo.appName}\"",
-        style: TextStyle(fontWeight: FontWeight.bold),
+        style: TextStyle(
+          fontSize: 20,
+            fontWeight: FontWeight.bold
+        ),
       ),
       content: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -62,10 +64,9 @@ class _AppNameTextFieldWithValidation extends State<AppNameTextFieldWithValidati
   Widget build(BuildContext context) {
     final displayNameEqualsAppName = widget.currentDisplayName == widget.appName;
 
-    final buttonStyle = getDialogButtonStyle(Theme.of(context).primaryColor);
+    bool isDarkMode = isThemeDark(context);
+    final buttonStyle = getDialogButtonStyle(isDarkMode);
 
-    // _controller.text = widget.currentDisplayName;
-    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Column(
       children: [
         TextField(
@@ -94,8 +95,12 @@ class _AppNameTextFieldWithValidation extends State<AppNameTextFieldWithValidati
             children: [
               TextButton(
                   onPressed: () {
-                    _controller.text = widget.appName;
-                    // Navigator.pop(context, widget.appName);
+                    if (displayNameEqualsAppName) {
+                      Navigator.pop(context, null);
+                    } else {
+                      _controller.text = widget.appName;
+                      Navigator.pop(context, widget.appName);
+                    }
                   },
                   style: buttonStyle,
                   child: Text("Reset")

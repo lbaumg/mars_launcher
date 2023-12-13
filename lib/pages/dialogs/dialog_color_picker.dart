@@ -18,7 +18,7 @@ class ColorPickerDialog extends StatelessWidget {
     const title = 'Pick a background color';
     const textButton = 'APPLY';
 
-    final buttonStyle = getDialogButtonStyle(Theme.of(context).primaryColor);
+    final buttonStyle = getDialogButtonStyle(themeManager.isDarkMode);
 
     var selectedColor = changeDarkModeColor ? themeManager.darkBackground : themeManager.lightBackground;
 

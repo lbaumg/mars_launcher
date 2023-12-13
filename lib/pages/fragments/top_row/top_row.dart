@@ -5,26 +5,28 @@ import 'package:flutter_alarm_clock/flutter_alarm_clock.dart';
 import 'package:mars_launcher/logic/battery_manager.dart';
 import 'package:mars_launcher/logic/settings_manager.dart';
 import 'package:mars_launcher/logic/shortcut_manager.dart';
+import 'package:mars_launcher/logic/utils.dart';
 import 'package:mars_launcher/pages/fragments/top_row/battery.dart';
 import 'package:mars_launcher/pages/fragments/top_row/event.dart';
 import 'package:mars_launcher/pages/fragments/top_row/clock.dart';
 import 'package:mars_launcher/pages/fragments/top_row/temperature.dart';
 import 'package:mars_launcher/services/service_locator.dart';
+import 'package:mars_launcher/theme/theme_constants.dart';
 
 class TopRow extends StatelessWidget {
   final appShortcutsManager = getIt<AppShortcutsManager>();
-  final settingsLogic = getIt<SettingsManager>();
-  final batteryLogic = getIt<BatteryManager>();
+  final settingsManager = getIt<SettingsManager>();
+  final batteryManager = getIt<BatteryManager>();
 
   TopRow({
     Key? key,
   }) : super(key: key) {
-    batteryLogic.updateBatteryLevel();
+    batteryManager.updateBatteryLevel();
   }
 
   @override
   Widget build(BuildContext context) {
-    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    bool isDarkMode = isThemeDark(context);
     return Padding(
       padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
       child: Row(
@@ -32,7 +34,7 @@ class TopRow extends StatelessWidget {
         children: [
           /// CLOCK WIDGET
           ValueListenableBuilder<bool>(
-              valueListenable: settingsLogic.clockWidgetEnabledNotifier,
+              valueListenable: settingsManager.clockWidgetEnabledNotifier,
               builder: (context, isEnabled, child) {
                 return isEnabled
                     ? TextButton(
@@ -54,7 +56,7 @@ class TopRow extends StatelessWidget {
               }),
 
           ValueListenableBuilder<bool>(
-              valueListenable: settingsLogic.batteryWidgetEnabledNotifier,
+              valueListenable: settingsManager.batteryWidgetEnabledNotifier,
               builder: (context, isEnabled, child) {
                 return Expanded(
                   child: Container(),
@@ -64,14 +66,14 @@ class TopRow extends StatelessWidget {
 
           /// BATTERY WIDGET
           ValueListenableBuilder<bool>(
-              valueListenable: settingsLogic.batteryWidgetEnabledNotifier,
+              valueListenable: settingsManager.batteryWidgetEnabledNotifier,
               builder: (context, isEnabled, child) {
                 return isEnabled
                     ? TextButton(
                   onPressed: () {}, //TODO battery
                   child: ValueListenableBuilder<int>(
                       valueListenable:
-                      batteryLogic.batteryLevelNotifier,
+                      batteryManager.batteryLevelNotifier,
                       builder: (context, batteryLevel, child) {
                         print("BUILDING BATTERYICON AGAIN: $batteryLevel");
                         return BatteryIcon(
@@ -84,7 +86,7 @@ class TopRow extends StatelessWidget {
 
 
           ValueListenableBuilder<bool>(
-              valueListenable: settingsLogic.weatherWidgetEnabledNotifier,
+              valueListenable: settingsManager.weatherWidgetEnabledNotifier,
               builder: (context, isEnabled, child) {
                 return Expanded(
                   child: Container(),
@@ -94,7 +96,7 @@ class TopRow extends StatelessWidget {
 
           /// WEATHER WIDGET
           ValueListenableBuilder<bool>(
-              valueListenable: settingsLogic.weatherWidgetEnabledNotifier,
+              valueListenable: settingsManager.weatherWidgetEnabledNotifier,
               builder: (context, isEnabled, child) {
                 return isEnabled
                     ? TextButton(
@@ -119,7 +121,7 @@ class TopRow extends StatelessWidget {
 
           /// CALENDAR WIDGET
           ValueListenableBuilder<bool>(
-              valueListenable: settingsLogic.calendarWidgetEnabledNotifier,
+              valueListenable: settingsManager.calendarWidgetEnabledNotifier,
               builder: (context, isEnabled, child) {
                 return isEnabled
                     ? EventView()
@@ -138,14 +140,16 @@ class TopRow extends StatelessWidget {
 }
 
 void openCreateAlarmDialog(context, isDarkMode) async {
-  // TODO maybe adjust theme?
+  final themeDark = basicDarkTheme;
+  final themeLight = basicLightTheme;
+
   var time = await showTimePicker(
     context: context,
     initialTime: TimeOfDay.now(),
     helpText: "Create a new alarm",
     builder: (context, child) {
       return Theme(
-        data: isDarkMode ? ThemeData.dark() : ThemeData.light(),
+        data: isDarkMode ? themeDark : themeLight,
         child: child!,
       );
     },

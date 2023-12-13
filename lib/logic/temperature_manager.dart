@@ -11,23 +11,22 @@ import 'package:mars_launcher/services/permission_service.dart';
 import 'package:mars_launcher/services/service_locator.dart';
 import 'package:mars_launcher/services/shared_prefs_manager.dart';
 import 'package:mars_launcher/strings.dart';
+import 'package:mars_launcher/theme/theme_manager.dart';
 import 'package:weather/weather.dart';
 import 'package:http/http.dart' as http;
-
-
 
 class TemperatureManager {
   final temperatureNotifier = ValueNotifier("-°C");
   final locationService = LocationService();
   final appShortcutManager = getIt<AppShortcutsManager>();
   final permissionService = getIt<PermissionService>();
-  final settingsLogic = getIt<SettingsManager>();
+  final settingsManager = getIt<SettingsManager>();
+  final themeManager = getIt<ThemeManager>();
 
   WeatherFactory? wf;
   String? apiKey;
   Timer? timer;
   int lastTemperatureUpdateMillis = 0;
-
 
   TemperatureManager() {
     print("[$runtimeType] INITIALIZING");
@@ -39,26 +38,28 @@ class TemperatureManager {
       wf = WeatherFactory(apiKey!);
     }
 
-    if (settingsLogic.weatherWidgetEnabledNotifier.value) {
+    if (settingsManager.weatherWidgetEnabledNotifier.value) {
       updateTemperature();
     }
 
     /// Setup timer to update temperature every 5min only when weatherWidget is enabled
     timer = Timer.periodic(Duration(minutes: UPDATE_TEMPERATURE_EVERY), (timer) {
-      if (settingsLogic.weatherWidgetEnabledNotifier.value && apiKey != null && wf != null) {
+      if (settingsManager.weatherWidgetEnabledNotifier.value && apiKey != null && wf != null) {
         updateTemperature();
       }
     });
 
-    settingsLogic.weatherWidgetEnabledNotifier.addListener(() {
-
-      if (settingsLogic.weatherWidgetEnabledNotifier.value) {
+    settingsManager.weatherWidgetEnabledNotifier.addListener(() {
+      if (settingsManager.weatherWidgetEnabledNotifier.value) {
         if (apiKey != null && wf != null) {
           updateTemperature();
         } else {
-
-          Fluttertoast.showToast(msg: "OpenWeather API key not set. Set under settings -> more -> OpenWeather API key",
-              toastLength: Toast.LENGTH_LONG,);
+          Fluttertoast.showToast(
+            msg: "OpenWeather API key not set. Set under settings -> more -> OpenWeather API key",
+            backgroundColor: themeManager.isDarkMode ? Colors.white : Colors.black,
+            textColor: themeManager.isDarkMode ? Colors.black : Colors.white,
+            toastLength: Toast.LENGTH_LONG,
+          );
         }
       }
     });
@@ -86,9 +87,10 @@ class TemperatureManager {
     }
 
     /// Check if weather is enabled
-    if (!settingsLogic.weatherWidgetEnabledNotifier.value) {
+    if (!settingsManager.weatherWidgetEnabledNotifier.value) {
       return couldNotRetrieveNewTemperature("[$runtimeType] weather widget disabled");
     }
+
     /// Check if permission for location is granted
     if (!await locationService.checkPermission()) {
       return couldNotRetrieveNewTemperature("[$runtimeType] no permission for location.");
@@ -100,7 +102,8 @@ class TemperatureManager {
     }
 
     print("[$runtimeType] Check new weather");
-    Weather w = await wf!.currentWeatherByLocation(locationService.locationData.latitude!, locationService.locationData.longitude!);
+    Weather w = await wf!
+        .currentWeatherByLocation(locationService.locationData.latitude!, locationService.locationData.longitude!);
     String? temp = w.temperature?.celsius?.toInt().toString();
     if (temp != null) {
       setNewTemperature(temp);
@@ -122,7 +125,9 @@ class TemperatureManager {
     int currentTimeMillis = DateTime.now().millisecondsSinceEpoch;
     int differenceMillis = currentTimeMillis - lastTemperatureUpdateMillis;
     int differenceSeconds = differenceMillis ~/ 1000;
-    bool isMoreThanThreeHours = differenceSeconds > (3 * 60 * 60); /// > (3 h * 60 min * 60 sec)?
+    bool isMoreThanThreeHours = differenceSeconds > (3 * 60 * 60);
+
+    /// > (3 h * 60 min * 60 sec)?
     if (isMoreThanThreeHours) {
       /// If lastUpdated more than 3h ago delete value
       temperatureNotifier.value = "-°C";
@@ -133,7 +138,6 @@ class TemperatureManager {
       }
     }
   }
-
 
   Future<bool> isApiKeyValid(String apiKey) async {
     final apiUrl = 'https://api.openweathermap.org/data/2.5/weather';
@@ -148,7 +152,7 @@ class TemperatureManager {
         // API key is valid, and the request was successful.
         return true;
       } else {
-        final error = jsonDecode(response.body);//['message'];
+        final error = jsonDecode(response.body); //['message'];
         print('API Key Validation Error: $error');
         return false;
       }

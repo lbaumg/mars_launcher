@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:mars_launcher/logic/temperature_manager.dart';
+import 'package:mars_launcher/logic/utils.dart';
 import 'package:mars_launcher/services/service_locator.dart';
 import 'package:mars_launcher/theme/theme_constants.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -82,20 +83,20 @@ class _OpenWeatherApiKeyTextFieldState extends State<OpenWeatherApiKeyTextField>
   TextEditingController _controller = TextEditingController();
   String? _errorText;
 
-  final temperatureLogic = getIt<TemperatureManager>();
+  final temperatureManager = getIt<TemperatureManager>();
 
   @override
   void initState() {
     super.initState();
-    if (temperatureLogic.apiKey != null && temperatureLogic.apiKey!.isNotEmpty) {
-      _controller.text = temperatureLogic.apiKey!;
+    if (temperatureManager.apiKey != null && temperatureManager.apiKey!.isNotEmpty) {
+      _controller.text = temperatureManager.apiKey!;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final buttonStyle = getDialogButtonStyle(Theme.of(context).primaryColor);
-    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final isDarkMode = isThemeDark(context);
+    final buttonStyle = getDialogButtonStyle(isDarkMode);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -117,31 +118,26 @@ class _OpenWeatherApiKeyTextFieldState extends State<OpenWeatherApiKeyTextField>
         Row(children: [
           TextButton(
             onPressed: () {
-              temperatureLogic.deleteAPIKey();
+              temperatureManager.deleteAPIKey();
               _controller.text = "";
               setErrorText(null);
             },
             child: const Text("DELETE"),
-            style: buttonStyle.copyWith(
-              backgroundColor: MaterialStateProperty.all<Color>(COLOR_ACCENT.withOpacity(0.3)),
-            ),
+            style: buttonStyle,
           ),
           Expanded(child: SizedBox()),
           TextButton(
-            child: const Text('ADD',
-              style: TextStyle(
-                color: Colors.green
-              ),
-            ),
+            child: const Text('ADD'),
             onPressed: () async {
               var apiKey = _controller.text.trim();
               if (await isInputValid(apiKey)) {
-                temperatureLogic.addApiKey(apiKey);
+                temperatureManager.addApiKey(apiKey);
                 Navigator.of(context).pop();
               }
             },
             style: buttonStyle.copyWith(
-              backgroundColor: MaterialStateProperty.all<Color>(Colors.green.withOpacity(0.3)),
+              backgroundColor: MaterialStatePropertyAll(Colors.green.withOpacity(0.3)),
+              foregroundColor: MaterialStatePropertyAll(Colors.green),
             ),
           ),
         ]),
@@ -155,7 +151,7 @@ class _OpenWeatherApiKeyTextFieldState extends State<OpenWeatherApiKeyTextField>
       setErrorText('Field cannot be empty');
       return false;
     } else {
-      final isValid = await temperatureLogic.isApiKeyValid(apiKey);
+      final isValid = await temperatureManager.isApiKeyValid(apiKey);
       if (!isValid) {
         setErrorText('API Key not valid');
         return false;

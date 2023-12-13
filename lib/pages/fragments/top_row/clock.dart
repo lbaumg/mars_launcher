@@ -27,17 +27,6 @@ class _ClockState extends State<Clock> {
               fontSize: FONT_SIZE_CLOCK,
               fontFamily: FONT_REGULAR,
             ),
-            //     children: <TextSpan>[
-            //       TextSpan(
-            //         text: clockLogic.currentDate,
-            //         style: TextStyle(
-            //           fontSize: FONT_SIZE_CLOCK_DATE,
-            //           height: 1.8,
-            //           fontFamily: FONT_LIGHT,
-            //
-            //         ),
-            //       ),
-            // ],
           );
         });
   }
