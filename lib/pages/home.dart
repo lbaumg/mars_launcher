@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mars_launcher/logic/app_search_manager.dart';
 import 'package:mars_launcher/logic/shortcut_manager.dart';
 import 'package:mars_launcher/pages/fragments/app_shortcuts_fragment.dart';
 import 'package:mars_launcher/pages/fragments/app_search_fragment.dart';
@@ -78,7 +79,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                           alignment:
                           Alignment.centerLeft, // Center only vertically
                           child: AppShortcutsFragment())
-                          : AppSearchFragment();
+                          : AppSearchFragment(appSearchMode: AppSearchMode.openApp);
                     },
                   ),
                 )

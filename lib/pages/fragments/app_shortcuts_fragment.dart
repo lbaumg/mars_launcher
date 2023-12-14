@@ -22,8 +22,14 @@ class AppShortcutsFragment extends StatelessWidget {
   final appShortcutsManager = getIt<AppShortcutsManager>();
   final settingsLogic = getIt<SettingsManager>();
 
+  callbackOpenApp(AppInfo appInfo) {
+    appInfo.open();
+  }
+
   @override
   Widget build(BuildContext context) {
+
+
     return ValueListenableBuilder<int>(
         valueListenable: settingsLogic.numberOfShortcutItemsNotifier,
         builder: (context, numOfShortcutItems, child){
@@ -39,9 +45,7 @@ class AppShortcutsFragment extends StatelessWidget {
                 children: shortcutApps.getRange(0, numOfShortcutItems).map((app) => AppCard(
                     appInfo: app,
                     isShortcutItem: true,
-                  openApp: (AppInfo appInfo) {
-                    appInfo.open();
-                  },
+                  callbackHandleOnPress: callbackOpenApp,
                 )).toList(),
               );
             }

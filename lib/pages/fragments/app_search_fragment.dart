@@ -1,49 +1,70 @@
 /// App search fragment that appears on swipe up
 
 import 'package:flutter/material.dart';
-import 'package:mars_launcher/logic/shortcut_manager.dart';
+import 'package:mars_launcher/logic/app_search_manager.dart';
 import 'package:mars_launcher/logic/utils.dart';
 import 'package:mars_launcher/pages/fragments/cards/app_card.dart';
 import 'package:mars_launcher/data/app_info.dart';
 import 'package:mars_launcher/services/service_locator.dart';
-import 'package:mars_launcher/logic/apps_manager.dart';
-
-enum AppSearchMode { openApp, chooseShortcut, chooseSpecialShortcut }
 
 class AppSearchFragment extends StatefulWidget {
   final AppSearchMode appSearchMode;
   final ValueNotifierWithKey<AppInfo>? specialShortcutAppNotifier;
   final int? shortcutIndex;
 
-  AppSearchFragment(
-      {this.appSearchMode = AppSearchMode.openApp,
-      this.specialShortcutAppNotifier,
-      this.shortcutIndex});
+  late final allowDialog;
+
+
+  AppSearchFragment({required this.appSearchMode, this.specialShortcutAppNotifier, this.shortcutIndex}) {
+    allowDialog = appSearchMode == AppSearchMode.openApp;
+  }
 
   @override
   _AppSearchFragmentState createState() => _AppSearchFragmentState();
 }
 
-class _AppSearchFragmentState extends State<AppSearchFragment>
-    with WidgetsBindingObserver {
+class _AppSearchFragmentState extends State<AppSearchFragment> with WidgetsBindingObserver {
   final _textController = TextEditingController();
-  late final appSearchLogic;
+  final appSearchManager = getIt<AppSearchManager>();
 
-  callbackPop() {
-    Navigator.pop(context);
+
+  final Map<AppInfo, AppCard> memorizedWidgets = {};
+
+  AppCard getMemorizedAppCard(AppInfo appInfo) {
+    return memorizedWidgets.putIfAbsent(
+      appInfo,
+          () => AppCard(
+            appInfo: appInfo,
+            isShortcutItem: false,
+            callbackHandleOnPress: callbackHandleOnTap,
+            allowDialog: widget.allowDialog,
+      ),
+    );
   }
 
   @override
   void initState() {
     print("[$runtimeType] INITIALISING");
-    appSearchLogic = AppSearchLogic(
-        callbackPop: callbackPop,
-        appSearchMode: widget.appSearchMode,
-        specialShortcutAppNotifier: widget.specialShortcutAppNotifier,
-        shortcutIndex: widget.shortcutIndex);
+    appSearchManager.setTemporaryParameters(
+      context,
+      widget.appSearchMode,
+      widget.shortcutIndex,
+      widget.specialShortcutAppNotifier,
+    );
+
     print("[$runtimeType] Shortcut selection mode: ${widget.appSearchMode}");
     WidgetsBinding.instance.addObserver(this);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    appSearchManager.resetFilteredList();
+    super.dispose();
+  }
+
+  callbackHandleOnTap(AppInfo appInfo) {
+    appSearchManager.handleOnTap(appInfo);
   }
 
   @override
@@ -59,10 +80,8 @@ class _AppSearchFragmentState extends State<AppSearchFragment>
                 cursorColor: Colors.white,
                 cursorWidth: 0,
                 decoration: InputDecoration(
-                    enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.transparent)),
-                    focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.transparent))),
+                    enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.transparent)),
+                    focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.transparent))),
                 controller: _textController,
                 autofocus: true,
                 textAlign: TextAlign.center,
@@ -71,25 +90,17 @@ class _AppSearchFragmentState extends State<AppSearchFragment>
                   fontSize: 30,
                 ),
                 onChanged: (value) {
-                  appSearchLogic.getFilteredApps(value);
+                  appSearchManager.updateFilteredApps(value);
                 },
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(22.0, 20.0, 0, 0),
                 child: ValueListenableBuilder<List<AppInfo>>(
-                    valueListenable: appSearchLogic.filteredAppsNotifier,
+                    valueListenable: appSearchManager.filteredAppsNotifier,
                     builder: (context, filteredApps, child) {
                       return Column(
-                        // mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: filteredApps
-                            .map((app) => AppCard(
-                                  appInfo: app,
-                                  isShortcutItem: false,
-                                  openApp: appSearchLogic.handleAppSelected,
-                                  allowDialog: widget.appSearchMode == AppSearchMode.openApp ? true : false,
-                                ))
-                            .toList(),
+                        children: filteredApps.map((app) => getMemorizedAppCard(app)).toList(),
                       );
                     }),
               ),
@@ -101,70 +112,10 @@ class _AppSearchFragmentState extends State<AppSearchFragment>
   }
 }
 
-class AppSearchLogic {
-  final appsManager = getIt<AppsManager>();
-  final appShortcutsManager = getIt<AppShortcutsManager>();
-  late final ValueNotifier<List<AppInfo>> filteredAppsNotifier;
-  final ValueNotifierWithKey? specialShortcutAppNotifier;
-  final int? shortcutIndex;
-  final Function callbackPop;
-  final AppSearchMode appSearchMode;
-
-  AppSearchLogic({
-    required this.callbackPop,
-    required this.appSearchMode,
-    this.specialShortcutAppNotifier,
-    this.shortcutIndex
-  }) {
-    filteredAppsNotifier = ValueNotifier(appsManager.appsNotifier.value.where((app) => !app.isHidden).toList());
-    appsManager.appsNotifier.addListener(() {
-      filteredAppsNotifier.value = appsManager.appsNotifier.value.where((app) => !app.isHidden).toList();
-    });
-  }
-
-
-  handleAppSelected(AppInfo appInfo) {
-    /// if appSearchMode: open app
-    /// else if chooseShortcut: replace shortcut
-    /// else if chooseSpecialShortcut: replace special shortcut
-
-    if (appSearchMode == AppSearchMode.openApp) {
-      appInfo.open();
-    } else if (appSearchMode == AppSearchMode.chooseShortcut) {
-      print(
-          "[$runtimeType] Replacing shortcut app with index $shortcutIndex with ${appInfo.appName}");
-      appShortcutsManager.shortcutAppsNotifier
-          .replaceShortcut(shortcutIndex ?? -1, appInfo);
-      callbackPop();
-    } else if (appSearchMode == AppSearchMode.chooseSpecialShortcut) {
-      print(
-          "[$runtimeType] Replacing special shortcut app ${specialShortcutAppNotifier?.key} with ${appInfo.appName}");
-      if (specialShortcutAppNotifier != null) {
-        appShortcutsManager.setSpecialShortcutValue(
-            specialShortcutAppNotifier!, appInfo);
-      }
-      callbackPop();
-    }
-  }
-
-  getFilteredApps(String searchValue) {
-    List<AppInfo> filteredApps = appsManager.appsNotifier.value
-        .where((app) =>
-            app.appName.toLowerCase().contains(searchValue.toLowerCase()) &&
-            !app.isHidden)
-        .toList();
-    if (filteredApps.length == 1) {
-      handleAppSelected(filteredApps.first);
-    }
-    filteredAppsNotifier.value = filteredApps;
-  }
-}
-
 class MyScrollBehavior extends ScrollBehavior {
   // Removes animation when arriving at top or bottom of scrollview
   @override
-  Widget buildOverscrollIndicator(
-      BuildContext context, Widget child, ScrollableDetails scrollableDetails) {
+  Widget buildOverscrollIndicator(BuildContext context, Widget child, ScrollableDetails scrollableDetails) {
     return child;
   }
 }

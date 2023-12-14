@@ -1,3 +1,4 @@
+import 'package:mars_launcher/logic/app_search_manager.dart';
 import 'package:mars_launcher/logic/apps_manager.dart';
 import 'package:mars_launcher/logic/battery_manager.dart';
 import 'package:mars_launcher/logic/settings_manager.dart';
@@ -16,6 +17,7 @@ void setupGetIt() {
   getIt.registerSingleton<AppsManager>(AppsManager());
   getIt.registerSingleton<ThemeManager>(ThemeManager());
   getIt.registerSingleton<AppShortcutsManager>(AppShortcutsManager());
+  getIt.registerSingleton<AppSearchManager>(AppSearchManager());
   getIt.registerSingleton<TemperatureManager>(TemperatureManager());
   getIt.registerSingleton<BatteryManager>(BatteryManager());
   getIt.registerSingleton<TodoManager>(TodoManager());
