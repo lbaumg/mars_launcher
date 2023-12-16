@@ -10,8 +10,6 @@ import 'package:mars_launcher/services/service_locator.dart';
 import 'package:mars_launcher/services/shared_prefs_manager.dart';
 import 'package:mars_launcher/strings.dart';
 
-
-
 class AppShortcutsManager {
   late final ValueNotifierWithKey<AppInfo> clockAppNotifier;
   late final ValueNotifierWithKey<AppInfo> calendarAppNotifier;
@@ -36,7 +34,9 @@ class AppShortcutsManager {
       }
     }
 
-    appsManager.renamedAppsUpdatedNotifier.addListener(() {updateDisplayNames();});
+    appsManager.renamedAppsUpdatedNotifier.addListener(() {
+      updateDisplayNames();
+    });
   }
 
   void generateGenericShortcutApps() {
@@ -54,12 +54,26 @@ class AppShortcutsManager {
       final String response = await rootBundle.loadString('assets/apps.json');
       final shortcutAppsJson = await json.decode(response);
 
-      shortcutAppsNotifier.value = List.generate(MAX_NUM_OF_SHORTCUT_ITEMS, (index) => AppInfo(packageName: shortcutAppsJson["shortcutApps"][index][JsonKeys.packageName], appName: shortcutAppsJson["shortcutApps"][index]["name"]));
-      clockAppNotifier.value = AppInfo(packageName: shortcutAppsJson["clock"][JsonKeys.packageName], appName: shortcutAppsJson["clock"][JsonKeys.appName]);
-      calendarAppNotifier.value = AppInfo(packageName: shortcutAppsJson["calendar"][JsonKeys.packageName], appName: shortcutAppsJson["calendar"][JsonKeys.appName]);
-      weatherAppNotifier.value = AppInfo(packageName: shortcutAppsJson["weather"][JsonKeys.packageName], appName: shortcutAppsJson["weather"][JsonKeys.appName]);
-      swipeLeftAppNotifier.value = AppInfo(packageName: shortcutAppsJson["camera"][JsonKeys.packageName], appName: shortcutAppsJson["camera"][JsonKeys.appName]);
-      swipeRightAppNotifier.value = AppInfo(packageName: shortcutAppsJson["contacts"][JsonKeys.packageName], appName: shortcutAppsJson["contacts"][JsonKeys.appName]);
+      shortcutAppsNotifier.value = List.generate(
+          MAX_NUM_OF_SHORTCUT_ITEMS,
+          (index) => AppInfo(
+              packageName: shortcutAppsJson["shortcutApps"][index][JsonKeys.packageName],
+              appName: shortcutAppsJson["shortcutApps"][index]["name"]));
+      clockAppNotifier.value = AppInfo(
+          packageName: shortcutAppsJson["clock"][JsonKeys.packageName],
+          appName: shortcutAppsJson["clock"][JsonKeys.appName]);
+      calendarAppNotifier.value = AppInfo(
+          packageName: shortcutAppsJson["calendar"][JsonKeys.packageName],
+          appName: shortcutAppsJson["calendar"][JsonKeys.appName]);
+      weatherAppNotifier.value = AppInfo(
+          packageName: shortcutAppsJson["weather"][JsonKeys.packageName],
+          appName: shortcutAppsJson["weather"][JsonKeys.appName]);
+      swipeLeftAppNotifier.value = AppInfo(
+          packageName: shortcutAppsJson["camera"][JsonKeys.packageName],
+          appName: shortcutAppsJson["camera"][JsonKeys.appName]);
+      swipeRightAppNotifier.value = AppInfo(
+          packageName: shortcutAppsJson["contacts"][JsonKeys.packageName],
+          appName: shortcutAppsJson["contacts"][JsonKeys.appName]);
     } catch (e) {
       print("[$runtimeType] error loading from json: $e");
     }
@@ -68,12 +82,18 @@ class AppShortcutsManager {
 
   void loadShortcutAppsFromSharedPrefs() {
     print("[$runtimeType] LOADING APPS FROM SHARED PREFS");
-    shortcutAppsNotifier = ShortcutAppsNotifier(List.generate(MAX_NUM_OF_SHORTCUT_ITEMS, (index) => AppInfo.fromJsonString(SharedPrefsManager.readData("shortcut$index"))));
-    clockAppNotifier = ValueNotifierWithKey(AppInfo.fromJsonString(SharedPrefsManager.readData(Keys.clockApp)), Keys.clockApp);
-    calendarAppNotifier = ValueNotifierWithKey(AppInfo.fromJsonString(SharedPrefsManager.readData(Keys.calendarApp)), Keys.calendarApp);
-    weatherAppNotifier = ValueNotifierWithKey(AppInfo.fromJsonString(SharedPrefsManager.readData(Keys.weatherApp)), Keys.weatherApp);
-    swipeLeftAppNotifier = ValueNotifierWithKey(AppInfo.fromJsonString(SharedPrefsManager.readData(Keys.swipeLeftApp)), Keys.swipeLeftApp);
-    swipeRightAppNotifier = ValueNotifierWithKey(AppInfo.fromJsonString(SharedPrefsManager.readData(Keys.swipeRightApp)), Keys.swipeRightApp);
+    shortcutAppsNotifier = ShortcutAppsNotifier(List.generate(
+        MAX_NUM_OF_SHORTCUT_ITEMS, (index) => AppInfo.fromJsonString(SharedPrefsManager.readData("shortcut$index"))));
+    clockAppNotifier =
+        ValueNotifierWithKey(AppInfo.fromJsonString(SharedPrefsManager.readData(Keys.clockApp)), Keys.clockApp);
+    calendarAppNotifier =
+        ValueNotifierWithKey(AppInfo.fromJsonString(SharedPrefsManager.readData(Keys.calendarApp)), Keys.calendarApp);
+    weatherAppNotifier =
+        ValueNotifierWithKey(AppInfo.fromJsonString(SharedPrefsManager.readData(Keys.weatherApp)), Keys.weatherApp);
+    swipeLeftAppNotifier =
+        ValueNotifierWithKey(AppInfo.fromJsonString(SharedPrefsManager.readData(Keys.swipeLeftApp)), Keys.swipeLeftApp);
+    swipeRightAppNotifier = ValueNotifierWithKey(
+        AppInfo.fromJsonString(SharedPrefsManager.readData(Keys.swipeRightApp)), Keys.swipeRightApp);
   }
 
   void saveShortcutAppsToSharedPrefs() {
@@ -97,24 +117,19 @@ class AppShortcutsManager {
   }
 
   void updateDisplayNames() {
-
-    final shortcutAppsCopy = List.of(shortcutAppsNotifier.value);
-    var changedShortcutApp = false;
-    for (var shortcutApp in shortcutAppsCopy) {
+    for (int index = 0; index < shortcutAppsNotifier.value.length; index++) {
+      final shortcutApp = shortcutAppsNotifier.value[index];
       final displayName = appsManager.renamedApps[shortcutApp.packageName];
-      if (displayName != null && displayName != shortcutApp.getDisplayName()) {
+
+      final isDisplayNameNew = displayName != null && displayName != shortcutApp.getDisplayName();
+      final hasDisplayNameBeenReset = displayName == null && shortcutApp.appName != shortcutApp.getDisplayName(); /// Check if display name has been reset
+      if (isDisplayNameNew || hasDisplayNameBeenReset) {
         shortcutApp.changeDisplayName(displayName);
-        changedShortcutApp = true;
+        shortcutAppsNotifier.replaceShortcut(index, shortcutApp);
       }
     }
-
-    if (changedShortcutApp) {
-      shortcutAppsNotifier.value = shortcutAppsCopy;
-    }
-
   }
 }
-
 
 class ShortcutAppsNotifier extends ValueNotifier<List<AppInfo>> {
   ShortcutAppsNotifier(List<AppInfo> initialShortcutApps) : super(initialShortcutApps);
