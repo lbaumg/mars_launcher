@@ -18,12 +18,6 @@ class TopRow extends StatelessWidget {
   final settingsManager = getIt<SettingsManager>();
   final batteryManager = getIt<BatteryManager>();
 
-  TopRow({
-    Key? key,
-  }) : super(key: key) {
-    batteryManager.updateBatteryLevel();
-  }
-
   @override
   Widget build(BuildContext context) {
     bool isDarkMode = isThemeDark(context);
@@ -38,13 +32,6 @@ class TopRow extends StatelessWidget {
               builder: (context, isEnabled, child) {
                 return isEnabled
                     ? TextButton(
-                        style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(),
-                            // padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0),
-                            // minimumSize: Size(0, 25.0), // Adjust minimum height
-                            alignment: Alignment.center,
-                            // backgroundColor: Colors.blue
-                        ),
                         onPressed: () =>
                             appShortcutsManager.clockAppNotifier.value.open(),
                         onLongPress: () {
@@ -100,13 +87,6 @@ class TopRow extends StatelessWidget {
               builder: (context, isEnabled, child) {
                 return isEnabled
                     ? TextButton(
-                        style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(),
-                            // padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0),
-                            // minimumSize: Size(0, 25.0), // Adjust minimum height
-                            alignment: Alignment.center,
-                            // backgroundColor: Colors.blue
-                        ),
                         onPressed: () =>
                             appShortcutsManager.weatherAppNotifier.value.open(),
                         child: Temperature(),
@@ -127,9 +107,6 @@ class TopRow extends StatelessWidget {
                     ? EventView()
                     : TextButton(
                         onPressed: () {},
-                        style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(),
-                        ),
                         child: SizedBox.shrink(),
                       ); // SizedBox.shrink();
               }),
