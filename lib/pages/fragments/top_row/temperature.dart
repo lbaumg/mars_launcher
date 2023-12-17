@@ -13,7 +13,7 @@ class Temperature extends StatelessWidget {
         valueListenable: temperatureManager.temperatureNotifier,
         builder: (context, temperature, child) {
           return Text(temperature,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: FONT_SIZE_TEMPERATURE,
                 fontFamily: FONT_REGULAR,
               ));

@@ -48,9 +48,8 @@ class _EventViewState extends State<EventView> {
                       event.length > letterLength
                           ? ".." + event.substring(event.length - letterLength)
                           : event,
-                      // calenderLogic.currentDate + "\n" + event,
                       softWrap: false,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: FONT_SIZE_EVENTS,
                         fontFamily: FONT_LIGHT,
                       ),
@@ -58,23 +57,8 @@ class _EventViewState extends State<EventView> {
                   }),
               style: TextButton.styleFrom(
                   shape: RoundedRectangleBorder(),
-                  // padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0),
-                  // minimumSize: Size(0, 25.0), // Adjust minimum height
                   alignment: Alignment.center,
-                  // padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0), // Adjust padding
-                  // minimumSize: Size(0, 10.0), // Adjust minimum height
               ),
-
-              // ButtonStyle(
-              //   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              //     RoundedRectangleBorder(
-              //       borderRadius: BorderRadius.circular(
-              //           5), // Adjust the radius to control the roundness
-              //     ),
-              //   ),
-              //   backgroundColor:
-              //       MaterialStateProperty.all<Color>(Colors.lightGreen),
-              // ),
             ),
           );
         });

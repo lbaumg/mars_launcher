@@ -48,6 +48,9 @@ class _TodoListState extends State<TodoList> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    const title = "To-Dos";
+    const text_delete_all = "clear all";
+
     final newTodoTextFieldWithPadding = Padding(
       padding: const EdgeInsets.fromLTRB(12, 0, 0, 0),
       child: NewTodoTextField(callbackAddTodo: callbackAddTodo),
@@ -70,8 +73,8 @@ class _TodoListState extends State<TodoList> with WidgetsBindingObserver {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      "To-Dos",
+                    const Text(
+                      title,
                       textAlign: TextAlign.left,
                       style: TEXT_STYLE_TITLE,
                     ),
@@ -79,7 +82,7 @@ class _TodoListState extends State<TodoList> with WidgetsBindingObserver {
                       onPressed: () {
                         todoManager.clearTodoList();
                       },
-                      child: Text("clear all",
+                      child: const Text(text_delete_all,
                         style: TextStyle(
                           fontSize: 12
                         ),

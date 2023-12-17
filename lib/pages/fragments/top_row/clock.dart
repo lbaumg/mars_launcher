@@ -23,7 +23,7 @@ class _ClockState extends State<Clock> {
         builder: (context, currentTime, child) {
           return Text(
             currentTime,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: FONT_SIZE_CLOCK,
               fontFamily: FONT_REGULAR,
             ),

@@ -13,8 +13,6 @@ import 'package:mars_launcher/services/permission_service.dart';
 import 'package:mars_launcher/services/service_locator.dart';
 import 'package:mars_launcher/strings.dart';
 
-
-
 const TEXT_STYLE_TITLE = TextStyle(fontSize: 35, fontWeight: FontWeight.normal);
 const TEXT_STYLE_ITEMS = TextStyle(fontSize: 22, height: 1);
 const ROW_PADDING_RIGHT = 50.0; // TODO look for overflow
@@ -67,262 +65,226 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(Strings.settingsTitle, style: TEXT_STYLE_TITLE),
-
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
                     child: SingleChildScrollView(
-                    child:  Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                        /// SET DEFAULT LAUNCHER
+                        TextButton(
+                          onPressed: () {
+                            settingsManager.openDefaultLauncherSettings();
+                          },
+                          child: const Text(
+                            Strings.settingsChangeDefaultLauncher,
+                            style: TEXT_STYLE_ITEMS,
+                          ),
+                        ),
+
+                        /// LIGHT COLOR / DARK COLOR
+                        Row(
                           children: [
-                            /// SET DEFAULT LAUNCHER
-                            TextButton(
-                              onPressed: () {
-                                settingsManager.openDefaultLauncherSettings();
-                              },
-                              child: Text(
-                                Strings.settingsChangeDefaultLauncher,
-                                style: TEXT_STYLE_ITEMS,
-                              ),
-                            ),
-
-                            /// LIGHT COLOR / DARK COLOR
-                            Row(
-                              children: [
-                                TextButton(
-                                  onPressed: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return ColorPickerDialog(changeDarkModeColor: false);
-                                      },
-                                    );
-                                  },
-                                  child: Text(
-                                    Strings.settingsLightColor,
-                                    style: TEXT_STYLE_ITEMS,
-                                  ),
-                                ),
-                                // Expanded(child: Container()),
-                                TextButton(
-                                  onPressed: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return ColorPickerDialog(changeDarkModeColor: true);
-                                        }
-                                    );
-                                  },
-                                  child: Text(
-                                    Strings.settingsDarkColor,
-                                    style: TEXT_STYLE_ITEMS,
-                                  ),
-                                ),
-                              ],
-                            ),
-
-                            /// APPS NUMBER
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                TextButton(
-                                  onPressed: () {
-                                    settingsManager.setNotifierValueAndSave(
-                                        settingsManager
-                                            .numberOfShortcutItemsNotifier);
-                                  },
-                                  child: Text(
-                                    Strings.settingsAppNumber,
-                                    style: TEXT_STYLE_ITEMS,
-                                  ),
-                                ),
-                                Expanded(child: Container()),
-                                ValueListenableBuilder<int>(
-                                    valueListenable: settingsManager
-                                        .numberOfShortcutItemsNotifier,
-                                    builder:
-                                        (context, numOfShortcutItems, child) {
-                                      return SizedBox(
-                                          width: 86,
-                                          child: TextButton(
-                                            onPressed: () {
-                                              settingsManager.setNotifierValueAndSave(
-                                                  settingsManager
-                                                      .numberOfShortcutItemsNotifier);
-                                            },
-                                            child: Center(
-                                                child: Text(
-                                                    numOfShortcutItems
-                                                        .toString(),
-                                                    style: TEXT_STYLE_ITEMS)),
-                                          ));
-                                    }),
-                              ],
-                            ),
-
-                            /// CLOCK APP
-                            Row(
-                              children: [
-                                TextButton(
-                                    onLongPress: () {},
-                                    onPressed: () {
-                                      pushAppSearch(
-                                          appShortcutsManager.clockAppNotifier);
-                                    },
-                                    child: Text(
-                                      Strings.settingsClockApp,
-                                      style: TEXT_STYLE_ITEMS,
-                                    )),
-                                Expanded(
-                                  child: Container(),
-                                ),
-                                ShowHideButton(
-                                  notifier:
-                                      settingsManager.clockWidgetEnabledNotifier,
-                                  onPressed: () {
-                                    settingsManager.setNotifierValueAndSave(
-                                        settingsManager
-                                            .clockWidgetEnabledNotifier);
-                                  },
-                                ),
-                              ],
-                            ),
-
-
-                            /// WEATHER APP
-                            Row(
-                              children: [
-                                TextButton(
-                                    onLongPress: () {},
-                                    onPressed: () {
-                                      pushAppSearch(appShortcutsManager
-                                          .weatherAppNotifier);
-                                    },
-                                    child: Text(
-                                      Strings.settingsWeatherApp,
-                                      style: TEXT_STYLE_ITEMS,
-                                    )),
-                                Expanded(child: Container()),
-                                ShowHideButton(
-                                  notifier: settingsManager
-                                      .weatherWidgetEnabledNotifier,
-                                  onPressed: () {
-                                    settingsManager.setNotifierValueAndSave(
-                                        settingsManager
-                                            .weatherWidgetEnabledNotifier);
-                                  },
-                                ),
-                              ],
-                            ),
-
-                            /// CALENDAR APP
-                            Row(
-                              children: [
-                                TextButton(
-                                  onLongPress: () {},
-                                  onPressed: () {
-                                    pushAppSearch(appShortcutsManager
-                                        .calendarAppNotifier);
-                                  },
-                                  child: Text(
-                                    Strings.settingsCalendarApp,
-                                    style: TEXT_STYLE_ITEMS,
-                                  ),
-                                ),
-                                Expanded(child: Container()),
-                                ShowHideButton(
-                                  notifier: settingsManager
-                                      .calendarWidgetEnabledNotifier,
-                                  onPressed: () {
-                                    settingsManager.setNotifierValueAndSave(
-                                        settingsManager
-                                            .calendarWidgetEnabledNotifier);
-                                  },
-                                ),
-                              ],
-                            ),
-
-                            /// BATTERY
-                            Row(
-                              children: [
-                                TextButton(
-                                    onLongPress: () {},
-                                    onPressed: () {},
-                                    child: Text(
-                                      Strings.settingsBattery,
-                                      style: TEXT_STYLE_ITEMS,
-                                    )),
-                                Expanded(
-                                  child: Container(),
-                                ),
-                                ShowHideButton(
-                                  notifier: settingsManager
-                                      .batteryWidgetEnabledNotifier,
-                                  onPressed: () {
-                                    settingsManager.setNotifierValueAndSave(
-                                        settingsManager
-                                            .batteryWidgetEnabledNotifier);
-                                  },
-                                ),
-                              ],
-                            ),
-
-                            /// SWIPE LEFT
-                            TextButton(
-                                onLongPress: () {},
-                                onPressed: () {
-                                  pushAppSearch(
-                                      appShortcutsManager.swipeLeftAppNotifier);
-                                },
-                                child: Text(
-                                  Strings.settingsSwipeLeft,
-                                  style: TEXT_STYLE_ITEMS,
-                                )),
-
-                            /// SWIPE RIGHT
-                            TextButton(
-                                onLongPress: () {},
-                                onPressed: () {
-                                  pushAppSearch(appShortcutsManager
-                                      .swipeRightAppNotifier);
-                                },
-                                child: Text(
-                                  Strings.settingsSwipeRight,
-                                  style: TEXT_STYLE_ITEMS,
-                                )),
-
-                            /// HIDDEN APPS
-                            TextButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const HiddenApps()),
-                                  );
-                                },
-                                child: Text(
-                                  Strings.settingsHiddenApps,
-                                  style: TEXT_STYLE_ITEMS,
-                                )),
-
-                            /// SET API KEY
                             TextButton(
                               onPressed: () {
                                 showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
-                                    return OpenWeatherAPIDialog();
-                                    // return buildAddOpenWeatherAPIDialog(context);
+                                    return ColorPickerDialog(changeDarkModeColor: false);
                                   },
                                 );
                               },
-                              child: Text(
-                                "OpenWeather API key",
+                              child: const Text(
+                                Strings.settingsLightColor,
                                 style: TEXT_STYLE_ITEMS,
                               ),
                             ),
-                          ]),
+                            // Expanded(child: Container()),
+                            TextButton(
+                              onPressed: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return ColorPickerDialog(changeDarkModeColor: true);
+                                    });
+                              },
+                              child: const Text(
+                                Strings.settingsDarkColor,
+                                style: TEXT_STYLE_ITEMS,
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        /// APPS NUMBER
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            TextButton(
+                              onPressed: () {
+                                settingsManager.setNotifierValueAndSave(settingsManager.numberOfShortcutItemsNotifier);
+                              },
+                              child: const Text(
+                                Strings.settingsAppNumber,
+                                style: TEXT_STYLE_ITEMS,
+                              ),
+                            ),
+                            Expanded(child: Container()),
+                            ValueListenableBuilder<int>(
+                                valueListenable: settingsManager.numberOfShortcutItemsNotifier,
+                                builder: (context, numOfShortcutItems, child) {
+                                  return SizedBox(
+                                      width: 86,
+                                      child: TextButton(
+                                        onPressed: () {
+                                          settingsManager
+                                              .setNotifierValueAndSave(settingsManager.numberOfShortcutItemsNotifier);
+                                        },
+                                        child:
+                                            Center(child: Text(numOfShortcutItems.toString(), style: TEXT_STYLE_ITEMS)),
+                                      ));
+                                }),
+                          ],
+                        ),
+
+                        /// CLOCK APP
+                        Row(
+                          children: [
+                            TextButton(
+                                onLongPress: () {},
+                                onPressed: () {
+                                  pushAppSearch(appShortcutsManager.clockAppNotifier);
+                                },
+                                child: const Text(
+                                  Strings.settingsClockApp,
+                                  style: TEXT_STYLE_ITEMS,
+                                )),
+                            Expanded(child: Container(),),
+                            ShowHideButton(
+                              notifier: settingsManager.clockWidgetEnabledNotifier,
+                              onPressed: () {
+                                settingsManager.setNotifierValueAndSave(settingsManager.clockWidgetEnabledNotifier);
+                              },
+                            ),
+                          ],
+                        ),
+
+                        /// WEATHER APP
+                        Row(
+                          children: [
+                            TextButton(
+                                onLongPress: () {},
+                                onPressed: () {
+                                  pushAppSearch(appShortcutsManager.weatherAppNotifier);
+                                },
+                                child: const Text(
+                                  Strings.settingsWeatherApp,
+                                  style: TEXT_STYLE_ITEMS,
+                                )),
+                            Expanded(child: Container()),
+                            ShowHideButton(
+                              notifier: settingsManager.weatherWidgetEnabledNotifier,
+                              onPressed: () {
+                                settingsManager.setNotifierValueAndSave(settingsManager.weatherWidgetEnabledNotifier);
+                              },
+                            ),
+                          ],
+                        ),
+
+                        /// CALENDAR APP
+                        Row(
+                          children: [
+                            TextButton(
+                              onLongPress: () {},
+                              onPressed: () {
+                                pushAppSearch(appShortcutsManager.calendarAppNotifier);
+                              },
+                              child: const Text(
+                                Strings.settingsCalendarApp,
+                                style: TEXT_STYLE_ITEMS,
+                              ),
+                            ),
+                            Expanded(child: Container()),
+                            ShowHideButton(
+                              notifier: settingsManager.calendarWidgetEnabledNotifier,
+                              onPressed: () {
+                                settingsManager.setNotifierValueAndSave(settingsManager.calendarWidgetEnabledNotifier);
+                              },
+                            ),
+                          ],
+                        ),
+
+                        /// BATTERY
+                        Row(
+                          children: [
+                            TextButton(
+                                onLongPress: () {},
+                                onPressed: () {},
+                                child: const Text(
+                                  Strings.settingsBattery,
+                                  style: TEXT_STYLE_ITEMS,
+                                )),
+                            Expanded(child: Container(),),
+                            ShowHideButton(
+                              notifier: settingsManager.batteryWidgetEnabledNotifier,
+                              onPressed: () {
+                                settingsManager.setNotifierValueAndSave(settingsManager.batteryWidgetEnabledNotifier);
+                              },
+                            ),
+                          ],
+                        ),
+
+                        /// SWIPE LEFT
+                        TextButton(
+                            onLongPress: () {},
+                            onPressed: () {
+                              pushAppSearch(appShortcutsManager.swipeLeftAppNotifier);
+                            },
+                            child: const Text(
+                              Strings.settingsSwipeLeft,
+                              style: TEXT_STYLE_ITEMS,
+                            )),
+
+                        /// SWIPE RIGHT
+                        TextButton(
+                            onLongPress: () {},
+                            onPressed: () {
+                              pushAppSearch(appShortcutsManager.swipeRightAppNotifier);
+                            },
+                            child: const Text(
+                              Strings.settingsSwipeRight,
+                              style: TEXT_STYLE_ITEMS,
+                            )),
+
+                        /// HIDDEN APPS
+                        TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const HiddenApps()),
+                              );
+                            },
+                            child: const Text(
+                              Strings.settingsHiddenApps,
+                              style: TEXT_STYLE_ITEMS,
+                            )),
+
+                        /// SET API KEY
+                        TextButton(
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return OpenWeatherAPIDialog();
+                                // return buildAddOpenWeatherAPIDialog(context);
+                              },
+                            );
+                          },
+                          child: const Text(
+                            "OpenWeather API key",
+                            style: TEXT_STYLE_ITEMS,
+                          ),
+                        ),
+                      ]),
                     ),
                   ),
                 )
@@ -333,14 +295,10 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
       ),
     );
   }
-
-
 }
 
 class ShowHideButton extends StatelessWidget {
-  const ShowHideButton(
-      {Key? key, required this.notifier, required this.onPressed})
-      : super(key: key);
+  const ShowHideButton({Key? key, required this.notifier, required this.onPressed}) : super(key: key);
 
   final ValueNotifierWithKey<bool> notifier;
   final Function onPressed;
@@ -367,5 +325,3 @@ class ShowHideButton extends StatelessWidget {
     );
   }
 }
-
-

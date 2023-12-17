@@ -23,7 +23,7 @@ class ColorPickerDialog extends StatelessWidget {
     var selectedColor = changeDarkModeColor ? themeManager.darkBackground : themeManager.lightBackground;
 
     return AlertDialog(
-      title: Text(
+      title: const Text(
         title,
         style: TextStyle(
           fontWeight: FontWeight.bold,

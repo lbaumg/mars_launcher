@@ -15,29 +15,19 @@ class RenameAppDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final titleColor = Theme.of(context).primaryColor; // Color(0xffa4133c);
-
-    final textStyle = TextStyle(
-        color: Theme.of(context).scaffoldBackgroundColor,
-      fontSize: 18
-    );
+    final textStyle = TextStyle(color: Theme.of(context).scaffoldBackgroundColor, fontSize: 18);
 
     return AlertDialog(
       title: Text(
         "Rename \"${appInfo.appName}\"",
-        style: TextStyle(
-          fontSize: 20,
-            fontWeight: FontWeight.bold
-        ),
+        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
       ),
       content: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text("Current name: \"${appInfo.displayName}\"",
-            style: textStyle
-          ),
+          Text("Current name: \"${appInfo.displayName}\"", style: textStyle),
           insertVerticalSpacing(20),
           AppNameTextFieldWithValidation(appInfo.displayName, appInfo.appName),
         ],
@@ -50,7 +40,7 @@ class AppNameTextFieldWithValidation extends StatefulWidget {
   final String currentDisplayName;
   final String appName;
 
-  AppNameTextFieldWithValidation(this.currentDisplayName, this.appName);
+  const AppNameTextFieldWithValidation(this.currentDisplayName, this.appName);
 
   @override
   _AppNameTextFieldWithValidation createState() => _AppNameTextFieldWithValidation();
@@ -73,20 +63,16 @@ class _AppNameTextFieldWithValidation extends State<AppNameTextFieldWithValidati
           maxLength: MAX_LENGTH_RENAMED_APP,
           controller: _controller,
           cursorColor: COLOR_ACCENT,
-          style: TextStyle(
-            color: COLOR_ACCENT
-          ),
+          style: const TextStyle(color: COLOR_ACCENT),
           decoration: InputDecoration(
-              // counterText: "",
               errorText: _errorText,
               filled: true,
               fillColor: isDarkMode ? Colors.black12 : Colors.white,
-              // enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: COLOR_ACCENT)),
-              // focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: COLOR_ACCENT)),
-              // border: UnderlineInputBorder(borderSide: BorderSide(color: COLOR_ACCENT)),
               focusColor: Colors.redAccent,
               hintText: "Enter new name",
-              hintStyle: TextStyle(color: Colors.black54,)),
+              hintStyle: TextStyle(
+                color: Colors.black54,
+              )),
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
@@ -103,8 +89,7 @@ class _AppNameTextFieldWithValidation extends State<AppNameTextFieldWithValidati
                     }
                   },
                   style: buttonStyle,
-                  child: Text("Reset")
-              ),
+                  child: const Text("Reset")),
               TextButton(
                 onPressed: () {
                   var newName = _controller.text.trim();
@@ -119,7 +104,7 @@ class _AppNameTextFieldWithValidation extends State<AppNameTextFieldWithValidati
                   }
                 },
                 style: buttonStyle,
-                child: Text("Change"),
+                child: const Text("Change"),
               ),
             ],
           ),

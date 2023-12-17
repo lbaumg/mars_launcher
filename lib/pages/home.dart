@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mars_launcher/global.dart';
 import 'package:mars_launcher/logic/app_search_manager.dart';
 import 'package:mars_launcher/logic/shortcut_manager.dart';
 import 'package:mars_launcher/pages/fragments/app_shortcuts_fragment.dart';
@@ -14,6 +13,8 @@ const double HEIGHT_SIZED_BOX = 50;
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
+
+  const Home();
 }
 
 class _HomeState extends State<Home> with WidgetsBindingObserver {
@@ -73,7 +74,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 TopRow(),
-                SizedBox(height: HEIGHT_SIZED_BOX,),
+                const SizedBox(height: HEIGHT_SIZED_BOX,),
                 Expanded(
                   child: ValueListenableBuilder<bool>(
                       valueListenable: searchAppsNotifier,

@@ -9,12 +9,12 @@ class TodoListCard extends StatelessWidget {
   final String todo;
   final callbackRemoveFromTodos;
 
-  TodoListCard({required this.index, required this.todo, required this.callbackRemoveFromTodos});
+  const TodoListCard({required this.index, required this.todo, required this.callbackRemoveFromTodos});
 
   @override
   Widget build(BuildContext context) {
-    var fontFamily = FONT_LIGHT;
-    var textColor = Theme.of(context).primaryColor;
+    const fontFamily = FONT_LIGHT;
+    final textColor = Theme.of(context).primaryColor;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -29,7 +29,7 @@ class TodoListCard extends StatelessWidget {
               todo,
               overflow: TextOverflow.ellipsis, // Specify how to handle overflow
               maxLines: 2,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 19,
                 fontWeight: FontWeight.w100,
                 fontFamily: fontFamily,
@@ -44,7 +44,7 @@ class TodoListCard extends StatelessWidget {
             onPressed: () {
               callbackRemoveFromTodos(index);
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.remove,
               size: 15,
             )

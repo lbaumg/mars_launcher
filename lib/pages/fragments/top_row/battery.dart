@@ -10,7 +10,7 @@ class BatteryIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomPaint(
       painter: BatteryPainter(batteryLevel: batteryLevel, paintColor: paintColor),
-      size: Size(18, 10), // Hier kannst du die Größe des Icons anpassen
+      size: const Size(18, 10), // Hier kannst du die Größe des Icons anpassen
     );
   }
 }

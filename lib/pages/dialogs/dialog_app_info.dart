@@ -12,6 +12,8 @@ const TEXT_RENAME = "Rename";
 const TEXT_INFO = "Info";
 const TEXT_UNINSTALL = "Uninstall";
 
+const WIDTH_SIZED_BOX = 60.0;
+
 class AppInfoDialog extends StatelessWidget {
   AppInfoDialog({
     Key? key,
@@ -54,7 +56,7 @@ class AppInfoDialog extends StatelessWidget {
                             textColor: Theme.of(context).scaffoldBackgroundColor);
                       }
                     },
-                    child: SizedBox(width: 60, child: Center(child: Text(TEXT_RENAME))),
+                    child: const SizedBox(width: WIDTH_SIZED_BOX, child: Center(child: Text(TEXT_RENAME))),
                     style: buttonStyle,
                   ),
                   TextButton(
@@ -66,7 +68,7 @@ class AppInfoDialog extends StatelessWidget {
                             textColor: Theme.of(context).scaffoldBackgroundColor);
                         Navigator.pop(context, null);
                       },
-                      child: SizedBox(width: 60, child: Center(child: Text(TEXT_HIDE))),
+                      child: const SizedBox(width: WIDTH_SIZED_BOX, child: Center(child: Text(TEXT_HIDE))),
                       style: buttonStyle),
                 ]),
             Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
@@ -75,22 +77,22 @@ class AppInfoDialog extends StatelessWidget {
                   appInfo.openSettings();
                   Navigator.pop(context, null);
                 },
-                child: SizedBox(
-                    width: 60,
+                child: const SizedBox(
+                    width: WIDTH_SIZED_BOX,
                     child: Center(
                       child: Text(TEXT_INFO),
                     )),
                 style: buttonStyle,
               ),
               appInfo.systemApp
-                  ? SizedBox.shrink()
+                  ? const SizedBox.shrink()
                   : TextButton(
                       onPressed: () {
                         appInfo.uninstall();
                         Navigator.pop(context, null);
                       },
-                      child: SizedBox(
-                          width: 60,
+                      child: const SizedBox(
+                          width: WIDTH_SIZED_BOX,
                           child: Center(
                             child: Text(TEXT_UNINSTALL),
                           )),

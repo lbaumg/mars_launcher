@@ -32,7 +32,7 @@ class MarsLauncher extends StatelessWidget {
                 themeMode: themeMode,
                 home: homeScreen!);
           })),
-      child: Home(),
+      child: const Home(),
     );
   }
 }

@@ -32,6 +32,8 @@ class _HiddenAppsState extends State<HiddenApps> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    const title = "Hidden apps";
+
     return GestureDetector(
       onDoubleTap: () {
         themeManager.toggleTheme();
@@ -43,10 +45,10 @@ class _HiddenAppsState extends State<HiddenApps> with WidgetsBindingObserver {
             children: [
               Align(
                 alignment: Alignment.topLeft,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(40, 20, 0, 20),
+                child: const Padding(
+                  padding: EdgeInsets.fromLTRB(40, 20, 0, 20),
                   child: Text(
-                    "Hidden apps",
+                    title,
                     textAlign: TextAlign.left,
                     style: TEXT_STYLE_TITLE,
                   ),

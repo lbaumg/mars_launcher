@@ -38,8 +38,8 @@ class TopRow extends StatelessWidget {
                           openCreateAlarmDialog(
                               context, isDarkMode);
                         },
-                        child: Clock())
-                    : TextButton(onPressed: () {}, child: SizedBox.shrink());
+                        child: const Clock())
+                    : TextButton(onPressed: () {}, child: const SizedBox.shrink());
               }),
 
           ValueListenableBuilder<bool>(
@@ -68,7 +68,7 @@ class TopRow extends StatelessWidget {
                             paintColor: Theme.of(context).primaryColor);
                       }),
                 )
-                    : SizedBox.shrink();
+                    : const SizedBox.shrink();
               }),
 
 
@@ -91,7 +91,7 @@ class TopRow extends StatelessWidget {
                             appShortcutsManager.weatherAppNotifier.value.open(),
                         child: Temperature(),
                       )
-                    : SizedBox.shrink();
+                    : const SizedBox.shrink();
               }),
 
 
@@ -107,7 +107,7 @@ class TopRow extends StatelessWidget {
                     ? EventView()
                     : TextButton(
                         onPressed: () {},
-                        child: SizedBox.shrink(),
+                        child: const SizedBox.shrink(),
                       ); // SizedBox.shrink();
               }),
         ],

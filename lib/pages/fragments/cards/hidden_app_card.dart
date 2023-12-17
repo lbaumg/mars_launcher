@@ -8,12 +8,12 @@ class HiddenAppCard extends StatelessWidget {
   final AppInfo appInfo;
   final callbackRemoveFromHiddenApps;
 
-  HiddenAppCard({required this.appInfo, required this.callbackRemoveFromHiddenApps});
+  const HiddenAppCard({required this.appInfo, required this.callbackRemoveFromHiddenApps});
 
   @override
   Widget build(BuildContext context) {
-    var fontFamily = FONT_LIGHT;
-    var textColor = Theme.of(context).primaryColor;
+    const fontFamily = FONT_LIGHT;
+    final textColor = Theme.of(context).primaryColor;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -28,7 +28,7 @@ class HiddenAppCard extends StatelessWidget {
               appInfo.displayName,
               overflow: TextOverflow.ellipsis, // Specify how to handle overflow
               maxLines: 2,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 19,
                 fontWeight: FontWeight.w100,
                 fontFamily: fontFamily,
@@ -43,7 +43,7 @@ class HiddenAppCard extends StatelessWidget {
             onPressed: () {
               callbackRemoveFromHiddenApps(appInfo);
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.remove,
               size: 15,
             )
