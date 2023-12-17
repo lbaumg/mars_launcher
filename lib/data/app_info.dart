@@ -10,7 +10,7 @@ class AppInfo {
   final String appName;
   final bool systemApp;
 
-  String? displayName;
+  String? _displayName;
   var isHidden;
 
   AppInfo({
@@ -18,11 +18,31 @@ class AppInfo {
     required this.appName,
     this.systemApp = false,
     this.isHidden = false,
-    this.displayName
-  });
+    String? displayName
+  }) : _displayName = displayName;
+
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AppInfo &&
+          runtimeType == other.runtimeType &&
+          packageName == other.packageName &&
+          appName == other.appName &&
+          systemApp == other.systemApp &&
+          _displayName == other._displayName &&
+          isHidden == other.isHidden;
+
+  @override
+  int get hashCode =>
+      packageName.hashCode ^ appName.hashCode ^ systemApp.hashCode ^ _displayName.hashCode ^ isHidden.hashCode;
 
   String getDisplayName() {
-    return displayName ?? appName;
+    return _displayName ?? appName;
+  }
+
+  void changeDisplayName(newName) {
+    _displayName = newName;
   }
 
   void open() {
@@ -50,14 +70,14 @@ class AppInfo {
       appName = json[JsonKeys.appName],
       systemApp = json[JsonKeys.systemApp],
       isHidden = json[JsonKeys.appIsHidden],
-      displayName = json[JsonKeys.displayName];
+      _displayName = json[JsonKeys.displayName];
 
   Map<String, dynamic> toJson() => {
     JsonKeys.packageName: packageName,
     JsonKeys.appName: appName,
     JsonKeys.systemApp: systemApp,
     JsonKeys.appIsHidden: isHidden,
-    JsonKeys.displayName: displayName,
+    JsonKeys.displayName: _displayName,
   };
 
   static AppInfo fromJsonString(String? jsonString) {
@@ -77,12 +97,10 @@ class AppInfo {
     JsonKeys.appName: appName,
     JsonKeys.systemApp: systemApp,
     JsonKeys.appIsHidden: isHidden,
-    JsonKeys.displayName: displayName
+    JsonKeys.displayName: _displayName
   });
 
-  void changeDisplayName(newName) {
-    displayName = newName;
-  }
+
 
   void hide(bool value) {
     isHidden = value;

@@ -1,63 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:mars_launcher/data/app_info.dart';
-import 'package:mars_launcher/logic/app_search_manager.dart';
-import 'package:mars_launcher/logic/shortcut_manager.dart';
-import 'package:mars_launcher/pages/dialogs/dialog_app_info.dart';
-import 'package:mars_launcher/pages/fragments/app_search_fragment.dart';
-import 'package:mars_launcher/services/service_locator.dart';
 import 'package:mars_launcher/theme/theme_constants.dart';
 
 class AppCard extends StatelessWidget {
   final AppInfo appInfo;
   final bool isShortcutItem;
-  final Function(AppInfo) callbackHandleOnPress;
-  final allowDialog;
+  final Function(BuildContext, AppInfo) callbackHandleOnPress;
+  final Function(BuildContext, AppInfo) callbackHandleOnLongPress;
 
-  AppCard(
-      {required this.appInfo,
-      required this.isShortcutItem,
-      required this.callbackHandleOnPress,
-      this.allowDialog = false});
+  const AppCard({
+    required this.appInfo,
+    required this.callbackHandleOnPress,
+    required this.callbackHandleOnLongPress,
+    this.isShortcutItem = false,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final appShortcutsManager = getIt<AppShortcutsManager>();
-
     var fontFamily = isShortcutItem ? FONT_REGULAR : FONT_LIGHT;
     var letterSpacing = isShortcutItem ? 1.0 : 0.0;
-    var textColor = isShortcutItem ? Theme.of(context).primaryColor : Theme.of(context).disabledColor;
+    var textColor = isShortcutItem ? Theme.of(context).primaryColor : COLOR_ACCENT;
 
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 7, 0, 7),
+    return Container(
+      padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+      alignment: Alignment.topLeft,
       child: TextButton(
         onPressed: () {
-          callbackHandleOnPress(appInfo);
+          callbackHandleOnPress(context, appInfo);
         },
-        onLongPress: () async {
-          if (isShortcutItem) {
-            int shortcutIndex = appShortcutsManager.shortcutAppsNotifier.value.indexOf(appInfo);
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (_) => Scaffold(
-                      body: SafeArea(
-                          child: AppSearchFragment(
-                              appSearchMode: AppSearchMode.chooseShortcut, shortcutIndex: shortcutIndex)))
-              ),
-            );
-          } else {
-            if (allowDialog) {
-              final result = await showDialog(
-                context: context,
-                builder: (_) => AppInfoDialog(appInfo: appInfo),
-              );
-
-              // Handle the result
-              if (result != null) {
-                print('Dialog result: $result');
-              }
-            }
-          }
+        onLongPress: () {
+          callbackHandleOnLongPress(context, appInfo);
         },
         child: Text(
           appInfo.getDisplayName(),
@@ -67,9 +39,9 @@ class AppCard extends StatelessWidget {
             fontFamily: fontFamily,
             letterSpacing: letterSpacing,
           ),
+          maxLines: isShortcutItem ? 1 : 2,
         ),
         style: ButtonStyle(
-          shape: MaterialStateProperty.all(RoundedRectangleBorder()),
           foregroundColor: MaterialStateProperty.all(textColor),
         ),
       ),

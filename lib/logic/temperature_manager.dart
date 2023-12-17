@@ -16,6 +16,7 @@ import 'package:weather/weather.dart';
 import 'package:http/http.dart' as http;
 
 class TemperatureManager {
+  final sharedPrefsManager = getIt<SharedPrefsManager>();
   final temperatureNotifier = ValueNotifier("-°C");
   final locationService = LocationService();
   final appShortcutManager = getIt<AppShortcutsManager>();
@@ -31,7 +32,7 @@ class TemperatureManager {
   TemperatureManager() {
     print("[$runtimeType] INITIALIZING");
 
-    apiKey = SharedPrefsManager.readData(Keys.apiKey);
+    apiKey = sharedPrefsManager.readData(Keys.apiKey);
 
     /// If weather is enabled and working apiKey exists
     if (apiKey != null) {
@@ -69,13 +70,13 @@ class TemperatureManager {
   void addApiKey(String newApiKey) {
     print("[$runtimeType] add new api key: $newApiKey");
     apiKey = newApiKey;
-    SharedPrefsManager.saveData(Keys.apiKey, apiKey);
+    sharedPrefsManager.saveData(Keys.apiKey, apiKey);
     wf = WeatherFactory(apiKey!);
     updateTemperature();
   }
 
   void deleteAPIKey() {
-    SharedPrefsManager.deleteData(Keys.apiKey);
+    sharedPrefsManager.deleteData(Keys.apiKey);
     apiKey = null;
     wf = null;
   }

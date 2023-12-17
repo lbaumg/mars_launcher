@@ -30,7 +30,7 @@ class BatteryManager {
   }
 
   /// Listen to changes of battery
-  void activateOnBatteryChangedListener() {
+  Future<void> activateOnBatteryChangedListener() async {
     if (subscriptionBatteryEnabled == null) {
       /// Add subscription if not already subscribed
       subscriptionBatteryEnabled = _battery.onBatteryStateChanged.listen((BatteryState state) {

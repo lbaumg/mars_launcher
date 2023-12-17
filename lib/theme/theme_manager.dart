@@ -1,22 +1,32 @@
 /// All logic according to dark and light theme
 
 import 'package:flutter/material.dart';
+import 'package:mars_launcher/services/service_locator.dart';
 import 'package:mars_launcher/services/shared_prefs_manager.dart';
 import 'package:mars_launcher/strings.dart';
 import 'package:mars_launcher/theme/theme_constants.dart';
 
 
 class ThemeManager {
-  final themeModeNotifier = ThemeModeNotifier<ThemeMode>(
-    SharedPrefsManager.readDataWithDefault(Keys.themeMode, true) ? ThemeMode.dark : ThemeMode.light
-  );
+  final sharedPrefsManager = getIt<SharedPrefsManager>();
 
-  Color lightBackground = Color(SharedPrefsManager.readData(Keys.lightBackground) ?? Colors.white.value);
-  Color darkBackground = Color(SharedPrefsManager.readData(Keys.darkBackground) ?? Colors.black.value);
-  Color searchTextColor = Color(SharedPrefsManager.readData(Keys.lightSearchColor) ?? COLOR_ACCENT.value);
+  late final themeModeNotifier;
+
+  late Color lightBackground;
+  late Color darkBackground;
+  late Color searchTextColor;
+
+  ThemeManager() {
+    themeModeNotifier = ThemeModeNotifier<ThemeMode>(
+        sharedPrefsManager.readDataWithDefault(Keys.themeMode, true) ? ThemeMode.dark : ThemeMode.light
+    );
+  lightBackground = Color(sharedPrefsManager.readData(Keys.lightBackground) ?? Colors.white.value);
+  darkBackground = Color(sharedPrefsManager.readData(Keys.darkBackground) ?? Colors.black.value);
+  searchTextColor = Color(sharedPrefsManager.readData(Keys.lightSearchColor) ?? COLOR_ACCENT.value);
+  }
 
   bool get isDarkMode {
-    print("ThemeMode: ${themeModeNotifier.value}, isDarkMode: ${themeModeNotifier.value == ThemeMode.dark}");
+    // print("ThemeMode: ${themeModeNotifier.value}, isDarkMode: ${themeModeNotifier.value == ThemeMode.dark}");
     return themeModeNotifier.value == ThemeMode.dark;
   }
 
@@ -42,17 +52,17 @@ class ThemeManager {
     } else {
       themeModeNotifier.value = ThemeMode.light;
     }
-    SharedPrefsManager.saveData(Keys.themeMode, isDarkMode);
+    sharedPrefsManager.saveData(Keys.themeMode, isDarkMode);
     print("Changed themeMode to ${themeModeNotifier.value}");
   }
 
   void setBackgroundColor(bool isDarkMode, Color color) {
     if (isDarkMode) {
       darkBackground = color;
-      SharedPrefsManager.saveData(Keys.darkBackground, color.value);
+      sharedPrefsManager.saveData(Keys.darkBackground, color.value);
     } else {
       lightBackground = color;
-      SharedPrefsManager.saveData(Keys.lightBackground, color.value);
+      sharedPrefsManager.saveData(Keys.lightBackground, color.value);
     }
     themeModeNotifier.notify();
   }

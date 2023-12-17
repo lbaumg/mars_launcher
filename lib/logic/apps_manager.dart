@@ -4,6 +4,7 @@ import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 import 'package:mars_launcher/data/app_info.dart';
 import 'package:mars_launcher/global.dart';
+import 'package:mars_launcher/services/service_locator.dart';
 import 'package:mars_launcher/services/shared_prefs_manager.dart';
 import 'package:mars_launcher/strings.dart';
 
@@ -13,8 +14,10 @@ class AppsManager {
   /// LIST of INSTALLED APPs
   final appsNotifier = ValueNotifier<List<AppInfo>>([]);
 
+  final sharedPrefsManager = getIt<SharedPrefsManager>();
+
   /// LIST of HIDDEN APPs (as packageName)
-  final ValueNotifier<Set<String>> hiddenAppsNotifier = ValueNotifier((SharedPrefsManager.readStringList(Keys.hiddenApps) ?? []).toSet());
+  late final ValueNotifier<Set<String>> hiddenAppsNotifier;
 
   /// MAP of RENAMED APPs
   final Map<String, String> renamedApps = {}; /// {"packageName": "displayName"}
@@ -24,13 +27,18 @@ class AppsManager {
 
   AppsManager() {
     print("[$runtimeType] INITIALISING");
+    hiddenAppsNotifier = ValueNotifier((sharedPrefsManager.readStringList(Keys.hiddenApps) ?? []).toSet());
+    loadAndSyncApps();
 
-    loadRenamedAppsFromSharedPrefs();
-
-    syncInstalledApps();
 
     /// Listen to change of apps (install/uninstall)
     DeviceApps.listenToAppsChanges().where((event) => event.event != ApplicationEventType.updated).listen((event) {handleAppEvent(event);});
+  }
+
+  Future<void> loadAndSyncApps() async {
+    loadRenamedAppsFromSharedPrefs();
+
+    syncInstalledApps();
   }
 
   void addOrUpdateRenamedApp(AppInfo appInfo, String newName) {
@@ -66,7 +74,7 @@ class AppsManager {
     hiddenAppsNotifier.value = updatedHiddenApps;
 
     /// Save to shared prefs
-    SharedPrefsManager.saveData(Keys.hiddenApps, hiddenAppsNotifier.value.toList());
+    sharedPrefsManager.saveData(Keys.hiddenApps, hiddenAppsNotifier.value.toList());
 
     /// Update appsNotifier
     updateAppsNotifierWithHideStatus(packageName, hide);
@@ -125,7 +133,7 @@ class AppsManager {
   }
 
   loadRenamedAppsFromSharedPrefs() {
-    final jsonString = SharedPrefsManager.readData(Keys.renamedApps);
+    final jsonString = sharedPrefsManager.readData(Keys.renamedApps);
 
     if (jsonString != null) {
       final Map<String, dynamic> loadedMap = json.decode(jsonString);
@@ -138,6 +146,6 @@ class AppsManager {
 
   saveRenamedAppsToSharedPrefs() {
     final jsonString = json.encode(renamedApps);
-    SharedPrefsManager.saveData(Keys.renamedApps, jsonString);
+    sharedPrefsManager.saveData(Keys.renamedApps, jsonString);
   }
 }

@@ -1,14 +1,19 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:mars_launcher/services/service_locator.dart';
 import 'package:mars_launcher/services/shared_prefs_manager.dart';
 import 'package:mars_launcher/strings.dart';
 
 
 
 class TodoManager {
+  final sharedPrefsManager = getIt<SharedPrefsManager>();
+  late ValueNotifier<List<String>> todoListNotifier;
 
-  ValueNotifier<List<String>> todoListNotifier = ValueNotifier(SharedPrefsManager.readStringList(Keys.todoList) ?? []);
+  TodoManager() {
+    todoListNotifier = ValueNotifier(sharedPrefsManager.readStringList(Keys.todoList) ?? []);
+  }
 
   addTodo(String todo) {
     var updatedTodoList = List.of(todoListNotifier.value);
@@ -40,6 +45,6 @@ class TodoManager {
   }
 
   saveTodosToSharedPrefs() {
-    SharedPrefsManager.saveData(Keys.todoList, todoListNotifier.value);
+    sharedPrefsManager.saveData(Keys.todoList, todoListNotifier.value);
   }
 }

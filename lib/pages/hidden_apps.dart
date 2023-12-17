@@ -45,7 +45,8 @@ class _HiddenAppsState extends State<HiddenApps> with WidgetsBindingObserver {
                 alignment: Alignment.topLeft,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(40, 20, 0, 20),
-                  child: Text("Hidden apps",
+                  child: Text(
+                    "Hidden apps",
                     textAlign: TextAlign.left,
                     style: TEXT_STYLE_TITLE,
                   ),
@@ -58,15 +59,12 @@ class _HiddenAppsState extends State<HiddenApps> with WidgetsBindingObserver {
                       child: ValueListenableBuilder<List<AppInfo>>(
                           valueListenable: appsManager.appsNotifier,
                           builder: (context, apps, child) {
-                            final hiddenApps = apps
-                                .where((app) => app.isHidden);
+                            final hiddenApps = apps.where((app) => app.isHidden);
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: hiddenApps
                                   .map<Widget>((app) => HiddenAppCard(
-                                      appInfo: app,
-                                      callbackRemoveFromHiddenApps:
-                                          callbackRemoveFromHiddenApps))
+                                      appInfo: app, callbackRemoveFromHiddenApps: callbackRemoveFromHiddenApps))
                                   .toList(),
                             );
                           })),

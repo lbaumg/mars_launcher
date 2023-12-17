@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mars_launcher/global.dart';
 import 'package:mars_launcher/logic/app_search_manager.dart';
 import 'package:mars_launcher/logic/shortcut_manager.dart';
 import 'package:mars_launcher/pages/fragments/app_shortcuts_fragment.dart';
@@ -7,6 +8,8 @@ import 'package:mars_launcher/pages/fragments/top_row/top_row.dart';
 import 'package:mars_launcher/theme/theme_manager.dart';
 import 'package:mars_launcher/pages/settings.dart';
 import 'package:mars_launcher/services/service_locator.dart';
+
+const double HEIGHT_SIZED_BOX = 50;
 
 class Home extends StatefulWidget {
   @override
@@ -38,6 +41,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    print("BUILDING HOME SCREEN");
     return PopScope( /// Detect back button to close app search
       canPop: false,
       onPopInvoked: (didPop) {_onWillPop(didPop);},
@@ -69,7 +73,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 TopRow(),
-                SizedBox(height: 50,),
+                SizedBox(height: HEIGHT_SIZED_BOX,),
                 Expanded(
                   child: ValueListenableBuilder<bool>(
                       valueListenable: searchAppsNotifier,

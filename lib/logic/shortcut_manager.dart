@@ -11,6 +11,9 @@ import 'package:mars_launcher/services/shared_prefs_manager.dart';
 import 'package:mars_launcher/strings.dart';
 
 class AppShortcutsManager {
+
+  final sharedPrefsManager = getIt<SharedPrefsManager>();
+
   late final ValueNotifierWithKey<AppInfo> clockAppNotifier;
   late final ValueNotifierWithKey<AppInfo> calendarAppNotifier;
   late final ValueNotifierWithKey<AppInfo> weatherAppNotifier;
@@ -25,7 +28,7 @@ class AppShortcutsManager {
   AppShortcutsManager() {
     print("[$runtimeType] INITIALIZING");
 
-    if (SharedPrefsManager.readData(Keys.appsAreSaved) ?? false) {
+    if (sharedPrefsManager.readData(Keys.appsAreSaved) ?? false) {
       loadShortcutAppsFromSharedPrefs();
     } else {
       generateGenericShortcutApps();
@@ -39,7 +42,7 @@ class AppShortcutsManager {
     });
   }
 
-  void generateGenericShortcutApps() {
+  void generateGenericShortcutApps() async {
     shortcutAppsNotifier = ShortcutAppsNotifier(List.generate(MAX_NUM_OF_SHORTCUT_ITEMS, (index) => genericAppInfo));
     clockAppNotifier = ValueNotifierWithKey(genericAppInfo, Keys.clockApp);
     calendarAppNotifier = ValueNotifierWithKey(genericAppInfo, Keys.calendarApp);
@@ -80,40 +83,40 @@ class AppShortcutsManager {
     saveShortcutAppsToSharedPrefs();
   }
 
-  void loadShortcutAppsFromSharedPrefs() {
+  Future<void> loadShortcutAppsFromSharedPrefs() async {
     print("[$runtimeType] LOADING APPS FROM SHARED PREFS");
     shortcutAppsNotifier = ShortcutAppsNotifier(List.generate(
-        MAX_NUM_OF_SHORTCUT_ITEMS, (index) => AppInfo.fromJsonString(SharedPrefsManager.readData("shortcut$index"))));
+        MAX_NUM_OF_SHORTCUT_ITEMS, (index) => AppInfo.fromJsonString(sharedPrefsManager.readData("shortcut$index"))));
     clockAppNotifier =
-        ValueNotifierWithKey(AppInfo.fromJsonString(SharedPrefsManager.readData(Keys.clockApp)), Keys.clockApp);
+        ValueNotifierWithKey(AppInfo.fromJsonString(sharedPrefsManager.readData(Keys.clockApp)), Keys.clockApp);
     calendarAppNotifier =
-        ValueNotifierWithKey(AppInfo.fromJsonString(SharedPrefsManager.readData(Keys.calendarApp)), Keys.calendarApp);
+        ValueNotifierWithKey(AppInfo.fromJsonString(sharedPrefsManager.readData(Keys.calendarApp)), Keys.calendarApp);
     weatherAppNotifier =
-        ValueNotifierWithKey(AppInfo.fromJsonString(SharedPrefsManager.readData(Keys.weatherApp)), Keys.weatherApp);
+        ValueNotifierWithKey(AppInfo.fromJsonString(sharedPrefsManager.readData(Keys.weatherApp)), Keys.weatherApp);
     swipeLeftAppNotifier =
-        ValueNotifierWithKey(AppInfo.fromJsonString(SharedPrefsManager.readData(Keys.swipeLeftApp)), Keys.swipeLeftApp);
+        ValueNotifierWithKey(AppInfo.fromJsonString(sharedPrefsManager.readData(Keys.swipeLeftApp)), Keys.swipeLeftApp);
     swipeRightAppNotifier = ValueNotifierWithKey(
-        AppInfo.fromJsonString(SharedPrefsManager.readData(Keys.swipeRightApp)), Keys.swipeRightApp);
+        AppInfo.fromJsonString(sharedPrefsManager.readData(Keys.swipeRightApp)), Keys.swipeRightApp);
   }
 
   void saveShortcutAppsToSharedPrefs() {
     int i = 0;
     for (var appInfo in shortcutAppsNotifier.value) {
-      SharedPrefsManager.saveData("shortcut$i", appInfo.toJsonString());
+      sharedPrefsManager.saveData("shortcut$i", appInfo.toJsonString());
       i++;
     }
-    SharedPrefsManager.saveData(clockAppNotifier.key, clockAppNotifier.value.toJsonString());
-    SharedPrefsManager.saveData(calendarAppNotifier.key, calendarAppNotifier.value.toJsonString());
-    SharedPrefsManager.saveData(weatherAppNotifier.key, weatherAppNotifier.value.toJsonString());
-    SharedPrefsManager.saveData(swipeLeftAppNotifier.key, swipeLeftAppNotifier.value.toJsonString());
-    SharedPrefsManager.saveData(swipeRightAppNotifier.key, swipeRightAppNotifier.value.toJsonString());
+    sharedPrefsManager.saveData(clockAppNotifier.key, clockAppNotifier.value.toJsonString());
+    sharedPrefsManager.saveData(calendarAppNotifier.key, calendarAppNotifier.value.toJsonString());
+    sharedPrefsManager.saveData(weatherAppNotifier.key, weatherAppNotifier.value.toJsonString());
+    sharedPrefsManager.saveData(swipeLeftAppNotifier.key, swipeLeftAppNotifier.value.toJsonString());
+    sharedPrefsManager.saveData(swipeRightAppNotifier.key, swipeRightAppNotifier.value.toJsonString());
 
-    SharedPrefsManager.saveData(Keys.appsAreSaved, true);
+    sharedPrefsManager.saveData(Keys.appsAreSaved, true);
   }
 
   void setSpecialShortcutValue(ValueNotifierWithKey notifier, AppInfo appInfo) {
     notifier.value = appInfo;
-    SharedPrefsManager.saveData(notifier.key, notifier.value.toJsonString());
+    sharedPrefsManager.saveData(notifier.key, notifier.value.toJsonString());
   }
 
   void updateDisplayNames() {
@@ -132,6 +135,7 @@ class AppShortcutsManager {
 }
 
 class ShortcutAppsNotifier extends ValueNotifier<List<AppInfo>> {
+  final sharedPrefsManager = getIt<SharedPrefsManager>();
   ShortcutAppsNotifier(List<AppInfo> initialShortcutApps) : super(initialShortcutApps);
 
   void replaceShortcut(int index, AppInfo newShortcutApp) async {
@@ -142,6 +146,6 @@ class ShortcutAppsNotifier extends ValueNotifier<List<AppInfo>> {
       print("[$runtimeType] replaced shortcut");
       notifyListeners();
     }
-    SharedPrefsManager.saveData("shortcut$index", newShortcutApp.toJsonString());
+    sharedPrefsManager.saveData("shortcut$index", newShortcutApp.toJsonString());
   }
 }

@@ -3,15 +3,13 @@ import 'package:flutter/services.dart';
 import 'package:mars_launcher/pages/home.dart';
 import 'package:mars_launcher/services/service_locator.dart';
 import 'package:mars_launcher/theme/theme_manager.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
-late final SharedPreferences prefs;
 
 void main() async {
+  print("# ---- STARTING APP MARS LAUNCHER ---- #");
   WidgetsFlutterBinding.ensureInitialized();
-  prefs = await SharedPreferences.getInstance();
-  setupGetIt();
+  await setupGetIt();
 
   runApp(MarsLauncher());
 }
@@ -21,6 +19,7 @@ class MarsLauncher extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("[$runtimeType] INITIALISING");
     return ValueListenableBuilder<ThemeMode>(
       valueListenable: themeManager.themeModeNotifier,
       builder: (context, themeMode, homeScreen) => AnnotatedRegion<SystemUiOverlayStyle>(
