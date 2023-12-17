@@ -25,7 +25,7 @@ class HiddenAppCard extends StatelessWidget {
           child: TextButton(
             onPressed: () {},
             child: Text(
-              appInfo.getDisplayName(),
+              appInfo.displayName,
               overflow: TextOverflow.ellipsis, // Specify how to handle overflow
               maxLines: 2,
               style: TextStyle(

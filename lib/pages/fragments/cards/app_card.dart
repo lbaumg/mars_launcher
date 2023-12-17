@@ -32,7 +32,7 @@ class AppCard extends StatelessWidget {
           callbackHandleOnLongPress(context, appInfo);
         },
         child: Text(
-          appInfo.getDisplayName(),
+          appInfo.displayName,
           style: TextStyle(
             fontSize: 30,
             fontWeight: FontWeight.w100,

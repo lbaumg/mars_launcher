@@ -9,9 +9,11 @@ class AppInfo {
   final String packageName;
   final String appName;
   final bool systemApp;
+  var isHidden;
 
   String? _displayName;
-  var isHidden;
+  get displayName => _displayName ?? appName;
+  set displayName(newName) => _displayName = newName;
 
   AppInfo({
     required this.packageName,
@@ -20,7 +22,6 @@ class AppInfo {
     this.isHidden = false,
     String? displayName
   }) : _displayName = displayName;
-
 
   @override
   bool operator ==(Object other) =>
@@ -36,14 +37,6 @@ class AppInfo {
   @override
   int get hashCode =>
       packageName.hashCode ^ appName.hashCode ^ systemApp.hashCode ^ _displayName.hashCode ^ isHidden.hashCode;
-
-  String getDisplayName() {
-    return _displayName ?? appName;
-  }
-
-  void changeDisplayName(newName) {
-    _displayName = newName;
-  }
 
   void open() {
     if (this.packageName.isNotEmpty) {

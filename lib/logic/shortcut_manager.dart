@@ -124,10 +124,10 @@ class AppShortcutsManager {
       final shortcutApp = shortcutAppsNotifier.value[index];
       final displayName = appsManager.renamedApps[shortcutApp.packageName];
 
-      final isDisplayNameNew = displayName != null && displayName != shortcutApp.getDisplayName();
-      final hasDisplayNameBeenReset = displayName == null && shortcutApp.appName != shortcutApp.getDisplayName(); /// Check if display name has been reset
+      final isDisplayNameNew = displayName != null && displayName != shortcutApp.displayName;
+      final hasDisplayNameBeenReset = displayName == null && shortcutApp.appName != shortcutApp.displayName; /// Check if display name has been reset
       if (isDisplayNameNew || hasDisplayNameBeenReset) {
-        shortcutApp.changeDisplayName(displayName);
+        shortcutApp.displayName = displayName;
         shortcutAppsNotifier.replaceShortcut(index, shortcutApp);
       }
     }

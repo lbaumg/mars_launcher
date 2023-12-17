@@ -52,8 +52,8 @@ class AppsManager {
           (oldAppInfo) => oldAppInfo.packageName == appInfo.packageName,
     );
     if (appNotifierIndex != -1) {
-      appsNotifier.value[appNotifierIndex].changeDisplayName(newName);
-      appsNotifier.value.sort((a, b) => a.getDisplayName().toLowerCase().compareTo(b.getDisplayName().toLowerCase()));
+      appsNotifier.value[appNotifierIndex].displayName = newName;
+      appsNotifier.value.sort((a, b) => a.displayName.toLowerCase().compareTo(b.displayName.toLowerCase()));
       appsNotifier.value = List.from(appsNotifier.value); // Trigger update
     }
 
@@ -127,7 +127,7 @@ class AppsManager {
     }
 
     /// Sort from A-Z
-    apps.sort((a, b) => a.getDisplayName().toLowerCase().compareTo(b.getDisplayName().toLowerCase()));
+    apps.sort((a, b) => a.displayName.toLowerCase().compareTo(b.displayName.toLowerCase()));
     appsNotifier.value = apps;
     print("[$runtimeType] syncInstalledApps() executed in ${stopwatch.elapsed.inMilliseconds}ms");
   }

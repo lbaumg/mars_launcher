@@ -35,11 +35,11 @@ class RenameAppDialog extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text("Current name: \"${appInfo.getDisplayName()}\"",
+          Text("Current name: \"${appInfo.displayName}\"",
             style: textStyle
           ),
           insertVerticalSpacing(20),
-          AppNameTextFieldWithValidation(appInfo.getDisplayName(), appInfo.appName),
+          AppNameTextFieldWithValidation(appInfo.displayName, appInfo.appName),
         ],
       ),
     );
