@@ -24,14 +24,6 @@ class _TodoListState extends State<TodoList> with WidgetsBindingObserver {
   final currentlyInTextFieldNotifier = ValueNotifier(false);
   final _scrollController = ScrollController();
 
-  @override /// Go back to main screen
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.inactive && mounted) {
-      Navigator.of(context).pop();
-    }
-    super.didChangeAppLifecycleState(state);
-  }
-
   @override
   void initState() {
     super.initState();
