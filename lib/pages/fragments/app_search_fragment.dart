@@ -41,6 +41,7 @@ class _AppSearchFragmentState extends State<AppSearchFragment> with WidgetsBindi
 
   @override
   Widget build(BuildContext context) {
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -64,7 +65,7 @@ class _AppSearchFragmentState extends State<AppSearchFragment> with WidgetsBindi
   }
 }
 
-class TextFieldSearchApp extends StatelessWidget {
+class TextFieldSearchApp extends StatefulWidget {
   const TextFieldSearchApp({
     Key? key,
     required this.appSearchManager,
@@ -73,21 +74,42 @@ class TextFieldSearchApp extends StatelessWidget {
   final AppSearchManager appSearchManager;
 
   @override
+  State<TextFieldSearchApp> createState() => _TextFieldSearchAppState();
+}
+
+class _TextFieldSearchAppState extends State<TextFieldSearchApp> {
+  late FocusNode _focusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+
     return TextField(
+      focusNode: _focusNode, /// to automatically focus TextField when search is opened
+      autofocus: true,
       cursorColor: Colors.white,
       cursorWidth: 0,
       decoration: InputDecoration(
           enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.transparent)),
           focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.transparent))),
-      autofocus: true,
       textAlign: TextAlign.center,
       style: TextStyle(
         color: Theme.of(context).primaryColor,
         fontSize: 30,
       ),
       onChanged: (value) {
-        appSearchManager.updateFilteredApps(context, value);
+        widget.appSearchManager.updateFilteredApps(context, value);
       },
     );
   }
