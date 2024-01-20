@@ -21,6 +21,7 @@ class TopRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isDarkMode = isThemeDark(context);
+    final is24HourFormat = MediaQuery.of(context).alwaysUse24HourFormat;
     return Padding(
       padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
       child: Row(
@@ -38,7 +39,7 @@ class TopRow extends StatelessWidget {
                           openCreateAlarmDialog(
                               context, isDarkMode);
                         },
-                        child: const Clock())
+                        child: Clock(is24HourFormat: is24HourFormat,))
                     : TextButton(onPressed: () {}, child: const SizedBox.shrink());
               }),
 
