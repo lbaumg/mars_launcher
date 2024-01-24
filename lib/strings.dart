@@ -33,6 +33,7 @@ class Keys {
   static const renamedApps = 'renamedApps';
   static const appsAreSaved = "appsAreSaved";
   static const clockApp = "clockApp";
+  static const batteryApp = "batteryApp";
   static const calendarApp = "calendarApp";
   static const weatherApp = "weatherApp";
   static const swipeLeftApp = "swipeLeftApp";

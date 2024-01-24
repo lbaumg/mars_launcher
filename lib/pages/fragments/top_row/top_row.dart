@@ -58,7 +58,7 @@ class TopRow extends StatelessWidget {
               builder: (context, isEnabled, child) {
                 return isEnabled
                     ? TextButton(
-                  onPressed: () {}, //TODO battery
+                  onPressed: () => appShortcutsManager.batteryAppNotifier.value.open(),
                   child: ValueListenableBuilder<int>(
                       valueListenable:
                       batteryManager.batteryLevelNotifier,
@@ -72,7 +72,7 @@ class TopRow extends StatelessWidget {
                     : const SizedBox.shrink();
               }),
 
-
+          //
           ValueListenableBuilder<bool>(
               valueListenable: settingsManager.weatherWidgetEnabledNotifier,
               builder: (context, isEnabled, child) {

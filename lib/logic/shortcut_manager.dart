@@ -15,6 +15,7 @@ class AppShortcutsManager {
   final sharedPrefsManager = getIt<SharedPrefsManager>();
 
   late final ValueNotifierWithKey<AppInfo> clockAppNotifier;
+  late final ValueNotifierWithKey<AppInfo> batteryAppNotifier;
   late final ValueNotifierWithKey<AppInfo> calendarAppNotifier;
   late final ValueNotifierWithKey<AppInfo> weatherAppNotifier;
   late final ValueNotifierWithKey<AppInfo> swipeLeftAppNotifier;
@@ -45,6 +46,7 @@ class AppShortcutsManager {
   void generateGenericShortcutApps() async {
     shortcutAppsNotifier = ShortcutAppsNotifier(List.generate(MAX_NUM_OF_SHORTCUT_ITEMS, (index) => genericAppInfo));
     clockAppNotifier = ValueNotifierWithKey(genericAppInfo, Keys.clockApp);
+    batteryAppNotifier = ValueNotifierWithKey(genericAppInfo, Keys.batteryApp);
     calendarAppNotifier = ValueNotifierWithKey(genericAppInfo, Keys.calendarApp);
     weatherAppNotifier = ValueNotifierWithKey(genericAppInfo, Keys.weatherApp);
     swipeLeftAppNotifier = ValueNotifierWithKey(genericAppInfo, Keys.swipeLeftApp);
@@ -89,6 +91,8 @@ class AppShortcutsManager {
         MAX_NUM_OF_SHORTCUT_ITEMS, (index) => AppInfo.fromJsonString(sharedPrefsManager.readData("shortcut$index"))));
     clockAppNotifier =
         ValueNotifierWithKey(AppInfo.fromJsonString(sharedPrefsManager.readData(Keys.clockApp)), Keys.clockApp);
+    batteryAppNotifier =
+        ValueNotifierWithKey(AppInfo.fromJsonString(sharedPrefsManager.readData(Keys.batteryApp)), Keys.batteryApp);
     calendarAppNotifier =
         ValueNotifierWithKey(AppInfo.fromJsonString(sharedPrefsManager.readData(Keys.calendarApp)), Keys.calendarApp);
     weatherAppNotifier =
@@ -106,6 +110,7 @@ class AppShortcutsManager {
       i++;
     }
     sharedPrefsManager.saveData(clockAppNotifier.key, clockAppNotifier.value.toJsonString());
+    sharedPrefsManager.saveData(batteryAppNotifier.key, batteryAppNotifier.value.toJsonString());
     sharedPrefsManager.saveData(calendarAppNotifier.key, calendarAppNotifier.value.toJsonString());
     sharedPrefsManager.saveData(weatherAppNotifier.key, weatherAppNotifier.value.toJsonString());
     sharedPrefsManager.saveData(swipeLeftAppNotifier.key, swipeLeftAppNotifier.value.toJsonString());

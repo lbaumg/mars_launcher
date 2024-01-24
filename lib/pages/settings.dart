@@ -218,7 +218,9 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                           children: [
                             TextButton(
                                 onLongPress: () {},
-                                onPressed: () {},
+                                onPressed: () {
+                                  pushAppSearch(appShortcutsManager.batteryAppNotifier);
+                                },
                                 child: const Text(
                                   Strings.settingsBattery,
                                   style: TEXT_STYLE_ITEMS,
