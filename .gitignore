@@ -222,3 +222,5 @@ fabric.properties
 !/gradle/wrapper/gradle-wrapper.jar
 
 .env
+
+key.properties
