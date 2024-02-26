@@ -154,12 +154,12 @@ class TemperatureManager {
         return true;
       } else {
         final error = jsonDecode(response.body); //['message'];
-        print('API Key Validation Error: $error');
+        print("API Key Validation Error: $error");
         return false;
       }
     } catch (e) {
       // An error occurred while making the request.
-      print('API Key Validation Error: $e');
+      print("API Key Validation Error: $e");
       return false;
     }
   }

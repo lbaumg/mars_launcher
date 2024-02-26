@@ -26,7 +26,6 @@ class ThemeManager {
   }
 
   bool get isDarkMode {
-    // print("ThemeMode: ${themeModeNotifier.value}, isDarkMode: ${themeModeNotifier.value == ThemeMode.dark}");
     return themeModeNotifier.value == ThemeMode.dark;
   }
 

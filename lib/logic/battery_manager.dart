@@ -34,7 +34,7 @@ class BatteryManager {
     if (subscriptionBatteryEnabled == null) {
       /// Add subscription if not already subscribed
       subscriptionBatteryEnabled = _battery.onBatteryStateChanged.listen((BatteryState state) {
-        print('Battery state changed: $state');
+        print("Battery state changed: $state");
         updateBatteryLevel();
       });
     }

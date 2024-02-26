@@ -22,7 +22,6 @@ class SettingsManager {
   late bool isFirstStartup;
 
   SettingsManager() {
-    /// Ask on first startup to be default launcher
 
     weatherWidgetEnabledNotifier = ValueNotifierWithKey(sharedPrefsManager.readData(Keys.weatherEnabled) ?? false, Keys.weatherEnabled);
     clockWidgetEnabledNotifier = ValueNotifierWithKey(sharedPrefsManager.readData(Keys.clockEnabled) ?? true, Keys.clockEnabled);
@@ -31,12 +30,11 @@ class SettingsManager {
     numberOfShortcutItemsNotifier = ValueNotifierWithKey(sharedPrefsManager.readData(Keys.numOfShortcutItems) ?? 6, Keys.numOfShortcutItems);
     shortcutMode = ValueNotifierWithKey(sharedPrefsManager.readData(Keys.shortcutMode) ?? true, Keys.shortcutMode);
 
+    /// Ask on first startup to be default launcher
     bool isFirstStartup = sharedPrefsManager.readData(Keys.isFirstStartup) ?? true;
-
     if (isFirstStartup) {
       isFirstStartup = false;
       sharedPrefsManager.saveData(Keys.isFirstStartup, false);
-
       openDefaultLauncherSettings();
     }
   }

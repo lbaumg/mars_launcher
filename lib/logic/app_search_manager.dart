@@ -84,7 +84,7 @@ class AppSearchManager {
 
     // Handle the result
     if (result != null) {
-      print('Dialog result: $result');
+      print("Dialog result: $result");
     }
   }
 
