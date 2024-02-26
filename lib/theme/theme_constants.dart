@@ -13,8 +13,6 @@ const COLOR_ACCENT_HIGHLIGHT = Color(0xffEA4876);
 const COLOR_DIALOG_BUTTONS = Color(0xffFF6F5C);
 
 /// Fonts
-// const FONT_LIGHT = "TitilliemWebLight";
-// const FONT_REGULAR = "TitilliemWebRegular";
 const FONT_LIGHT = "NotoSansLight";
 const FONT_REGULAR = "NotoSansRegular";
 

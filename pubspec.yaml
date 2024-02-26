@@ -68,22 +68,9 @@ flutter:
     - .env
 
   fonts:
-    - family: TitilliemWebLight
-      fonts:
-        - asset: assets/fonts/TitilliumWeb-Light.ttf
-    - family: TitilliemWebRegular
-      fonts:
-        - asset: assets/fonts/TitilliumWeb-Regular.ttf
     - family: NotoSansLight
       fonts:
         - asset: assets/fonts/notosans_light.ttf
     - family: NotoSansRegular
       fonts:
         - asset: assets/fonts/notosans_regular.ttf
-#
-
-  # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.dev/assets-and-images/#resolution-aware.
-
-  # For details regarding adding assets from package dependencies, see
-  # https://flutter.dev/assets-and-images/#from-packages
