@@ -12,7 +12,7 @@ class AppInfo {
   var isHidden;
 
   String? _displayName;
-  get displayName => _displayName ?? appName;
+  get displayName => _displayName ?? appName; /// If _displayName not set return appName
   set displayName(newName) => _displayName = newName;
 
   AppInfo({
