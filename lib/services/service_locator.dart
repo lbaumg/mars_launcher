@@ -3,7 +3,6 @@ import 'package:mars_launcher/logic/apps_manager.dart';
 import 'package:mars_launcher/logic/battery_manager.dart';
 import 'package:mars_launcher/logic/settings_manager.dart';
 import 'package:mars_launcher/logic/shortcut_manager.dart';
-import 'package:mars_launcher/logic/temperature_manager.dart';
 import 'package:mars_launcher/services/shared_prefs_manager.dart';
 import 'package:mars_launcher/theme/theme_manager.dart';
 import 'package:mars_launcher/logic/todo_manager.dart';
@@ -20,7 +19,9 @@ Future setupGetIt() async {
   getIt.registerSingleton<ThemeManager>(ThemeManager());
   getIt.registerSingleton<AppShortcutsManager>(AppShortcutsManager());
   getIt.registerSingleton<AppSearchManager>(AppSearchManager());
-  getIt.registerSingleton<TemperatureManager>(TemperatureManager());
+  /* WEATHER_DISABLED
+   getIt.registerSingleton<TemperatureManager>(TemperatureManager());
+  */
   getIt.registerSingleton<BatteryManager>(BatteryManager());
   getIt.registerSingleton<TodoManager>(TodoManager());
 }

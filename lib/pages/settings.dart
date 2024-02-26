@@ -6,7 +6,6 @@ import 'package:mars_launcher/logic/shortcut_manager.dart';
 import 'package:mars_launcher/theme/theme_manager.dart';
 import 'package:mars_launcher/logic/utils.dart';
 import 'package:mars_launcher/pages/dialogs/dialog_color_picker.dart';
-import 'package:mars_launcher/pages/dialogs/dialog_open_weather_api_key.dart';
 import 'package:mars_launcher/pages/fragments/app_search_fragment.dart';
 import 'package:mars_launcher/pages/hidden_apps.dart';
 import 'package:mars_launcher/services/permission_service.dart';
@@ -169,6 +168,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                         ),
 
                         /// WEATHER APP
+                        /* WEATHER_DISABLED
                         Row(
                           children: [
                             TextButton(
@@ -189,6 +189,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                             ),
                           ],
                         ),
+                        */
 
                         /// CALENDAR APP
                         Row(
@@ -271,6 +272,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                             )),
 
                         /// SET API KEY
+                        /* WEATHER_DISABLED
                         TextButton(
                           onPressed: () {
                             showDialog(
@@ -286,6 +288,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                             style: TEXT_STYLE_ITEMS,
                           ),
                         ),
+                        */
                       ]),
                     ),
                   ),

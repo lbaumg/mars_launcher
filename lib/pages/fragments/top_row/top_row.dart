@@ -9,7 +9,6 @@ import 'package:mars_launcher/logic/utils.dart';
 import 'package:mars_launcher/pages/fragments/top_row/battery.dart';
 import 'package:mars_launcher/pages/fragments/top_row/event.dart';
 import 'package:mars_launcher/pages/fragments/top_row/clock.dart';
-import 'package:mars_launcher/pages/fragments/top_row/temperature.dart';
 import 'package:mars_launcher/services/service_locator.dart';
 import 'package:mars_launcher/theme/theme_constants.dart';
 
@@ -43,6 +42,7 @@ class TopRow extends StatelessWidget {
                     : TextButton(onPressed: () {}, child: const SizedBox.shrink());
               }),
 
+
           ValueListenableBuilder<bool>(
               valueListenable: settingsManager.batteryWidgetEnabledNotifier,
               builder: (context, isEnabled, child) {
@@ -72,7 +72,7 @@ class TopRow extends StatelessWidget {
                     : const SizedBox.shrink();
               }),
 
-          //
+          /* WEATHER_DISABLED
           ValueListenableBuilder<bool>(
               valueListenable: settingsManager.weatherWidgetEnabledNotifier,
               builder: (context, isEnabled, child) {
@@ -81,8 +81,10 @@ class TopRow extends StatelessWidget {
                   flex: isEnabled ? 1 : 0,
                 );
               }),
+           */
 
           /// WEATHER WIDGET
+          /* WEATHER_DISABLED
           ValueListenableBuilder<bool>(
               valueListenable: settingsManager.weatherWidgetEnabledNotifier,
               builder: (context, isEnabled, child) {
@@ -94,6 +96,7 @@ class TopRow extends StatelessWidget {
                       )
                     : const SizedBox.shrink();
               }),
+            */
 
 
           Expanded(
