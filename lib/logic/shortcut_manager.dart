@@ -10,8 +10,16 @@ import 'package:mars_launcher/services/service_locator.dart';
 import 'package:mars_launcher/services/shared_prefs_manager.dart';
 import 'package:mars_launcher/strings.dart';
 
-class AppShortcutsManager {
+final Map<String, AppInfo> MAP_SHORTCUT_TYPE_TO_UNINITIALIZED_APP_INFO = {
+  Keys.typeAppClock: AppInfo(packageName: Strings.packageNameClockUninitialized, appName: Strings.appNameUninitialized),
+  Keys.typeAppBattery: AppInfo(packageName: Strings.packageNameBatteryUninitialized, appName: Strings.appNameUninitialized),
+  Keys.typeAppCalendar: AppInfo(packageName: Strings.packageNameCalendarUninitialized, appName: Strings.appNameUninitialized),
+  Keys.typeAppWeather: AppInfo(packageName: Strings.packageNameWeatherUninitialized, appName: Strings.appNameUninitialized),
+  Keys.typeAppSwipeLeft: AppInfo(packageName: Strings.packageNameSwipeLeftUninitialized, appName: Strings.appNameUninitialized),
+  Keys.typeAppSwipeRight: AppInfo(packageName: Strings.packageNameSwipeRightUninitialized, appName: Strings.appNameUninitialized),
+};
 
+class AppShortcutsManager {
   final sharedPrefsManager = getIt<SharedPrefsManager>();
 
   late final ValueNotifierWithKey<AppInfo> clockAppNotifier;
@@ -21,8 +29,6 @@ class AppShortcutsManager {
   late final ValueNotifierWithKey<AppInfo> swipeLeftAppNotifier;
   late final ValueNotifierWithKey<AppInfo> swipeRightAppNotifier;
   late final ShortcutAppsNotifier shortcutAppsNotifier;
-
-  final genericAppInfo = AppInfo(packageName: "", appName: Strings.uninitializedAppName);
 
   final appsManager = getIt<AppsManager>();
 
@@ -43,14 +49,24 @@ class AppShortcutsManager {
     });
   }
 
+  AppInfo getUninitializedAppInfo(String shortcutType) {
+    return MAP_SHORTCUT_TYPE_TO_UNINITIALIZED_APP_INFO[shortcutType]!;
+  }
+
+  AppInfo getUninitializedShortcutAppInfo(int index) {
+    return AppInfo(packageName: index.toString(), appName: Strings.appNameUninitialized);
+  }
+
   void generateGenericShortcutApps() async {
-    shortcutAppsNotifier = ShortcutAppsNotifier(List.generate(MAX_NUM_OF_SHORTCUT_ITEMS, (index) => genericAppInfo));
-    clockAppNotifier = ValueNotifierWithKey(genericAppInfo, Keys.clockApp);
-    batteryAppNotifier = ValueNotifierWithKey(genericAppInfo, Keys.batteryApp);
-    calendarAppNotifier = ValueNotifierWithKey(genericAppInfo, Keys.calendarApp);
-    weatherAppNotifier = ValueNotifierWithKey(genericAppInfo, Keys.weatherApp);
-    swipeLeftAppNotifier = ValueNotifierWithKey(genericAppInfo, Keys.swipeLeftApp);
-    swipeRightAppNotifier = ValueNotifierWithKey(genericAppInfo, Keys.swipeRightApp);
+    /// Assign generic display name to shortcutApps, set packageName = index
+    shortcutAppsNotifier = ShortcutAppsNotifier(List.generate(MAX_NUM_OF_SHORTCUT_ITEMS, (index) => getUninitializedShortcutAppInfo(index)));
+
+    clockAppNotifier = ValueNotifierWithKey(getUninitializedAppInfo(Keys.typeAppClock), Keys.typeAppClock);
+    batteryAppNotifier = ValueNotifierWithKey(getUninitializedAppInfo(Keys.typeAppBattery), Keys.typeAppBattery);
+    calendarAppNotifier = ValueNotifierWithKey(getUninitializedAppInfo(Keys.typeAppCalendar), Keys.typeAppCalendar);
+    weatherAppNotifier = ValueNotifierWithKey(getUninitializedAppInfo(Keys.typeAppWeather), Keys.typeAppWeather);
+    swipeLeftAppNotifier = ValueNotifierWithKey(getUninitializedAppInfo(Keys.typeAppSwipeLeft), Keys.typeAppSwipeLeft);
+    swipeRightAppNotifier = ValueNotifierWithKey(getUninitializedAppInfo(Keys.typeAppSwipeRight), Keys.typeAppSwipeRight);
   }
 
   void loadShortcutAppsFromJson() async {
@@ -60,47 +76,38 @@ class AppShortcutsManager {
       final shortcutAppsJson = await json.decode(response);
 
       shortcutAppsNotifier.value = List.generate(
-          MAX_NUM_OF_SHORTCUT_ITEMS,
-          (index) => AppInfo(
-              packageName: shortcutAppsJson["shortcutApps"][index][JsonKeys.packageName],
-              appName: shortcutAppsJson["shortcutApps"][index]["name"]));
-      clockAppNotifier.value = AppInfo(
-          packageName: shortcutAppsJson["clock"][JsonKeys.packageName],
-          appName: shortcutAppsJson["clock"][JsonKeys.appName]);
-      calendarAppNotifier.value = AppInfo(
-          packageName: shortcutAppsJson["calendar"][JsonKeys.packageName],
-          appName: shortcutAppsJson["calendar"][JsonKeys.appName]);
-      weatherAppNotifier.value = AppInfo(
-          packageName: shortcutAppsJson["weather"][JsonKeys.packageName],
-          appName: shortcutAppsJson["weather"][JsonKeys.appName]);
-      swipeLeftAppNotifier.value = AppInfo(
-          packageName: shortcutAppsJson["camera"][JsonKeys.packageName],
-          appName: shortcutAppsJson["camera"][JsonKeys.appName]);
-      swipeRightAppNotifier.value = AppInfo(
-          packageName: shortcutAppsJson["contacts"][JsonKeys.packageName],
-          appName: shortcutAppsJson["contacts"][JsonKeys.appName]);
+          MAX_NUM_OF_SHORTCUT_ITEMS, (index) => AppInfo(packageName: shortcutAppsJson["shortcutApps"][index][JsonKeys.packageName], appName: shortcutAppsJson["shortcutApps"][index]["name"]));
+
+      clockAppNotifier.value = AppInfo(packageName: shortcutAppsJson["clock"][JsonKeys.packageName], appName: shortcutAppsJson["clock"][JsonKeys.appName]);
+      calendarAppNotifier.value = AppInfo(packageName: shortcutAppsJson["calendar"][JsonKeys.packageName], appName: shortcutAppsJson["calendar"][JsonKeys.appName]);
+      weatherAppNotifier.value = AppInfo(packageName: shortcutAppsJson["weather"][JsonKeys.packageName], appName: shortcutAppsJson["weather"][JsonKeys.appName]);
+      swipeLeftAppNotifier.value = AppInfo(packageName: shortcutAppsJson["camera"][JsonKeys.packageName], appName: shortcutAppsJson["camera"][JsonKeys.appName]);
+      swipeRightAppNotifier.value = AppInfo(packageName: shortcutAppsJson["contacts"][JsonKeys.packageName], appName: shortcutAppsJson["contacts"][JsonKeys.appName]);
     } catch (e) {
       print("[$runtimeType] error loading from json: $e");
     }
     saveShortcutAppsToSharedPrefs();
   }
 
+  /// Loading shortcut apps from shared prefs, if not present initialize with AppInfo
   Future<void> loadShortcutAppsFromSharedPrefs() async {
     print("[$runtimeType] LOADING APPS FROM SHARED PREFS");
-    shortcutAppsNotifier = ShortcutAppsNotifier(List.generate(
-        MAX_NUM_OF_SHORTCUT_ITEMS, (index) => AppInfo.fromJsonString(sharedPrefsManager.readData("shortcut$index"))));
-    clockAppNotifier =
-        ValueNotifierWithKey(AppInfo.fromJsonString(sharedPrefsManager.readData(Keys.clockApp)), Keys.clockApp);
-    batteryAppNotifier =
-        ValueNotifierWithKey(AppInfo.fromJsonString(sharedPrefsManager.readData(Keys.batteryApp)), Keys.batteryApp);
-    calendarAppNotifier =
-        ValueNotifierWithKey(AppInfo.fromJsonString(sharedPrefsManager.readData(Keys.calendarApp)), Keys.calendarApp);
-    weatherAppNotifier =
-        ValueNotifierWithKey(AppInfo.fromJsonString(sharedPrefsManager.readData(Keys.weatherApp)), Keys.weatherApp);
-    swipeLeftAppNotifier =
-        ValueNotifierWithKey(AppInfo.fromJsonString(sharedPrefsManager.readData(Keys.swipeLeftApp)), Keys.swipeLeftApp);
-    swipeRightAppNotifier = ValueNotifierWithKey(
-        AppInfo.fromJsonString(sharedPrefsManager.readData(Keys.swipeRightApp)), Keys.swipeRightApp);
+    shortcutAppsNotifier = ShortcutAppsNotifier(List.generate(MAX_NUM_OF_SHORTCUT_ITEMS, (index) =>
+        AppInfo.fromJsonString(sharedPrefsManager.readDataWithDefault("shortcut$index", getUninitializedShortcutAppInfo(index)))));
+
+    final jsonStringClockApp = sharedPrefsManager.readData(Keys.typeAppClock) ?? getUninitializedAppInfo(Keys.typeAppClock).toJsonString();
+    final jsonStringBatteryApp = sharedPrefsManager.readData(Keys.typeAppBattery) ?? getUninitializedAppInfo(Keys.typeAppBattery).toJsonString();
+    final jsonStringCalendarApp = sharedPrefsManager.readData(Keys.typeAppCalendar) ?? getUninitializedAppInfo(Keys.typeAppCalendar).toJsonString();
+    final jsonStringWeatherApp = sharedPrefsManager.readData(Keys.typeAppWeather) ?? getUninitializedAppInfo(Keys.typeAppWeather).toJsonString();
+    final jsonStringSwipeLeftApp = sharedPrefsManager.readData(Keys.typeAppSwipeLeft) ?? getUninitializedAppInfo(Keys.typeAppSwipeLeft).toJsonString();
+    final jsonStringSwipeRightApp = sharedPrefsManager.readData(Keys.typeAppSwipeRight) ?? getUninitializedAppInfo(Keys.typeAppSwipeRight).toJsonString();
+
+    clockAppNotifier = ValueNotifierWithKey(AppInfo.fromJsonString(jsonStringClockApp), Keys.typeAppClock);
+    batteryAppNotifier = ValueNotifierWithKey(AppInfo.fromJsonString(jsonStringBatteryApp), Keys.typeAppBattery);
+    calendarAppNotifier = ValueNotifierWithKey(AppInfo.fromJsonString(jsonStringCalendarApp), Keys.typeAppCalendar);
+    weatherAppNotifier = ValueNotifierWithKey(AppInfo.fromJsonString(jsonStringWeatherApp), Keys.typeAppWeather);
+    swipeLeftAppNotifier = ValueNotifierWithKey(AppInfo.fromJsonString(jsonStringSwipeLeftApp), Keys.typeAppSwipeLeft);
+    swipeRightAppNotifier = ValueNotifierWithKey(AppInfo.fromJsonString(jsonStringSwipeRightApp), Keys.typeAppSwipeRight);
   }
 
   void saveShortcutAppsToSharedPrefs() {
@@ -141,6 +148,7 @@ class AppShortcutsManager {
 
 class ShortcutAppsNotifier extends ValueNotifier<List<AppInfo>> {
   final sharedPrefsManager = getIt<SharedPrefsManager>();
+
   ShortcutAppsNotifier(List<AppInfo> initialShortcutApps) : super(initialShortcutApps);
 
   void replaceShortcut(int index, AppInfo newShortcutApp) async {

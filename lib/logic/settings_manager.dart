@@ -27,7 +27,7 @@ class SettingsManager {
     clockWidgetEnabledNotifier = ValueNotifierWithKey(sharedPrefsManager.readData(Keys.clockEnabled) ?? true, Keys.clockEnabled);
     batteryWidgetEnabledNotifier = ValueNotifierWithKey(sharedPrefsManager.readData(Keys.batteryEnabled) ?? true, Keys.batteryEnabled);
     calendarWidgetEnabledNotifier = ValueNotifierWithKey(sharedPrefsManager.readData(Keys.calendarEnabled) ?? true, Keys.calendarEnabled);
-    numberOfShortcutItemsNotifier = ValueNotifierWithKey(sharedPrefsManager.readData(Keys.numOfShortcutItems) ?? 6, Keys.numOfShortcutItems);
+    numberOfShortcutItemsNotifier = ValueNotifierWithKey(sharedPrefsManager.readData(Keys.numOfShortcutItems) ?? NUMBER_OF_SHORTCUT_ITEMS_ON_STARTUP, Keys.numOfShortcutItems);
     shortcutMode = ValueNotifierWithKey(sharedPrefsManager.readData(Keys.shortcutMode) ?? true, Keys.shortcutMode);
 
     /// Ask on first startup to be default launcher

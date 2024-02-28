@@ -15,7 +15,13 @@ class Strings {
   static const settingsAppNumber = "app number";
 
   /// Standard names
-  static const uninitializedAppName = "hold to set";
+  static const appNameUninitialized = "hold to set";
+  static const packageNameClockUninitialized = "uninitialized clock app";
+  static const packageNameBatteryUninitialized = "uninitialized battery app";
+  static const packageNameCalendarUninitialized = "uninitialized calendar app";
+  static const packageNameWeatherUninitialized = "uninitialized weather app";
+  static const packageNameSwipeLeftUninitialized = "uninitialized swipe left app";
+  static const packageNameSwipeRightUninitialized = "uninitialized swipe right app";
   static const textCalendarEmpty = "no events";
 }
 
@@ -32,12 +38,12 @@ class Keys {
   static const hiddenApps = "hiddenApps";
   static const renamedApps = 'renamedApps';
   static const appsAreSaved = "appsAreSaved";
-  static const clockApp = "clockApp";
-  static const batteryApp = "batteryApp";
-  static const calendarApp = "calendarApp";
-  static const weatherApp = "weatherApp";
-  static const swipeLeftApp = "swipeLeftApp";
-  static const swipeRightApp = "swipeRightApp";
+  static const typeAppClock = "clockApp";
+  static const typeAppBattery = "batteryApp";
+  static const typeAppCalendar = "calendarApp";
+  static const typeAppWeather = "weatherApp";
+  static const typeAppSwipeLeft = "swipeLeftApp";
+  static const typeAppSwipeRight = "swipeRightApp";
   static const apiKey = "apiKey";
   static const themeMode = "themeMode";
   static const lightBackground = "light_background";

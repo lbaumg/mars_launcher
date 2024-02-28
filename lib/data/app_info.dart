@@ -39,7 +39,7 @@ class AppInfo {
       packageName.hashCode ^ appName.hashCode ^ systemApp.hashCode ^ _displayName.hashCode ^ isHidden.hashCode;
 
   void open() {
-    if (this.packageName.isNotEmpty) {
+    if (this.packageName.isNotEmpty && this.appName != Strings.appNameUninitialized) {
       DeviceApps.openApp(this.packageName);
     } else {
       print("[$runtimeType] Could not open app: packageName is empty");
@@ -73,8 +73,7 @@ class AppInfo {
     JsonKeys.displayName: _displayName,
   };
 
-  static AppInfo fromJsonString(String? jsonString) {
-    jsonString = jsonString ?? jsonEncode({JsonKeys.packageName: "", JsonKeys.appName: Strings.uninitializedAppName, JsonKeys.systemApp: false});
+  static AppInfo fromJsonString(String jsonString) {
     Map<String, dynamic> json = jsonDecode(jsonString) as Map<String, dynamic>;
     return AppInfo(
       packageName: json[JsonKeys.packageName],
