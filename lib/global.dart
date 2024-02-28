@@ -2,6 +2,8 @@ const PACKAGE_NAME = "com.cloudcatcher.mars_launcher";
 
 const PRINT_SHARED_PREF_ACCESS = false;
 
+const ASK_TO_BE_DEFAULT_LAUNCHER = false;
+
 const int MIN_NUM_OF_SHORTCUT_ITEMS = 0;
 const int MAX_NUM_OF_SHORTCUT_ITEMS = 7;
 const int NUMBER_OF_SHORTCUT_ITEMS_ON_STARTUP = 5;

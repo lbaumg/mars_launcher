@@ -30,12 +30,14 @@ class SettingsManager {
     numberOfShortcutItemsNotifier = ValueNotifierWithKey(sharedPrefsManager.readData(Keys.numOfShortcutItems) ?? NUMBER_OF_SHORTCUT_ITEMS_ON_STARTUP, Keys.numOfShortcutItems);
     shortcutMode = ValueNotifierWithKey(sharedPrefsManager.readData(Keys.shortcutMode) ?? true, Keys.shortcutMode);
 
-    /// Ask on first startup to be default launcher
-    bool isFirstStartup = sharedPrefsManager.readData(Keys.isFirstStartup) ?? true;
-    if (isFirstStartup) {
-      isFirstStartup = false;
-      sharedPrefsManager.saveData(Keys.isFirstStartup, false);
-      openDefaultLauncherSettings();
+    if (ASK_TO_BE_DEFAULT_LAUNCHER) {
+      /// Ask on first startup to be default launcher
+      bool isFirstStartup = sharedPrefsManager.readData(Keys.isFirstStartup) ?? true;
+      if (isFirstStartup) {
+        isFirstStartup = false;
+        sharedPrefsManager.saveData(Keys.isFirstStartup, false);
+        openDefaultLauncherSettings();
+      }
     }
   }
 
