@@ -1,6 +1,6 @@
 class Strings {
   /// Settings page names
-  static const settingsTitle = "settings";
+  static const settingsTitle = "Settings";
   static const settingsClockApp = "clock app";
   static const settingsBattery = "battery";
   static const settingsWeatherApp = "weather app";
@@ -8,11 +8,14 @@ class Strings {
   static const settingsSwipeLeft = "swipe left";
   static const settingsSwipeRight = "swipe right";
   static const settingsHiddenApps = "hidden apps";
+  static const settingsCredits = "credits";
   static const settingsMore = "more";
   static const settingsChangeDefaultLauncher = "set default launcher";
   static const settingsLightColor = "light color";
   static const settingsDarkColor = "dark color";
   static const settingsAppNumber = "app number";
+
+  static const creditsTitle = "Credits";
 
   /// Standard names
   static const appNameUninitialized = "hold to set";
@@ -44,7 +47,6 @@ class Keys {
   static const typeAppWeather = "weatherApp";
   static const typeAppSwipeLeft = "swipeLeftApp";
   static const typeAppSwipeRight = "swipeRightApp";
-  static const apiKey = "apiKey";
   static const themeMode = "themeMode";
   static const lightBackground = "light_background";
   static const lightSearchColor = "light_search_color";

@@ -3,10 +3,10 @@ import 'package:mars_launcher/data/app_info.dart';
 import 'package:mars_launcher/logic/app_search_manager.dart';
 import 'package:mars_launcher/logic/settings_manager.dart';
 import 'package:mars_launcher/logic/shortcut_manager.dart';
+import 'package:mars_launcher/pages/credits.dart';
 import 'package:mars_launcher/theme/theme_manager.dart';
 import 'package:mars_launcher/logic/utils.dart';
 import 'package:mars_launcher/pages/dialogs/dialog_color_picker.dart';
-import 'package:mars_launcher/pages/dialogs/dialog_open_weather_api_key.dart';
 import 'package:mars_launcher/pages/fragments/app_search_fragment.dart';
 import 'package:mars_launcher/pages/hidden_apps.dart';
 import 'package:mars_launcher/services/permission_service.dart';
@@ -273,16 +273,13 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                         /// SET API KEY
                         TextButton(
                           onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return OpenWeatherAPIDialog();
-                                // return buildAddOpenWeatherAPIDialog(context);
-                              },
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const Credits()),
                             );
                           },
                           child: const Text(
-                            "OpenWeather API key",
+                            Strings.settingsCredits,
                             style: TEXT_STYLE_ITEMS,
                           ),
                         ),
