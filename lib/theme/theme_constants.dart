@@ -69,7 +69,7 @@ ThemeData basicLightTheme = ThemeData(
   textButtonTheme: TextButtonThemeData(
       style: ButtonStyle(
           foregroundColor: MaterialStateProperty.all<Color>(COLOR_LIGHT_PRIMARY),
-          overlayColor: MaterialStateProperty.all<Color>(COLOR_LIGHT_BACKGROUND))),
+          overlayColor: MaterialStateProperty.all<Color>(Colors.transparent))),
 );
 
 ThemeData basicDarkTheme = ThemeData(
@@ -108,7 +108,7 @@ ThemeData basicDarkTheme = ThemeData(
   textButtonTheme: TextButtonThemeData(
       style: ButtonStyle(
           foregroundColor: MaterialStateProperty.all<Color>(COLOR_DARK_PRIMARY),
-          overlayColor: MaterialStateProperty.all<Color>(COLOR_DARK_BACKGROUND))),
+          overlayColor: MaterialStateProperty.all<Color>(Colors.transparent))),
 );
 
 SystemUiOverlayStyle lightSystemUiOverlayStyle = SystemUiOverlayStyle(
