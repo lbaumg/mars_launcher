@@ -42,6 +42,7 @@ class AppShortcutsManager {
       if (LOAD_APPS_FROM_JSON) {
         loadShortcutAppsFromJson();
       }
+      saveShortcutAppsToSharedPrefs(); /// Save shortcut apps and set appsAreSaved to true
     }
 
     appsManager.renamedAppsUpdatedNotifier.addListener(() {
@@ -86,7 +87,6 @@ class AppShortcutsManager {
     } catch (e) {
       print("[$runtimeType] error loading from json: $e");
     }
-    saveShortcutAppsToSharedPrefs();
   }
 
   /// Loading shortcut apps from shared prefs, if not present initialize with AppInfo
