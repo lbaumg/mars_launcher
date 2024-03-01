@@ -52,6 +52,7 @@ class Keys {
   static const lightSearchColor = "light_search_color";
   static const darkBackground = "dark_background";
   static const darkSearchColor = "dark_search_color";
+  static const weatherActivatedAtLeaseOnce = "weatherActivatedAtLeaseOnce";
 }
 
 class JsonKeys {

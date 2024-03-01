@@ -4,6 +4,7 @@ import 'package:mars_launcher/logic/app_search_manager.dart';
 import 'package:mars_launcher/logic/settings_manager.dart';
 import 'package:mars_launcher/logic/shortcut_manager.dart';
 import 'package:mars_launcher/pages/credits.dart';
+import 'package:mars_launcher/services/shared_prefs_manager.dart';
 import 'package:mars_launcher/theme/theme_manager.dart';
 import 'package:mars_launcher/logic/utils.dart';
 import 'package:mars_launcher/pages/dialogs/dialog_color_picker.dart';
@@ -29,6 +30,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
   final themeManager = getIt<ThemeManager>();
   final permissionService = getIt<PermissionService>();
   final settingsManager = getIt<SettingsManager>();
+  final sharedPrefsManager = getIt<SharedPrefsManager>();
 
   @override
   void initState() {
@@ -136,11 +138,9 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                                       width: 86,
                                       child: TextButton(
                                         onPressed: () {
-                                          settingsManager
-                                              .setNotifierValueAndSave(settingsManager.numberOfShortcutItemsNotifier);
+                                          settingsManager.setNotifierValueAndSave(settingsManager.numberOfShortcutItemsNotifier);
                                         },
-                                        child:
-                                            Center(child: Text(numOfShortcutItems.toString(), style: TEXT_STYLE_ITEMS)),
+                                        child: Center(child: Text(numOfShortcutItems.toString(), style: TEXT_STYLE_ITEMS)),
                                       ));
                                 }),
                           ],
@@ -158,7 +158,9 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                                   Strings.settingsClockApp,
                                   style: TEXT_STYLE_ITEMS,
                                 )),
-                            Expanded(child: Container(),),
+                            Expanded(
+                              child: Container(),
+                            ),
                             ShowHideButton(
                               notifier: settingsManager.clockWidgetEnabledNotifier,
                               onPressed: () {
@@ -184,7 +186,35 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                             ShowHideButton(
                               notifier: settingsManager.weatherWidgetEnabledNotifier,
                               onPressed: () {
-                                settingsManager.setNotifierValueAndSave(settingsManager.weatherWidgetEnabledNotifier);
+                                if (sharedPrefsManager.readData(Keys.weatherActivatedAtLeaseOnce) == null) {
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: Text("Requesting location permission"),
+                                          titleTextStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
+                                          content: Text(
+                                            "mars launcher collects location data to be able to show accurate temperature information.",
+                                            style: TextStyle(color: Colors.black),
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                              style: ButtonStyle(foregroundColor: MaterialStatePropertyAll<Color>(Colors.blue)),
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: const Text('OK'),
+                                            ),
+                                          ],
+                                        );
+                                      }).then((value) {
+                                    settingsManager.setNotifierValueAndSave(settingsManager.weatherWidgetEnabledNotifier);
+                                  });
+
+                                  sharedPrefsManager.saveData(Keys.weatherActivatedAtLeaseOnce, true);
+                                } else {
+                                  settingsManager.setNotifierValueAndSave(settingsManager.weatherWidgetEnabledNotifier);
+                                }
                               },
                             ),
                           ],
@@ -225,7 +255,9 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                                   Strings.settingsBattery,
                                   style: TEXT_STYLE_ITEMS,
                                 )),
-                            Expanded(child: Container(),),
+                            Expanded(
+                              child: Container(),
+                            ),
                             ShowHideButton(
                               notifier: settingsManager.batteryWidgetEnabledNotifier,
                               onPressed: () {
