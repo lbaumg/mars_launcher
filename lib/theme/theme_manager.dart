@@ -38,9 +38,12 @@ class ThemeManager {
   }
 
   get systemUiOverlayStyle {
+    /// If background color is changed (!= white or black) -> it is not possible to adjust status bar color to background color -> therefore use normal contrast in that case
+    final statusBarIconBrightnessDark = darkBackground == COLOR_DARK_BACKGROUND ? Brightness.dark : Brightness.light;
+    final statusBarIconBrightnessLight = lightBackground == COLOR_LIGHT_BACKGROUND ? Brightness.light : Brightness.dark;
     final systemUiOverlayStyle = isDarkMode ?
-    lightSystemUiOverlayStyle.copyWith(systemNavigationBarColor: darkBackground, statusBarColor: darkBackground) :
-    darkSystemUiOverlayStyle.copyWith(systemNavigationBarColor: lightBackground, statusBarColor: lightBackground);
+      lightSystemUiOverlayStyle.copyWith(systemNavigationBarColor: darkBackground, statusBarColor: darkBackground, statusBarIconBrightness: statusBarIconBrightnessDark) :
+      darkSystemUiOverlayStyle.copyWith(systemNavigationBarColor: lightBackground, statusBarColor: lightBackground, statusBarIconBrightness: statusBarIconBrightnessLight);
 
     return systemUiOverlayStyle;
   }
