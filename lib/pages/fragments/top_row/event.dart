@@ -44,10 +44,10 @@ class _EventViewState extends State<EventView> {
               child: ValueListenableBuilder<String>(
                   valueListenable: calenderLogic.eventNotifier,
                   builder: (context, event, child) {
-                    return Text(
-                      event.length > letterLength
-                          ? ".." + event.substring(event.length - letterLength)
-                          : event,
+                    return Text("Call (11:00)",
+                      // event.length > letterLength
+                      //     ? ".." + event.substring(event.length - letterLength)
+                      //     : event,
                       softWrap: false,
                       style: const TextStyle(
                         fontSize: FONT_SIZE_EVENTS,

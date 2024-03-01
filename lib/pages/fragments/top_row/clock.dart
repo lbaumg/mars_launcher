@@ -62,7 +62,7 @@ class ClockLogic {
     var now = DateTime.now();
     String formattedTime = _formatTime(now);
     if (formattedTime != timeNotifier.value) {
-      timeNotifier.value = formattedTime;
+      timeNotifier.value = "10:30"; //formattedTime;
     }
   }
 
