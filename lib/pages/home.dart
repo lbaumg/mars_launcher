@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mars_launcher/logic/app_search_manager.dart';
 import 'package:mars_launcher/logic/shortcut_manager.dart';
+import 'package:mars_launcher/logic/temperature_manager.dart';
 import 'package:mars_launcher/pages/fragments/app_shortcuts_fragment.dart';
 import 'package:mars_launcher/pages/fragments/app_search_fragment.dart';
 import 'package:mars_launcher/pages/fragments/top_row/top_row.dart';
@@ -20,6 +21,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> with WidgetsBindingObserver {
   final themeManager = getIt<ThemeManager>();
   final appShortcutsManager = getIt<AppShortcutsManager>();
+  final temperatureManager = getIt<TemperatureManager>();
   final sensitivity = 8;
 
   final ValueNotifier<bool> searchAppsNotifier = ValueNotifier(false);
@@ -74,7 +76,13 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 TopRow(),
-                const SizedBox(height: HEIGHT_SIZED_BOX,),
+                SizedBox(
+                  height: HEIGHT_SIZED_BOX,
+                  child: ValueListenableBuilder<String>(
+                    valueListenable: temperatureManager.sunriseSunsetNotifier,
+                    builder: (context, sunriseSunset, child) {
+                      return Center(child: Text(sunriseSunset));
+                })),
                 Expanded(
                   child: ValueListenableBuilder<bool>(
                       valueListenable: searchAppsNotifier,

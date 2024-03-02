@@ -18,6 +18,7 @@ class Strings {
   static const creditsTitle = "Credits";
 
   /// Standard names
+  static const defaultTemperatureString = "-°C";
   static const appNameUninitialized = "hold to set";
   static const packageNameClockUninitialized = "uninitialized clock app";
   static const packageNameBatteryUninitialized = "uninitialized battery app";

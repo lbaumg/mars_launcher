@@ -5,6 +5,7 @@ import 'package:flutter_alarm_clock/flutter_alarm_clock.dart';
 import 'package:mars_launcher/logic/battery_manager.dart';
 import 'package:mars_launcher/logic/settings_manager.dart';
 import 'package:mars_launcher/logic/shortcut_manager.dart';
+import 'package:mars_launcher/logic/temperature_manager.dart';
 import 'package:mars_launcher/logic/utils.dart';
 import 'package:mars_launcher/pages/fragments/top_row/battery.dart';
 import 'package:mars_launcher/pages/fragments/top_row/event.dart';
@@ -17,6 +18,7 @@ class TopRow extends StatelessWidget {
   final appShortcutsManager = getIt<AppShortcutsManager>();
   final settingsManager = getIt<SettingsManager>();
   final batteryManager = getIt<BatteryManager>();
+  final temperatureManager = getIt<TemperatureManager>();
 
   @override
   Widget build(BuildContext context) {
@@ -90,6 +92,9 @@ class TopRow extends StatelessWidget {
                     ? TextButton(
                         onPressed: () =>
                             appShortcutsManager.weatherAppNotifier.value.open(),
+                        onLongPress: () {
+                          temperatureManager.showSunriseSunsetForAFewSeconds();
+                        },
                         child: Temperature(),
                       )
                     : const SizedBox.shrink();
